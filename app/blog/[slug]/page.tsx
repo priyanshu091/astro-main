@@ -1,0 +1,370 @@
+import Link from "next/link";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+
+type BlogPostData = {
+  slug: string;
+  title: string;
+  category: string;
+  date: string;
+  readTime: string;
+  content: string[];
+};
+
+const BLOG_DATA: Record<string, BlogPostData> = {
+  "understanding-birth-chart": {
+    slug: "understanding-birth-chart",
+    title: "Understanding Your Birth Chart: A Complete Beginner's Guide",
+    category: "Astrology",
+    date: "June 12, 2026",
+    readTime: "8 min read",
+    content: [
+      "A birth chart, also known as a Kundli or natal chart, is essentially a map of the sky at the exact moment you were born. It captures the positions of the Sun, Moon, planets, and other celestial bodies relative to your birthplace. In Vedic astrology, this chart serves as a cosmic blueprint — a detailed guide to understanding your personality, strengths, challenges, and the trajectory of your life.",
+      "The birth chart is divided into 12 houses, each representing different aspects of life — from self-identity and wealth to relationships, career, and spiritual growth. The placement of planets in these houses, combined with their zodiac signs and aspects (drishti), creates a unique pattern that tells the story of your life.",
+      "The Ascendant (Lagna) is the most important point in your chart. It represents the zodiac sign that was rising on the eastern horizon at the time of your birth. The Ascendant determines your physical appearance, temperament, and the overall framework through which you experience life.",
+      "Each planet in Vedic astrology rules specific aspects of life. The Sun represents your soul and vitality, the Moon governs emotions and mind, Mars drives energy and courage, Mercury controls intellect and communication, Jupiter brings wisdom and fortune, Venus rules love and luxury, Saturn teaches discipline through challenges, and Rahu and Ketu represent karmic nodes that shape your destiny.",
+      "Understanding your birth chart is the first step toward self-awareness and informed decision-making. Whether you are navigating career choices, relationship questions, or health concerns, your birth chart provides invaluable insights that can help you align with your true path.",
+      "At Vedic Destiny, Astrologer Acharya Soumitra Roy Chowdhury analyzes your birth chart with over 30 years of experience, providing practical guidance and remedies tailored to your unique planetary configuration.",
+    ],
+  },
+  "saturn-return-explained": {
+    slug: "saturn-return-explained",
+    title: "Saturn Return: Why Ages 28–30 Are Life-Changing",
+    category: "Astrology",
+    date: "June 8, 2026",
+    readTime: "6 min read",
+    content: [
+      "Saturn return is one of the most significant astrological transits you will ever experience. It occurs approximately every 29.5 years when Saturn returns to the exact position it occupied in your birth chart. This transit typically happens between ages 28–30, and again around 58–60.",
+      "During your Saturn return, you are forced to confront the foundations of your life. Saturn is the planet of discipline, responsibility, and karma — it demands that you grow up, make mature decisions, and let go of anything that no longer serves your highest good.",
+      "Many people experience major life transitions during their Saturn return: career changes, relationship shifts, moves to new cities, or deep personal transformations. These changes can feel challenging, but they are ultimately designed to align you with your authentic path.",
+      "The key to navigating your Saturn return successfully is to embrace responsibility rather than resist it. Saturn rewards hard work, honesty, and persistence. If you have been building your life on a solid foundation, this period can bring recognition and advancement.",
+      "In Vedic astrology, Saturn (Shani) is not a malefic planet to be feared — it is the great teacher. Understanding your Saturn placement and its return cycle can help you prepare for and navigate these pivotal years with wisdom and grace.",
+      "Consult with Astrologer Acharya Soumitra Roy Chowdhury to understand your Saturn return and receive personalized remedies to navigate this transformative period.",
+    ],
+  },
+  "vastu-tips-for-home": {
+    slug: "vastu-tips-for-home",
+    title: "10 Essential Vastu Tips for a Harmonious Home",
+    category: "Vastu",
+    date: "June 5, 2026",
+    readTime: "7 min read",
+    content: [
+      "Vastu Shastra, the ancient Indian science of architecture, offers profound insights into how the design and layout of your home can influence your health, wealth, relationships, and overall well-being. By aligning your living space with natural forces, you can create an environment that supports harmony and prosperity.",
+      "Tip 1: The main entrance should ideally face north, east, or northeast. This allows positive energy (prana) to flow into your home. Keep the entrance clean, well-lit, and free of obstacles.",
+      "Tip 2: The master bedroom should be in the southwest direction. This ensures stability, grounding, and a strong foundation for the household head. Avoid placing the bedroom in the northeast corner.",
+      "Tip 3: The kitchen should be located in the southeast direction, governed by the fire element. While cooking, face east to absorb positive solar energy. Keep the kitchen clean and avoid placing it directly opposite the main door.",
+      "Tip 4: Place your study table or work desk facing north or east. These directions enhance concentration, creativity, and intellectual growth. Avoid sitting with your back to the door.",
+      "Tip 5: The northeast corner of your home is considered the most sacred. Keep it clean, clutter-free, and use it for prayer or meditation. A water element (fountain or aquarium) in the northeast can attract prosperity.",
+      "Tip 6: Avoid mirrors in the bedroom facing the bed. Mirrors reflect energy and can disturb sleep patterns. If a mirror is necessary, ensure it does not directly reflect the bed.",
+      "Tip 7: The center of the house (Brahmasthan) should remain open and clutter-free. This area represents the cosmic center and should not have heavy furniture, pillars, or toilets.",
+      "Tip 8: Use light, warm colors in common areas — cream, light yellow, or beige promote peace and positivity. Avoid dark, heavy colors on walls, especially in the northeast and east.",
+      "Tip 9: Store water in the northeast corner. Water storage in the wrong direction can lead to financial difficulties and health issues.",
+      "Tip 10: Ensure proper ventilation and natural light. Cross ventilation allows positive energy to circulate, while stagnant air creates negative energy.",
+    ],
+  },
+  "numerology-life-path": {
+    slug: "numerology-life-path",
+    title: "Life Path Numbers: Discover Your True Purpose",
+    category: "Numerology",
+    date: "May 30, 2026",
+    readTime: "9 min read",
+    content: [
+      "Your Life Path Number is the most important number in numerology. It reveals your core purpose, innate talents, challenges, and the overall trajectory of your life. Calculated from your complete date of birth, this number provides a roadmap for understanding who you truly are.",
+      "To calculate your Life Path Number, add all the digits of your birth date together and reduce to a single digit (or master number). For example, if born on December 15, 1990: 1+2+1+5+1+9+9+0 = 28, 2+8 = 10, 1+0 = 1. Your Life Path Number is 1.",
+      "Life Path 1: The Leader — Independent, ambitious, and innovative. You are meant to pioneer new paths and lead with confidence. Challenges include stubbornness and isolation.",
+      "Life Path 2: The Peacemaker — Diplomatic, sensitive, and cooperative. You thrive in partnerships and bring harmony to groups. Challenges include indecisiveness and over-sensitivity.",
+      "Life Path 3: The Communicator — Creative, expressive, and joyful. You are naturally artistic and inspire others through words and art. Challenges include scattered energy and superficiality.",
+      "Life Path 4: The Builder — Practical, hardworking, and dependable. You create lasting foundations and value stability. Challenges include rigidity and workaholism.",
+      "Life Path 5: The Explorer — Adventurous, freedom-loving, and versatile. You crave variety and new experiences. Challenges include restlessness and commitment issues.",
+      "Life Path 6: The Nurturer — Caring, responsible, and family-oriented. You are a natural healer and protector. Challenges include perfectionism and self-sacrifice.",
+      "Life Path 7: The Seeker — Intellectual, spiritual, and introspective. You are drawn to deep knowledge and inner wisdom. Challenges include isolation and skepticism.",
+      "Life Path 8: The Achiever — Ambitious, powerful, and business-minded. You are destined for material success and authority. Challenges include workaholism and dominance.",
+      "Life Path 9: The Humanitarian — Compassionate, idealistic, and generous. You serve a larger cause and inspire transformation. Challenges include martyrdom and emotional overwhelm.",
+      "Master Numbers 11, 22, and 33 carry intensified energy and represent higher spiritual missions. Consult with a numerology expert to understand their full significance in your chart.",
+    ],
+  },
+  "lal-kitab-remedies-career": {
+    slug: "lal-kitab-remedies-career",
+    title: "Powerful Lal Kitab Remedies for Career Growth",
+    category: "Lal Kitab",
+    date: "May 25, 2026",
+    readTime: "5 min read",
+    content: [
+      "Lal Kitab, the renowned treatise on Vedic astrology and palmistry, offers uniquely simple yet powerful remedies for various life challenges. When it comes to career growth and professional success, Lal Kitab provides practical solutions that anyone can implement.",
+      "Remedy 1: Keep a silver square piece in your wallet. Silver is associated with the Moon, which governs the mind and emotional stability — both crucial for making sound career decisions.",
+      "Remedy 2: Offer water to the Sun every morning at sunrise. Stand facing east, hold water in a copper vessel, and let it flow slowly while reciting the Surya mantra. This strengthens the Sun in your chart, enhancing authority, recognition, and leadership qualities.",
+      "Remedy 3: Feed green grass to cows on Wednesdays. Mercury governs intelligence, communication, and business acumen. Strengthening Mercury through this simple act can improve your professional relationships and analytical abilities.",
+      "Remedy 4: Apply saffron tilak on the forehead before important meetings or interviews. Saffron is associated with Jupiter, the planet of wisdom and fortune, and can attract positive outcomes in professional settings.",
+      "Remedy 5: Keep your workspace clean and organized. Clutter represents stagnant energy in Lal Kitab. A clean, well-organized desk allows positive energy to flow, enhancing productivity and focus.",
+      "These remedies are most effective when performed consistently and with genuine faith. For personalized Lal Kitab remedies based on your specific birth chart, consult Astrologer Acharya Soumitra Roy Chowdhury.",
+    ],
+  },
+  "mangal-dosha-marriage": {
+    slug: "mangal-dosha-marriage",
+    title: "Mangal Dosha and Marriage: Facts vs Myths",
+    category: "Astrology",
+    date: "May 20, 2026",
+    readTime: "7 min read",
+    content: [
+      "Mangal Dosha (also known as Kuja Dosha or Manglik Dosha) is one of the most discussed — and most misunderstood — concepts in Vedic astrology. It occurs when Mars is placed in certain houses of the birth chart, and it is often feared in the context of marriage compatibility.",
+      "Mangal Dosha occurs when Mars is placed in the 1st, 2nd, 4th, 7th, 8th, or 12th house from the Ascendant, Moon, or Venus. According to traditional texts, this placement can create challenges in marital life, including conflicts, health issues for the spouse, or delays in marriage.",
+      "However, many of the fears surrounding Mangal Dosha are based on myths rather than careful astrological analysis. Not all Mars placements are equally strong, and several factors can cancel or reduce the dosha's effects.",
+      "Cancellation factors include: Mars in its own sign or exalted sign, Jupiter's aspect on Mars, both partners having Mangal Dosha (which cancels the effect), and Mars in certain signs where its energy is constructively channeled.",
+      "The intensity of Mangal Dosha also varies based on the specific house Mars occupies. Mars in the 7th or 8th house is generally considered more significant than Mars in the 1st or 2nd house.",
+      "Modern Vedic astrologers take a holistic approach, analyzing the entire chart rather than focusing solely on Mars placement. Factors like the overall strength of the 7th house, Venus placement, and Navamsa chart analysis provide a more complete picture of marital compatibility.",
+      "If you are concerned about Mangal Dosha in your chart or your partner's chart, seek a comprehensive analysis from an experienced Vedic astrologer like Acharya Soumitra Roy Chowdhury, who provides balanced, practical guidance rather than fear-based predictions.",
+    ],
+  },
+  "vastu-for-business-success": {
+    slug: "vastu-for-business-success",
+    title: "Vastu Shastra for Office & Business Success",
+    category: "Vastu",
+    date: "May 15, 2026",
+    readTime: "6 min read",
+    content: [
+      "The principles of Vastu Shastra extend beyond residential spaces — they are equally powerful for offices, shops, and commercial establishments. A Vastu-compliant workspace can enhance productivity, attract customers, and improve financial outcomes.",
+      "The owner or CEO should sit in the southwest corner of the office, facing north or east. This position provides stability, authority, and a commanding presence.",
+      "The accounts department should be in the southeast, and the marketing team should ideally be in the northwest. These placements align departmental energies with their respective functions.",
+      "The main entrance of the office should face north or east. A well-lit, welcoming entrance attracts positive energy and opportunities. Avoid obstacles or clutter near the entrance.",
+      "Keep the center of the office (Brahmasthan) open. Avoid placing pillars, heavy furniture, or storage in this area. The center should breathe — allowing energy to circulate freely throughout the space.",
+      "Water features like small fountains or aquariums should be placed in the northeast corner to attract wealth and prosperity. Avoid water elements in the south or southwest.",
+      "Proper lighting is essential. Ensure natural light enters from the north and east. Dark or poorly lit offices create stagnant energy that hampers growth and morale.",
+      "For a detailed Vastu analysis of your business space, consult with Astrologer Acharya Soumitra Roy Chowdhury, who provides practical recommendations tailored to your specific layout and business needs.",
+    ],
+  },
+  "rudraksha-guide": {
+    slug: "rudraksha-guide",
+    title: "The Complete Guide to Rudraksha: Types, Benefits & How to Wear",
+    category: "Remedies",
+    date: "May 10, 2026",
+    readTime: "10 min read",
+    content: [
+      "Rudraksha beads have been revered in Hindu and Buddhist traditions for thousands of years. These sacred seeds from the Elaeocarpus ganitrus tree are believed to carry powerful electromagnetic, spiritual, and healing properties.",
+      "Rudraksha beads are classified by the number of natural lines (mukhis) on their surface. Each mukhi corresponds to a different deity and planet, offering specific benefits to the wearer.",
+      "1 Mukhi Rudraksha: Ruled by the Sun, it represents pure consciousness and is extremely rare. It enhances concentration, leadership, and spiritual growth.",
+      "5 Mukhi Rudraksha: Ruled by Jupiter, this is the most common and versatile Rudraksha. It promotes health, peace, and academic success. Ideal for beginners.",
+      "7 Mukhi Rudraksha: Associated with the Goddess Lakshmi and Saturn, it attracts wealth, removes financial obstacles, and brings good fortune.",
+      "9 Mukhi Rudraksha: Ruled by Goddess Durga and Ketu, it provides courage, energy, and protection. It is particularly beneficial for removing fear and obstacles.",
+      "To wear Rudraksha properly, first energize it with mantras and sacred rituals. Wear it close to the skin, preferably on a silk or cotton thread. Avoid wearing it during sleep, bathing, or visiting impure places.",
+      "Authentic Rudraksha can be verified through water test (sinks in water), visual inspection (natural mukhis with clear lines), and by consulting a knowledgeable practitioner.",
+      "For personalized Rudraksha recommendations based on your birth chart, consult Astrologer Acharya Soumitra Roy Chowdhury.",
+    ],
+  },
+  "meditation-and-planets": {
+    slug: "meditation-and-planets",
+    title: "How Meditation Aligns Your Energy with Planetary Forces",
+    category: "Spirituality",
+    date: "May 5, 2026",
+    readTime: "8 min read",
+    content: [
+      "The ancient Vedic tradition recognizes a profound connection between meditation and planetary influences. Each planet governs specific energy centers (chakras) in the body, and targeted meditation practices can help harmonize these energies.",
+      "The Sun governs the Solar Plexus Chakra (Manipura). Meditating at sunrise with the Gayatri Mantra strengthens your willpower, vitality, and sense of purpose.",
+      "The Moon rules the Sacral Chakra (Svadhisthana). Moonlight meditation and chanting 'Om Shri Chandraya Namah' can calm emotions, improve intuition, and enhance emotional intelligence.",
+      "Mars is connected to the Root Chakra (Muladhara). Grounding meditations and physical practices like yoga can channel Mars energy constructively, transforming aggression into courage.",
+      "Mercury governs the Throat Chakra (Vishuddha). Breathwork (Pranayama) and mantra chanting improve communication skills, intellectual clarity, and decision-making.",
+      "Jupiter rules the Crown Chakra (Sahasrara). Deep contemplative meditation, scripture study, and wisdom practices strengthen Jupiter's blessings of knowledge, fortune, and spiritual expansion.",
+      "Saturn teaches through the Third Eye Chakra (Ajna). Disciplined daily meditation, even for short periods, builds Saturn's positive qualities of patience, focus, and inner strength.",
+      "Regular meditation practice not only strengthens beneficial planetary influences but also mitigates the challenging effects of afflicted planets in your chart. It is one of the most powerful remedies in Vedic astrology.",
+    ],
+  },
+  "name-numerology-business": {
+    slug: "name-numerology-business",
+    title: "How to Choose a Lucky Business Name Using Numerology",
+    category: "Numerology",
+    date: "April 28, 2026",
+    readTime: "6 min read",
+    content: [
+      "In numerology, every letter carries a specific vibration, and the name of your business is more than just a label — it is an energetic signature that can attract success or create obstacles.",
+      "To analyze a business name numerologically, each letter is assigned a number (A=1, B=2, ... I=9, J=1, K=2, etc.) and the digits are summed until a single digit or master number is obtained.",
+      "Number 1 names project leadership and innovation — ideal for startups and tech companies. Number 5 names suggest versatility and dynamic energy — great for marketing and media businesses.",
+      "Number 8 names carry strong financial energy and authority — perfect for finance, real estate, and corporate ventures. However, 8 requires careful analysis as it can also bring challenges if not aligned with the owner's personal numbers.",
+      "Number 9 names embody humanitarian values and global reach — suitable for NGOs, healthcare, and international businesses.",
+      "The most important principle is alignment: your business name number should harmonize with your personal numbers (Life Path, Destiny, and Name numbers). Conflicting vibrations can create obstacles.",
+      "Before finalizing a business name, consult with an experienced numerologist like Astrologer Acharya Soumitra Roy Chowdhury to ensure the name carries vibrations that support your goals.",
+    ],
+  },
+  "lal-kitab-remedies-finance": {
+    slug: "lal-kitab-remedies-finance",
+    title: "Simple Lal Kitab Remedies to Improve Financial Stability",
+    category: "Lal Kitab",
+    date: "April 22, 2026",
+    readTime: "5 min read",
+    content: [
+      "Financial instability can be deeply stressful, affecting every area of life. Lal Kitab, with its unique approach to astrology, offers practical remedies that can help remove financial obstacles and attract abundance.",
+      "Remedy 1: Keep a piece of silver in your wallet or cash box. Silver strengthens the Moon, which governs prosperity and mental peace. A stable mind makes better financial decisions.",
+      "Remedy 2: On Thursdays, apply a saffron tilak and visit a temple. Jupiter is the planet of wealth and expansion, and Thursday rituals strengthen Jupiter's blessings in your chart.",
+      "Remedy 3: Avoid keeping broken mirrors, clocks, or electronics at home. These represent stagnant and broken energy that can block financial growth.",
+      "Remedy 4: Feed jaggery and wheat to cows on Tuesdays. This remedy strengthens Mars and removes obstacles related to property, legal matters, and financial disputes.",
+      "Remedy 5: Keep the north corner of your home clean and clutter-free. North is the direction of Kuber (the deity of wealth), and a clean north area invites financial prosperity.",
+      "Remedy 6: Donate black sesame seeds on Saturdays to strengthen Saturn. Saturn, when well-placed, provides long-term financial stability through disciplined effort.",
+      "These remedies should be performed with consistency and devotion. For personalized financial remedies based on your specific planetary positions, consult Astrologer Acharya Soumitra Roy Chowdhury.",
+    ],
+  },
+  "gemstones-planets": {
+    slug: "gemstones-planets",
+    title: "Gemstones for Each Planet: A Vedic Astrology Guide",
+    category: "Remedies",
+    date: "April 15, 2026",
+    readTime: "9 min read",
+    content: [
+      "In Vedic astrology, gemstones are one of the most powerful remedies for strengthening weak or afflicted planets in your birth chart. Each planet is associated with a specific gemstone that channels its energy.",
+      "Sun — Ruby (Manik): Enhances authority, confidence, and vitality. Wear on the ring finger in gold on Sunday morning.",
+      "Moon — Pearl (Moti): Calms emotions, improves mental peace, and strengthens intuition. Wear on the little finger in silver on Monday.",
+      "Mars — Red Coral (Moonga): Boosts courage, energy, and physical strength. Wear on the ring finger in gold or copper on Tuesday.",
+      "Mercury — Emerald (Panna): Sharpens intellect, communication, and business acumen. Wear on the little finger in gold on Wednesday.",
+      "Jupiter — Yellow Sapphire (Pukhraj): Attracts wisdom, fortune, and marital bliss. Wear on the index finger in gold on Thursday.",
+      "Venus — Diamond (Heera): Enhances love, luxury, creativity, and relationships. Wear on the ring finger in platinum or white gold on Friday.",
+      "Saturn — Blue Sapphire (Neelam): The most powerful gemstone — brings rapid results but must be tested first. Wear only after expert consultation.",
+      "Rahu — Hessonite (Gomed): Removes confusion, phobias, and obstacles caused by Rahu. Wear on the middle finger in silver.",
+      "Ketu — Cat's Eye (Lehsunia): Provides spiritual insight, protection, and removes Ketu-related challenges. Wear on the middle finger in gold.",
+      "Important: Never wear a gemstone without consulting an expert astrologer. Incorrect gemstone selection can amplify negative planetary effects. Astrologer Acharya Soumitra Roy Chowdhury provides personalized gemstone recommendations after thorough chart analysis.",
+    ],
+  },
+};
+
+export function generateStaticParams() {
+  return Object.keys(BLOG_DATA).map((slug) => ({ slug }));
+}
+
+export default function BlogPostPage({ params }: { params: { slug: string } }) {
+  const post = BLOG_DATA[params.slug];
+
+  if (!post) {
+    return (
+      <main className="min-h-screen flex flex-col justify-between bg-bg-void selection:bg-gold-100 selection:text-copper-800">
+        <Navbar />
+        <div className="pt-24 lg:pt-32 flex-1 pb-16 text-center px-sp-5">
+          <h1 className="font-display text-3xl font-bold text-text-primary">Article Not Found</h1>
+          <p className="mt-4 text-text-secondary font-sans">
+            The article you are looking for does not exist.
+          </p>
+          <Link
+            href="/blog"
+            className="mt-6 inline-block font-sans text-sm font-semibold text-gold-500 hover:text-gold-600 transition-colors"
+          >
+            ← Back to Blog
+          </Link>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
+
+  return (
+    <main className="min-h-screen flex flex-col justify-between bg-bg-void selection:bg-gold-100 selection:text-copper-800">
+      <Navbar />
+
+      <article className="pt-24 lg:pt-32 flex-1 pb-16">
+        {/* Header */}
+        <header className="max-w-[720px] mx-auto px-sp-5 text-center mb-10">
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-1 font-sans text-xs font-semibold text-gold-500 hover:text-gold-600 transition-colors mb-6"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+            Back to Blog
+          </Link>
+
+          <span className="block eyebrow text-gold-500 tracking-[0.2em] uppercase text-xs">
+            {post.category}
+          </span>
+          <h1 className="font-display mt-sp-3 text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.15] tracking-[-0.02em] text-text-primary">
+            {post.title}
+          </h1>
+          <div className="mt-4 flex items-center justify-center gap-3 font-sans text-xs text-text-muted">
+            <span>{post.date}</span>
+            <span className="text-gold-400/30">•</span>
+            <span className="text-gold-500 font-semibold">{post.readTime}</span>
+          </div>
+          <p className="mt-3 font-sans text-xs text-text-secondary">
+            By Astrologer Acharya Soumitra Roy Chowdhury
+          </p>
+        </header>
+
+        {/* Featured Image Placeholder */}
+        <div className="max-w-[720px] mx-auto px-sp-5 mb-10">
+          <div className="relative h-56 lg:h-72 rounded-card overflow-hidden bg-bg-surface border border-gold-400/10">
+            <div className="absolute inset-0 bg-gradient-to-br from-gold-100/60 via-bg-surface to-gold-200/40" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-display text-2xl font-bold text-gold-600 opacity-25">
+                {post.category}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="max-w-[720px] mx-auto px-sp-5">
+          <div className="space-y-5">
+            {post.content.map((paragraph, idx) => (
+              <p
+                key={idx}
+                className="font-sans text-[15px] text-text-secondary leading-[1.8]"
+              >
+                {paragraph}
+              </p>
+            ))}
+          </div>
+
+          {/* Author / CTA */}
+          <div className="mt-12 bg-bg-cosmos border border-gold-400/15 rounded-card p-6 lg:p-8">
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+              <div className="w-14 h-14 rounded-full bg-gold-400/20 flex items-center justify-center shrink-0">
+                <span className="font-display text-xl font-bold text-gold-600">S</span>
+              </div>
+              <div>
+                <h3 className="font-display text-base font-bold text-text-primary">
+                  Astrologer Acharya Soumitra Roy Chowdhury
+                </h3>
+                <p className="font-sans text-xs text-text-secondary mt-1 leading-relaxed">
+                  Professional Vedic astrologer with over 30 years of consulting experience. Specializing in birth chart analysis, marriage compatibility, career guidance, Vastu Shastra, and Lal Kitab remedies.
+                </p>
+                <Link
+                  href="/#contact"
+                  className="inline-flex items-center gap-1 mt-3 font-sans text-xs font-semibold text-gold-500 hover:text-gold-600 transition-colors"
+                >
+                  Book a Consultation →
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Back to blog */}
+          <div className="mt-10 text-center">
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-1 font-sans text-sm font-semibold text-gold-500 hover:text-gold-600 transition-colors"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m15 18-6-6 6-6" />
+              </svg>
+              View All Articles
+            </Link>
+          </div>
+        </div>
+      </article>
+
+      <Footer />
+    </main>
+  );
+}
