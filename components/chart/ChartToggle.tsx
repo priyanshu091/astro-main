@@ -19,7 +19,7 @@ export default function ChartToggle({
     <div
       role="tablist"
       aria-label="Chart varga"
-      className="relative flex items-center gap-1 rounded-full border border-[rgba(212,175,106,0.12)] bg-bg-surface p-1"
+      className="relative flex items-center gap-1 rounded-full border border-[rgba(184,146,40,0.12)] bg-bg-surface p-1"
     >
       {OPTIONS.map((opt) => {
         const active = opt.value === value;

@@ -87,7 +87,7 @@ export default function KundliGenerator() {
                     value={dob}
                     onChange={(e) => setDob(e.target.value)}
                     required
-                    className="h-12 w-full rounded-input border border-[rgba(212,175,106,0.12)] bg-bg-surface px-4 font-sans text-[15px] text-text-primary transition-[border-color,box-shadow] duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(212,162,86,0.12)] focus:outline-none"
+                    className="h-12 w-full rounded-input border border-[rgba(184,146,40,0.12)] bg-bg-surface px-4 font-sans text-[15px] text-text-primary transition-[border-color,box-shadow] duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(138,107,18,0.12)] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -100,7 +100,7 @@ export default function KundliGenerator() {
                     value={tob}
                     onChange={(e) => setTob(e.target.value)}
                     required
-                    className="h-12 w-full rounded-input border border-[rgba(212,175,106,0.12)] bg-bg-surface px-4 font-sans text-[15px] text-text-primary transition-[border-color,box-shadow] duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(212,162,86,0.12)] focus:outline-none"
+                    className="h-12 w-full rounded-input border border-[rgba(184,146,40,0.12)] bg-bg-surface px-4 font-sans text-[15px] text-text-primary transition-[border-color,box-shadow] duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(138,107,18,0.12)] focus:outline-none"
                   />
                 </div>
               </div>
@@ -121,7 +121,7 @@ export default function KundliGenerator() {
                   required
                 />
                 {showCities && cityMatches.length > 0 && (
-                  <ul className="absolute z-20 mt-1 w-full overflow-hidden rounded-input border border-[rgba(212,175,106,0.18)] bg-bg-elevated shadow-[0_20px_50px_-20px_rgba(0,0,0,0.7)]">
+                  <ul className="absolute z-20 mt-1 w-full overflow-hidden rounded-input border border-[rgba(184,146,40,0.18)] bg-bg-elevated shadow-[0_20px_50px_-20px_rgba(0,0,0,0.7)]">
                     {cityMatches.map((c) => (
                       <li key={c}>
                         <button
@@ -152,7 +152,7 @@ export default function KundliGenerator() {
                     value={gender}
                     onChange={(e) => setGender(e.target.value)}
                     required
-                    className="h-12 w-full appearance-none rounded-input border border-[rgba(212,175,106,0.12)] bg-bg-surface px-4 pr-10 font-sans text-[15px] text-text-primary transition-[border-color,box-shadow] duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(212,162,86,0.12)] focus:outline-none"
+                    className="h-12 w-full appearance-none rounded-input border border-[rgba(184,146,40,0.12)] bg-bg-surface px-4 pr-10 font-sans text-[15px] text-text-primary transition-[border-color,box-shadow] duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(138,107,18,0.12)] focus:outline-none"
                     style={{ color: gender ? "var(--text-primary)" : "var(--text-muted)" }}
                   >
                     <option value="" disabled>
@@ -191,7 +191,7 @@ export default function KundliGenerator() {
           {/* Right: chart display */}
           <div className="flex flex-col">
             <div
-              className="rounded-card border border-[rgba(212,175,106,0.12)] bg-bg-cosmos p-sp-5"
+              className="rounded-card border border-[rgba(184,146,40,0.12)] bg-bg-cosmos p-sp-5"
               style={{
                 backgroundImage:
                   "linear-gradient(165deg, rgba(255,255,255,0.025), rgba(255,255,255,0) 60%)",
@@ -206,7 +206,7 @@ export default function KundliGenerator() {
                     transition={{ duration: reduced ? 0 : 0.4 }}
                   >
                     <KundliChart />
-                    <div className="mt-sp-4 border-t border-[rgba(212,175,106,0.08)] pt-sp-4">
+                    <div className="mt-sp-4 border-t border-[rgba(184,146,40,0.08)] pt-sp-4">
                       <dl className="flex flex-wrap gap-x-sp-8 gap-y-sp-2 font-mono text-[13px]">
                         <div>
                           <dt className="inline text-text-muted">Ascendant: </dt>

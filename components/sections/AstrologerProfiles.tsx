@@ -2,121 +2,67 @@
 
 import Image from "next/image";
 import SectionHeader from "@/components/shared/SectionHeader";
-import { StaggerReveal, StaggerItem } from "@/components/shared/StaggerReveal";
-import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
-
-type Astrologer = {
-  name: string;
-  photo: string;
-  specialization: string;
-  experience: string;
-  rating: string;
-  languages: string[];
-  price: string;
-};
-
-const ASTROLOGERS: Astrologer[] = [
-  {
-    name: "Acharya Vikram Sharma",
-    photo: "https://randomuser.me/api/portraits/men/32.jpg",
-    specialization: "KP Astrology · Career & Finance",
-    experience: "12 years · 800+ consultations",
-    rating: "4.9★",
-    languages: ["Hindi", "English", "Marathi"],
-    price: "₹1,999",
-  },
-  {
-    name: "Dr. Meera Iyer",
-    photo: "https://randomuser.me/api/portraits/women/44.jpg",
-    specialization: "Vedic & Nadi · Marriage & Family",
-    experience: "15 years · 1,200+ consultations",
-    rating: "4.9★",
-    languages: ["English", "Hindi", "Tamil"],
-    price: "₹2,499",
-  },
-  {
-    name: "Pandit Raghav Joshi",
-    photo: "https://randomuser.me/api/portraits/men/52.jpg",
-    specialization: "Parashari · Remedies & Muhurta",
-    experience: "9 years · 600+ consultations",
-    rating: "4.8★",
-    languages: ["Hindi", "English", "Gujarati"],
-    price: "₹1,799",
-  },
-];
 
 export default function AstrologerProfiles() {
   return (
-    <section id="astrologers" className="bg-bg-void">
+    <section id="about" className="bg-bg-void border-t border-[rgba(184,146,40,0.1)]">
       <div className="mx-auto max-w-content px-sp-5 py-sp-10 lg:py-sp-16">
         <SectionHeader
-          eyebrow="Our astrologers"
-          title="Consult with certified Vedic experts"
+          eyebrow="Meet Your Astrologer"
+          title="Soumitra Roy Chowdhury"
         />
 
-        <StaggerReveal
-          stagger={0.1}
-          amount={0.2}
-          className="mt-sp-8 flex snap-x snap-mandatory gap-sp-5 overflow-x-auto pb-2 lg:mt-sp-10 lg:grid lg:grid-cols-3 lg:overflow-visible lg:pb-0 [-ms-overflow-style:none] [scrollbar-width:none]"
-        >
-          {ASTROLOGERS.map((a) => (
-            <StaggerItem
-              key={a.name}
-              className="min-w-[80%] shrink-0 snap-start sm:min-w-[320px] lg:min-w-0 lg:shrink"
-            >
-              <Card interactive className="flex h-full flex-col items-center p-7 text-center">
-                {/* Photo with gold ring */}
-                <div className="relative h-24 w-24 overflow-hidden rounded-full ring-2 ring-gold-400">
-                  <Image
-                    src={a.photo}
-                    alt={`Portrait of ${a.name}`}
-                    fill
-                    sizes="96px"
-                    className="object-cover"
-                  />
-                </div>
+        <div className="mt-sp-8 grid grid-cols-1 gap-sp-8 lg:mt-sp-10 lg:grid-cols-12 lg:gap-sp-10 items-center">
+          {/* Photo: 5 of 12 cols */}
+          <div className="lg:col-span-5 flex justify-center">
+            <div className="relative h-72 w-72 overflow-hidden rounded-card ring-4 ring-gold-400/35 shadow-chart-float">
+              <Image
+                src="/astrologer.jpg"
+                alt="Portrait of Soumitra Roy Chowdhury"
+                fill
+                sizes="288px"
+                className="object-cover"
+              />
+            </div>
+          </div>
 
-                <h3 className="mt-sp-4 font-sans text-lg font-semibold text-text-primary">
-                  {a.name}
-                </h3>
-                <p className="mt-sp-1 font-sans text-sm text-gold-200">
-                  {a.specialization}
-                </p>
-                <p className="mt-sp-2 font-sans text-[13px] text-text-muted">
-                  {a.experience}
-                </p>
-                <p className="mt-sp-1 font-sans text-[13px] font-medium text-saffron-400">
-                  {a.rating}
-                </p>
+          {/* Biography details: 7 of 12 cols */}
+          <div className="lg:col-span-7 space-y-sp-4">
+            <h3 className="font-display text-2xl font-bold text-text-primary">
+              Vedic Astrology, Vastu Shastra & Lal Kitab Expert
+            </h3>
+            
+            <p className="font-sans text-base leading-relaxed text-text-secondary">
+              Based in Lucknow, **Soumitra Roy Chowdhury** is a professional astrologer with over 30 years of consulting experience. His practice stands apart by providing logical, practical, and highly realistic remedies rather than fear-based, deterministic predictions.
+            </p>
 
-                {/* Language pills */}
-                <ul className="mt-sp-4 flex flex-wrap justify-center gap-sp-2">
-                  {a.languages.map((lang) => (
-                    <li
-                      key={lang}
-                      className="rounded-full bg-bg-surface px-2.5 py-1 font-sans text-[11px] text-text-secondary"
-                    >
-                      {lang}
-                    </li>
-                  ))}
-                </ul>
+            <p className="font-sans text-base leading-relaxed text-text-secondary">
+              He specializes in analyzing career charts, marriage compatibility (Kundli Matching), court/legal matters, property investments, and Vastu space energy alignments. He prescribes customized gemstones, Rudraksha, and Lal Kitab remedial rituals tailored to restore karmic harmony.
+            </p>
 
-                <div className="mt-sp-5 w-full">
-                  <Button
-                    as="a"
-                    href="#pricing"
-                    variant="secondary"
-                    size="md"
-                    className="w-full !text-[13px]"
-                  >
-                    Book session · {a.price}
-                  </Button>
-                </div>
-              </Card>
-            </StaggerItem>
-          ))}
-        </StaggerReveal>
+            <div className="flex flex-wrap gap-sp-3 pt-sp-2">
+              <div className="rounded-input border border-gold-400/15 bg-bg-cosmos px-4 py-2 text-center">
+                <span className="block text-xs text-text-muted uppercase font-bold font-sans">Experience</span>
+                <span className="block font-display text-lg font-semibold text-gold-600">30+ Years</span>
+              </div>
+              <div className="rounded-input border border-gold-400/15 bg-bg-cosmos px-4 py-2 text-center">
+                <span className="block text-xs text-text-muted uppercase font-bold font-sans">Consultations</span>
+                <span className="block font-display text-lg font-semibold text-gold-600">10,000+</span>
+              </div>
+              <div className="rounded-input border border-gold-400/15 bg-bg-cosmos px-4 py-2 text-center">
+                <span className="block text-xs text-text-muted uppercase font-bold font-sans">Languages</span>
+                <span className="block font-display text-lg font-semibold text-gold-600">Hindi, English, Bengali</span>
+              </div>
+            </div>
+
+            <div className="pt-sp-4">
+              <Button as="a" href="#social-profiles" variant="primary" size="lg">
+                Connect
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

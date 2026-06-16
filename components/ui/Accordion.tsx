@@ -21,7 +21,7 @@ export default function Accordion({ items }: { items: AccordionItem[] }) {
         return (
           <div
             key={item.q}
-            className="border-b border-[rgba(212,175,106,0.06)] first:border-t"
+            className="border-b border-[rgba(184,146,40,0.06)] first:border-t"
           >
             <h3>
               <button

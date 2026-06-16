@@ -19,9 +19,9 @@ export default function Card({
   href?: string;
 }) {
   const cls =
-    "group relative rounded-card border border-[rgba(212,175,106,0.1)] bg-bg-cosmos " +
+    "group relative rounded-card border border-[rgba(184,146,40,0.1)] bg-bg-cosmos " +
     (interactive
-      ? "cursor-pointer transition-[transform,border-color,background-color] duration-300 ease-[cubic-bezier(0.22,0.61,0.36,1)] hover:-translate-y-1 hover:border-[rgba(212,175,106,0.25)] hover:bg-bg-surface-hover active:-translate-y-0.5 active:scale-[0.995] "
+      ? "cursor-pointer transition-[transform,border-color,background-color] duration-300 ease-[cubic-bezier(0.22,0.61,0.36,1)] hover:-translate-y-1 hover:border-[rgba(184,146,40,0.25)] hover:bg-bg-surface-hover active:-translate-y-0.5 active:scale-[0.995] "
       : "") +
     className;
 

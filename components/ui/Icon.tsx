@@ -204,3 +204,31 @@ export function IconYoutube({ size = 20, className, strokeWidth = 1.75 }: IconPr
     </svg>
   );
 }
+
+export function IconFacebook({ size = 20, className, strokeWidth = 1.75 }: IconProps) {
+  return (
+    <svg {...base(size)} strokeWidth={strokeWidth} className={className} aria-hidden="true">
+      <path d="M7 10v4h3v7h4v-7h3l1-4h-4v-2a1 1 0 0 1 1-1h3v-4h-3a5 5 0 0 0-5 5v2h-3" />
+    </svg>
+  );
+}
+
+export function IconLinkedin({ size = 20, className, strokeWidth = 1.75 }: IconProps) {
+  return (
+    <svg {...base(size)} strokeWidth={strokeWidth} className={className} aria-hidden="true">
+      <rect x="4" y="4" width="16" height="16" rx="2" />
+      <path d="M8 11v5" />
+      <path d="M8 8v.01" />
+      <path d="M12 16v-5" />
+      <path d="M16 16v-3a2 2 0 0 0-4 0" />
+    </svg>
+  );
+}
+
+export function IconThreads({ size = 20, className, strokeWidth = 1.75 }: IconProps) {
+  return (
+    <svg {...base(size)} strokeWidth={strokeWidth} className={className} aria-hidden="true">
+      <path d="M19 7.5c-1.333 -3 -3.667 -4.5 -7 -4.5c-5.333 0 -9 3.667 -9 9c0 5.333 3.667 9 9 9c3.5 0 5.667 -1.333 6.5 -4c.833 -2.667 .667 -5.333 -.5 -8c-1.667 -4 -5.333 -5 -9 -5c-2.333 0 -4.333 .667 -5.667 2c-1.333 1.333 -2 3.333 -2 6c0 2.667 .667 4.667 2 6c1.333 1.333 3.333 2 5.667 2c3.333 0 6.667 -1 8 -5c.5 -1.667 .667 -3.333 .5 -5" />
+    </svg>
+  );
+}

@@ -49,19 +49,15 @@ export default function HeroText() {
         variants={item}
         className="mt-sp-5 max-w-[480px] text-[18px] font-normal leading-relaxed text-text-secondary"
       >
-        Get your Kundli generated instantly, or book a private consultation with a
-        certified Vedic astrologer.
+        Gain deep cosmic insights and practical remedies for your career, marriage, health, and Vastu from Lucknow's trusted expert.
       </motion.p>
 
       <motion.div
         variants={item}
         className="mt-sp-6 flex flex-col gap-sp-4 sm:flex-row sm:items-center"
       >
-        <Button as="a" href="#pricing" variant="primary" size="lg">
-          Book a consultation
-        </Button>
-        <Button as="a" href="#kundli" variant="secondary" size="lg">
-          Generate free Kundli
+        <Button as="a" href="/about" variant="primary" size="lg">
+          Connect with Soumitra
         </Button>
       </motion.div>
 
@@ -69,7 +65,7 @@ export default function HeroText() {
         variants={item}
         className="mt-sp-5 font-mono text-[13px] text-text-muted"
       >
-        500+ consultations completed &middot; 4.9&#9733; average rating
+        10,000+ consultations completed &middot; 4.9&#9733; average rating
       </motion.p>
     </motion.div>
   );

@@ -26,14 +26,14 @@ const REVIEWS: Review[] = [
   },
   {
     quote:
-      "The compatibility session was thorough and surprisingly grounded. They walked us through the actual placements instead of vague reassurances.",
+      "The compatibility session was thorough and surprisingly grounded. He walked us through the actual placements instead of vague reassurances.",
     name: "Sneha & Karthik",
     detail: "Couple, Pune · Marriage Compatibility",
     stars: 5,
   },
   {
     quote:
-      "Booking was effortless and the recorded session meant I could revisit the remedies later. The astrologer was patient with every question.",
+      "Booking was effortless and the recorded session meant I could revisit the remedies later. Soumitra was patient with every question.",
     name: "Priya Nair",
     detail: "Product Manager, Mumbai · Annual Predictions",
     stars: 5,
@@ -89,7 +89,7 @@ export default function Testimonials() {
     <section id="testimonials" className="bg-bg-void">
       <div className="mx-auto max-w-content px-sp-5 py-sp-10 lg:py-sp-16">
         <div className="flex items-end justify-between gap-sp-5">
-          <SectionHeader eyebrow="Testimonials" title="What our clients say" />
+          <SectionHeader eyebrow="Testimonials" title="What clients say" />
 
           {/* Nav arrows */}
           <div className="hidden shrink-0 gap-sp-3 sm:flex">
@@ -112,7 +112,7 @@ export default function Testimonials() {
             <article
               key={r.name}
               data-card
-              className="flex min-w-[85%] shrink-0 snap-start flex-col rounded-card border border-[rgba(212,175,106,0.1)] border-l-[3px] border-l-gold-400 bg-bg-cosmos p-7 sm:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)]"
+              className="flex min-w-[85%] shrink-0 snap-start flex-col rounded-card border border-[rgba(184,146,40,0.1)] border-l-[3px] border-l-gold-400 bg-bg-cosmos p-7 sm:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)]"
               style={{
                 backgroundImage:
                   "linear-gradient(165deg, rgba(255,255,255,0.025), rgba(255,255,255,0) 60%)",
@@ -163,7 +163,7 @@ function ArrowButton({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-gold-400 text-gold-200 transition-colors duration-200 hover:bg-[rgba(212,175,106,0.08)]"
+      className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-gold-400 text-gold-200 transition-colors duration-200 hover:bg-[rgba(184,146,40,0.08)]"
     >
       {children}
     </button>

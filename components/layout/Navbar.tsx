@@ -6,10 +6,10 @@ import Button from "@/components/ui/Button";
 import Logo from "@/components/shared/Logo";
 
 const LINKS = [
-  { label: "Services", href: "#services" },
-  { label: "Astrologers", href: "#astrologers" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "About", href: "#about" },
+  { label: "Services", href: "/#services" },
+  { label: "About", href: "/about" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function Navbar() {
@@ -27,10 +27,10 @@ export default function Navbar() {
     <header
       className="fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-[350ms] ease-out"
       style={{
-        backgroundColor: scrolled ? "rgba(11, 10, 20, 0.85)" : "transparent",
+        backgroundColor: scrolled ? "rgba(255, 253, 247, 0.85)" : "transparent",
         backdropFilter: scrolled ? "blur(16px)" : "none",
         WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
-        borderBottom: `1px solid ${scrolled ? "rgba(212, 175, 106, 0.1)" : "transparent"}`,
+        borderBottom: `1px solid ${scrolled ? "rgba(184,146,40, 0.1)" : "transparent"}`,
       }}
     >
       <nav className="mx-auto flex max-w-content items-center justify-between px-sp-5 py-sp-4">
@@ -53,8 +53,8 @@ export default function Navbar() {
 
         {/* CTA — desktop */}
         <div className="hidden md:block">
-          <Button as="a" href="#pricing" variant="primary" size="md">
-            Book a session
+          <Button as="a" href="/about" variant="primary" size="md">
+            Connect
           </Button>
         </div>
 
@@ -102,13 +102,13 @@ export default function Navbar() {
             ))}
             <Button
               as="a"
-              href="#pricing"
+              href="/about"
               variant="primary"
               size="lg"
               className="mt-sp-3 w-full"
               onClick={() => setOpen(false)}
             >
-              Book a session
+              Connect
             </Button>
           </motion.div>
         )}

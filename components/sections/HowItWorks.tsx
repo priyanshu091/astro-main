@@ -7,19 +7,19 @@ import { IconForms, IconChartDots, IconCalendarEvent } from "@/components/ui/Ico
 
 const STEPS = [
   {
+    Icon: IconCalendarEvent,
+    title: "Choose a consultation",
+    desc: "Select the packages that best address your life's challenges, career, marriage, or Vastu queries.",
+  },
+  {
     Icon: IconForms,
-    title: "Enter your birth details",
-    desc: "Share your date, time, and place of birth. It takes less than a minute.",
+    title: "Submit birth details",
+    desc: "Provide your date, time, and place of birth securely so Soumitra can prepare your detailed birth charts.",
   },
   {
     Icon: IconChartDots,
-    title: "Get your chart instantly",
-    desc: "Your Kundli is calculated and rendered on screen — D1 and D9, ready to explore.",
-  },
-  {
-    Icon: IconCalendarEvent,
-    title: "Book a deep reading",
-    desc: "Sit with a certified astrologer who walks you through what your chart means.",
+    title: "Receive practical remedies",
+    desc: "Connect directly for a personalized session and receive practical, logical remedial solutions.",
   },
 ];
 

@@ -9,41 +9,46 @@ const config: Config = {
     extend: {
       colors: {
         // Background ramp
-        "bg-void": "#060509",
-        "bg-cosmos": "#0B0A14",
-        "bg-elevated": "#12111E",
-        "bg-surface": "#1A1829",
-        "bg-surface-hover": "#242236",
+        "bg-void": "#FDFAF3",
+        "bg-cosmos": "#FDFAF3",
+        "bg-elevated": "#F4EAD0",
+        "bg-surface": "#F4EAD0",
+        "bg-surface-hover": "#EDE0C2",
+        "bg-stats": "#F4EAD0",
         // Gold / sacred metal ramp
         gold: {
-          50: "#FFF8E7",
-          100: "#F6E4B5",
-          200: "#E8C97A",
-          400: "#D4A256",
-          500: "#C4893C",
-          600: "#A3713A",
-          800: "#7D5A2A",
+          50: "#FDFAF3",
+          100: "#F4EAD0",
+          200: "#E8D9B5",
+          400: "#B89228",
+          500: "#8A6B12",
+          600: "#7A5E10",
+          800: "#5C470C",
         },
         // Saffron / copper
         saffron: {
-          400: "#E8985E",
-          500: "#D47E42",
+          400: "#B89228",
+          500: "#8A6B12",
         },
         copper: {
-          400: "#B87333",
-          600: "#8B5E30",
-          800: "#5C3D1E",
+          400: "#6B4020",
+          600: "#7A0E20",
+          800: "#5A0A18",
         },
+        // Card
+        card: "#FFFFFF",
         // Semantic
-        success: "#4ADE80",
-        warning: "#FBBF24",
-        error: "#F87171",
-        info: "#60A5FA",
+        success: "#10B981",
+        warning: "#F59E0B",
+        error: "#EF4444",
+        info: "#3B82F6",
+        // Accent
+        accent: "#7A0E20",
         // Text
-        "text-primary": "#F2E8D8",
-        "text-secondary": "#A89B8C",
-        "text-muted": "#6E6259",
-        "text-on-gold": "#2A1708",
+        "text-primary": "#1A0900",
+        "text-secondary": "#6B4020",
+        "text-muted": "#6B4020",
+        "text-on-gold": "#FDFAF3",
       },
       fontFamily: {
         display: ["var(--font-fraunces)", "Georgia", "serif"],

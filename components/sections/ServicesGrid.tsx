@@ -3,58 +3,260 @@
 import SectionHeader from "@/components/shared/SectionHeader";
 import { StaggerReveal, StaggerItem } from "@/components/shared/StaggerReveal";
 import Card from "@/components/ui/Card";
-import {
-  IconBirthChart,
-  IconRings,
-  IconBriefcase,
-  IconClock,
-  IconCalendarEvent,
-  IconGem,
-  IconSparkle,
-} from "@/components/ui/Icon";
+
+// Custom inline SVG icons
+function IconChildren(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="12" cy="7" r="4" />
+      <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+      <circle cx="6" cy="13" r="1" />
+      <circle cx="18" cy="13" r="1" />
+    </svg>
+  );
+}
+
+function IconCareer(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M3 21h18M3 17h6v4H3zM9 13h6v8H9zM15 9h6v12h-6z" />
+      <path d="M18 5l-3 3M18 5h-4M18 5v4" />
+    </svg>
+  );
+}
+
+function IconProperty(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M3 12l9-9 9 9M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6" />
+    </svg>
+  );
+}
+
+function IconBusiness(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9 7h2M9 11h2M9 15h2M13 7h2M13 11h2M13 15h2" />
+    </svg>
+  );
+}
+
+function IconMedical(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+    </svg>
+  );
+}
+
+function IconEducation(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+      <path d="M6 12v5c0 2 2.5 3 6 3s6-1 6-3v-5" />
+    </svg>
+  );
+}
+
+function IconLegal(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M12 3v17M12 5h8M12 5H4M20 5l-2 5H22zM4 5L2 10H6zM12 20H4M12 20h8" />
+    </svg>
+  );
+}
+
+function IconMarriage(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="8" cy="12" r="5" />
+      <circle cx="16" cy="12" r="5" />
+      <path d="M11 8.5l1 1" />
+    </svg>
+  );
+}
+
+function IconForeign(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M16 10h4a2 2 0 0 1 0 4h-4l-4 7H8l2-7H6l-2 2H2l1-4-1-4h2l2 2h4l-2-7h4z" />
+    </svg>
+  );
+}
+
+function IconLoan(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M16 8l-8 8M9 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm6 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+    </svg>
+  );
+}
+
+function IconStock(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M3 3v18h18M9 15v4M9 5v4M9 9h4M15 11v6M15 5v2M15 17h4" />
+      <rect x="7" y="9" width="4" height="6" rx="1" />
+      <rect x="13" y="7" width="4" height="4" rx="1" />
+    </svg>
+  );
+}
+
+function IconClockEdit(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l2.5 1.5M18.5 18.5l2.5 2.5" />
+      <circle cx="18.5" cy="18.5" r="1.5" />
+    </svg>
+  );
+}
+
+function IconPredictive(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="12" cy="10" r="7" />
+      <path d="M5 18a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2H5z" />
+      <path d="M10 7a2 2 0 0 1 2-2" opacity="0.6" />
+    </svg>
+  );
+}
+
+function IconRemedial(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M12 21a6 6 0 0 0 6-6c0-3-6-9-6-9s-6 6-6 6a6 6 0 0 0 6 6z" />
+      <path d="M12 11a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" opacity="0.7" />
+    </svg>
+  );
+}
+
+function IconVastu(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M12 3v18M3 12h18M12 3l3 3M12 3L9 6M12 21l3-3M12 21l-3-3M21 12l-3 3M21 12l-3-3M3 12l3 3M3 12l3-3" />
+    </svg>
+  );
+}
+
+function IconLalKitabPred(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M19 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h13z" />
+      <path d="M12 8v8M8 12h8" />
+    </svg>
+  );
+}
+
+function IconLalKitabRem(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M19 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h13z" />
+      <path d="M14 10l4-4M18 6v4M18 6h-4" />
+    </svg>
+  );
+}
+
+function IconRudrakshaGems(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M6 3h12l3 5-9 11L3 9z" />
+      <path d="M3 9h18M9 3l-1.5 6h9L15 3M9 9l3 10 3-10" />
+    </svg>
+  );
+}
 
 const SERVICES = [
   {
-    Icon: IconBirthChart,
-    name: "Birth chart analysis",
-    desc: "A full reading of your D1 and D9 charts — strengths, challenges, and the dasha periods shaping your life.",
-    price: "From ₹1,499",
+    Icon: IconChildren,
+    name: "Children Section",
+    desc: "Astrological guidance regarding children’s health, personality development, well-being, and growth prospects.",
   },
   {
-    Icon: IconRings,
-    name: "Marriage compatibility",
-    desc: "Guna Milan and chart-to-chart analysis for couples weighing a serious commitment.",
-    price: "From ₹1,999",
+    Icon: IconCareer,
+    name: "Career Section",
+    desc: "Auspicious timings, optimal paths, job changes, and professional promotions aligned with your natal chart.",
   },
   {
-    Icon: IconBriefcase,
-    name: "Career & finance",
-    desc: "Timing for job changes, business moves, and investments, read through your 10th and 11th houses.",
-    price: "From ₹1,799",
+    Icon: IconProperty,
+    name: "Property Section",
+    desc: "Guidance on property transactions, land acquisition, inheritance, investments, and home purchases.",
   },
   {
-    Icon: IconClock,
-    name: "Muhurta (auspicious timing)",
-    desc: "Find the right moment for a wedding, launch, or housewarming based on planetary transits.",
-    price: "From ₹999",
+    Icon: IconBusiness,
+    name: "Business Section",
+    desc: "Astrological direction for commercial ventures, partnership options, investments, and business growth.",
   },
   {
-    Icon: IconCalendarEvent,
-    name: "Annual predictions",
-    desc: "A month-by-month forecast for the year ahead, grounded in your Varshaphal chart.",
-    price: "From ₹2,499",
+    Icon: IconMedical,
+    name: "Medical Section",
+    desc: "Understanding physical/mental health timings, dasha indicators, and suitable holistic wellness practices.",
   },
   {
-    Icon: IconGem,
-    name: "Remedial measures",
-    desc: "Practical, tradition-rooted remedies — gemstones, mantras, and rituals matched to your chart.",
-    price: "From ₹1,299",
+    Icon: IconEducation,
+    name: "Education Section",
+    desc: "Subject choices, academic success periods, higher study paths, and competitive exam alignments.",
   },
   {
-    Icon: IconSparkle,
-    name: "Child naming",
-    desc: "An auspicious name and starting syllable chosen from your child's nakshatra and Moon sign.",
-    price: "From ₹1,499",
+    Icon: IconLegal,
+    name: "Court & Legal Issues",
+    desc: "Astrological analysis of transit houses and planets influencing legal disputes and court outcomes.",
+  },
+  {
+    Icon: IconMarriage,
+    name: "Marriage Section",
+    desc: "Detailed relationship compatibility (Kundli Matching), marital harmony, and auspicious wedding timing.",
+  },
+  {
+    Icon: IconForeign,
+    name: "Foreign Visit/Settlement",
+    desc: "Opportunities for global travel, higher studies abroad, foreign job postings, and visa approvals.",
+  },
+  {
+    Icon: IconLoan,
+    name: "Loan & Debt",
+    desc: "Navigating debt release, release from financial pressure, and managing compound interest blocks.",
+  },
+  {
+    Icon: IconStock,
+    name: "Share Market Section",
+    desc: "Astrological markers driving short-term trading, investments, and wealth accumulative cycles.",
+  },
+  {
+    Icon: IconClockEdit,
+    name: "Birth Time Rectification",
+    desc: "Fine-tuning birth times down to the minute by matching significant life events with sub-divisional charts.",
+  },
+  {
+    Icon: IconPredictive,
+    name: "Predictive Section",
+    desc: "Detailed future predictions based on dasha cycles, planetary transits, and progressive charts.",
+  },
+  {
+    Icon: IconRemedial,
+    name: "Remedial Section",
+    desc: "Authentic, realistic remedies tailored to neutralize planetary afflictions and enhance beneficial placements.",
+  },
+  {
+    Icon: IconVastu,
+    name: "Vaastu for Residential & Commercial",
+    desc: "Tuning directional energies and balancing element layouts in residential homes or business spaces.",
+  },
+  {
+    Icon: IconLalKitabPred,
+    name: "Lal Kitab Predictions",
+    desc: "Unique, character-focused horoscope predictions using classic Lal Kitab house placement methods.",
+  },
+  {
+    Icon: IconLalKitabRem,
+    name: "Lal Kitab Remedies",
+    desc: "Highly practical, simple, and realistic remedies to clear deep karmic debts and planetary blockages.",
+  },
+  {
+    Icon: IconRudrakshaGems,
+    name: "Rudraksha & Gems",
+    desc: "Prescribing highly accurate gemstones, bead counts, and metals to restore physical and energetic balances.",
   },
 ];
 
@@ -62,28 +264,27 @@ export default function ServicesGrid() {
   return (
     <section id="services" className="bg-bg-void">
       <div className="mx-auto max-w-content px-sp-5 py-sp-10 lg:py-sp-16">
-        <SectionHeader eyebrow="Services" title="Guidance for every area of life" />
+        <SectionHeader
+          eyebrow="Services"
+          title="Astrological remedies for every aspect of life’s challenges."
+        />
 
         <StaggerReveal
-          stagger={0.08}
-          amount={0.15}
-          className="mt-sp-8 grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-sp-5 lg:mt-sp-10"
+          stagger={0.05}
+          amount={0.1}
+          className="mt-sp-8 grid grid-cols-1 gap-sp-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:mt-sp-10"
         >
           {SERVICES.map((s) => (
             <StaggerItem key={s.name} className="h-full">
-              <Card as="a" href="#pricing" className="flex h-full flex-col p-7">
+              <Card as="a" href="#contact" className="flex h-full flex-col p-6">
                 <s.Icon
-                  size={28}
                   className="text-gold-400 transition-transform duration-300 group-hover:scale-105"
                 />
-                <h3 className="mt-sp-5 font-sans text-lg font-semibold text-text-primary">
+                <h3 className="mt-sp-4 font-sans text-base font-semibold text-text-primary">
                   {s.name}
                 </h3>
-                <p className="mt-sp-3 flex-1 font-sans text-sm leading-relaxed text-text-secondary">
+                <p className="mt-sp-2 flex-1 font-sans text-[13px] leading-relaxed text-text-secondary">
                   {s.desc}
-                </p>
-                <p className="mt-sp-5 font-sans text-sm font-medium text-gold-400">
-                  {s.price}
                 </p>
               </Card>
             </StaggerItem>

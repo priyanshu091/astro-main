@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import ConnectModal from "@/components/shared/ConnectModal";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -22,9 +23,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vedic Astrology — Clarity for life's biggest decisions",
+  title: "Vedic Destiny — Expert Vedic Astrology by Soumitra Roy Chowdhury",
   description:
-    "Get your Kundli generated instantly, or book a private consultation with a certified Vedic astrologer.",
+    "Personalized, logical Vedic astrology consultations and practical remedies for career, marriage, health, and Vastu by expert Soumitra Roy Chowdhury.",
 };
 
 export default function RootLayout({
@@ -37,7 +38,10 @@ export default function RootLayout({
       lang="en"
       className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        {children}
+        <ConnectModal />
+      </body>
     </html>
   );
 }

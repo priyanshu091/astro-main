@@ -24,9 +24,9 @@ const variants: Record<Variant, string> = {
   primary:
     "text-text-on-gold border-0 bg-[linear-gradient(155deg,var(--gold-100),var(--gold-500))] hover:-translate-y-px hover:bg-[linear-gradient(155deg,var(--gold-200),var(--gold-600))] active:translate-y-0 active:scale-[0.98]",
   secondary:
-    "border border-gold-400 text-gold-200 bg-transparent hover:bg-[rgba(212,175,106,0.08)] hover:-translate-y-px active:translate-y-0 active:scale-[0.98]",
+    "border border-gold-400 text-gold-600 bg-transparent hover:bg-[rgba(184,146,40,0.08)] hover:-translate-y-px active:translate-y-0 active:scale-[0.98]",
   ghost:
-    "border-0 bg-transparent text-gold-400 hover:text-gold-200 px-2 py-1",
+    "border-0 bg-transparent text-gold-400 hover:text-gold-600 px-2 py-1",
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(

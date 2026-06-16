@@ -4,33 +4,39 @@
 
 :root {
   /* Background ramp */
-  --bg-void: #060509;
-  --bg-cosmos: #0b0a14;
-  --bg-elevated: #12111e;
-  --bg-surface: #1a1829;
-  --bg-surface-hover: #242236;
+  --bg-void: #FDFAF3;
+  --bg-cosmos: #FDFAF3;
+  --bg-elevated: #F4EAD0;
+  --bg-surface: #F4EAD0;
+  --bg-surface-hover: #EDE0C2;
 
   /* Gold / sacred metal */
-  --gold-50: #fff8e7;
-  --gold-100: #f6e4b5;
-  --gold-200: #e8c97a;
-  --gold-400: #d4a256;
-  --gold-500: #c4893c;
-  --gold-600: #a3713a;
-  --gold-800: #7d5a2a;
+  --gold-50: #FDFAF3;
+  --gold-100: #F4EAD0;
+  --gold-200: #E8D9B5;
+  --gold-400: #B89228;
+  --gold-500: #8A6B12;
+  --gold-600: #7A5E10;
+  --gold-800: #5C470C;
 
   /* Saffron / copper */
-  --saffron-400: #e8985e;
-  --saffron-500: #d47e42;
-  --copper-400: #b87333;
-  --copper-600: #8b5e30;
-  --copper-800: #5c3d1e;
+  --saffron-400: #B89228;
+  --saffron-500: #8A6B12;
+  --copper-400: #6B4020;
+  --copper-600: #7A0E20;
+  --copper-800: #5A0A18;
+
+  /* Card */
+  --card: #FFFFFF;
+
+  /* Accent */
+  --accent: #7A0E20;
 
   /* Text */
-  --text-primary: #f2e8d8;
-  --text-secondary: #a89b8c;
-  --text-muted: #6e6259;
-  --text-on-gold: #2a1708;
+  --text-primary: #1A0900;
+  --text-secondary: #6B4020;
+  --text-muted: #6B4020;
+  --text-on-gold: #FDFAF3;
 }
 
 html {
@@ -69,7 +75,7 @@ p {
 /* Keyboard focus ring (gold glow) */
 :where(a, button, input, [tabindex]):focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(212, 162, 86, 0.3);
+  box-shadow: 0 0 0 3px rgba(138,107,18, 0.3);
   border-radius: 8px;
 }
 
@@ -110,4 +116,20 @@ input[type="time"]:focus::-webkit-calendar-picker-indicator {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+@keyframes rotate-zodiac {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-zodiac-rotate {
+  animation: rotate-zodiac 100s linear infinite;
+  transform-origin: 120px 120px;
+  will-change: transform;
+  backface-visibility: hidden;
 }

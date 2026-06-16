@@ -7,7 +7,6 @@ import { IconCheck } from "@/components/ui/Icon";
 
 type Tier = {
   name: string;
-  price: string;
   duration: string;
   features: string[];
   cta: string;
@@ -17,17 +16,15 @@ type Tier = {
 const TIERS: Tier[] = [
   {
     name: "Quick reading",
-    price: "₹999",
     duration: "20 minutes",
-    features: ["Basic chart analysis", "One area of focus", "Live Q&A"],
+    features: ["Vedic chart overview", "One primary area of focus", "Actionable remedies"],
     cta: "Book quick reading",
   },
   {
     name: "Deep consultation",
-    price: "₹2,499",
     duration: "45 minutes",
     features: [
-      "Full chart analysis (D1 + D9)",
+      "Full chart analysis",
       "Dasha period breakdown",
       "Detailed Q&A",
       "Remedial suggestions",
@@ -38,14 +35,13 @@ const TIERS: Tier[] = [
   },
   {
     name: "Comprehensive package",
-    price: "₹4,999",
     duration: "90 minutes · across 2 sessions",
     features: [
       "Everything in Deep consultation",
-      "Annual predictions",
+      "Annual predictions & transits",
       "Muhurta recommendations",
       "Follow-up session",
-      "PDF report",
+      "Detailed PDF report",
     ],
     cta: "Book package",
   },
@@ -56,8 +52,8 @@ export default function Pricing() {
     <section id="pricing" className="bg-bg-void">
       <div className="mx-auto max-w-content px-sp-5 py-sp-10 lg:py-sp-16">
         <SectionHeader
-          eyebrow="Pricing"
-          title="Transparent pricing, no hidden fees"
+          eyebrow="Consultations"
+          title="Tailored consultation packages"
         />
 
         <StaggerReveal
@@ -75,7 +71,7 @@ export default function Pricing() {
                   "relative flex h-full flex-col rounded-card bg-bg-cosmos p-8 " +
                   (tier.featured
                     ? "border-2 border-gold-400 shadow-[0_24px_64px_-28px_rgba(0,0,0,0.7)] lg:-translate-y-2"
-                    : "border border-[rgba(212,175,106,0.1)]")
+                    : "border border-[rgba(184,146,40,0.1)]")
                 }
                 style={{
                   backgroundImage:
@@ -90,16 +86,11 @@ export default function Pricing() {
 
                 <h3 className="eyebrow text-gold-200">{tier.name}</h3>
 
-                <div className="mt-sp-4 flex items-baseline gap-sp-2">
-                  <span className="font-display text-[40px] font-semibold leading-none text-text-primary">
-                    {tier.price}
-                  </span>
-                </div>
-                <p className="mt-sp-2 font-sans text-sm text-text-muted">
-                  {tier.duration}
+                <p className="mt-sp-3 font-sans text-sm text-text-primary font-semibold">
+                  Duration: {tier.duration}
                 </p>
 
-                <ul className="mt-sp-6 flex flex-1 flex-col gap-sp-3">
+                <ul className="mt-sp-5 flex flex-1 flex-col gap-sp-3">
                   {tier.features.map((f) => (
                     <li key={f} className="flex items-start gap-sp-2">
                       <IconCheck
@@ -116,7 +107,7 @@ export default function Pricing() {
                 <div className="mt-sp-6">
                   <Button
                     as="a"
-                    href="#kundli"
+                    href="#skills"
                     variant={tier.featured ? "primary" : "secondary"}
                     size="lg"
                     className="w-full"

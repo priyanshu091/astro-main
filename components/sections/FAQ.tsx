@@ -4,23 +4,23 @@ import Accordion, { type AccordionItem } from "@/components/ui/Accordion";
 const FAQS: AccordionItem[] = [
   {
     q: "How accurate is Vedic astrology?",
-    a: "Vedic astrology is an interpretive tradition, not a guarantee of outcomes. A good reading gives you a structured way to think about timing, tendencies, and decisions — grounded in your exact birth chart. We're honest about what it can and can't tell you, and we never trade in fear or certainty about the future.",
+    a: "Vedic astrology is an interpretive tradition, not a guarantee of outcomes. A good reading gives you a structured way to think about timing, tendencies, and decisions — grounded in your exact birth chart. Soumitra is honest about what it can and can't tell you, and never trades in fear or certainty about the future.",
   },
   {
     q: "What do I need for a consultation?",
     a: "Three things: your date of birth, your time of birth (as precise as possible), and your place of birth. Birth time matters most — even a few minutes changes house placements — so check a birth certificate or hospital record if you can.",
   },
   {
-    q: "How are your astrologers certified?",
-    a: "Every astrologer on the platform is vetted for formal training in their tradition (Parashari, KP, or Nadi), a minimum of several years of consulting experience, and verified client reviews. We onboard a small, curated panel rather than listing hundreds of profiles.",
+    q: "What are the credentials of the astrologer?",
+    a: "Soumitra Roy Chowdhury is a certified, professional Vedic astrologer with over 30 years of consulting experience. Trained in classical Vedic traditions (Parashari, KP, and Lal Kitab), he offers logical, practical remedies based on structural analysis of planetary positions, avoiding fear-based or deterministic predictions.",
   },
   {
     q: "Is my birth data private?",
-    a: "Yes. Your birth details are encrypted and used only to generate your chart and brief your astrologer. We never sell or share your data, and you can request its deletion at any time.",
+    a: "Yes. Your birth details are used exclusively to prepare your chart for your personal consultation with Soumitra Roy Chowdhury. Your personal information is kept strictly confidential and is never shared with third parties.",
   },
   {
     q: "Can I reschedule or cancel?",
-    a: "You can reschedule or cancel up to 12 hours before your session at no charge. Cancellations inside that window are eligible for a partial credit toward a future booking.",
+    a: "You can reschedule or cancel up to 12 hours before your session. Please reach out directly to adjust your appointment.",
   },
   {
     q: "What's the difference between D1 and D9 charts?",
