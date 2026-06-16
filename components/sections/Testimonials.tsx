@@ -92,7 +92,7 @@ export default function Testimonials() {
           <SectionHeader eyebrow="Testimonials" title="What clients say" />
 
           {/* Nav arrows */}
-          <div className="hidden shrink-0 gap-sp-3 sm:flex">
+          <div className="flex shrink-0 gap-sp-3">
             <ArrowButton label="Previous testimonial" onClick={() => step(-1)}>
               <IconChevronLeft size={18} />
             </ArrowButton>
@@ -112,7 +112,7 @@ export default function Testimonials() {
             <article
               key={r.name}
               data-card
-              className="flex min-w-[85%] shrink-0 snap-start flex-col rounded-card border border-[rgba(184,146,40,0.1)] border-l-[3px] border-l-gold-400 bg-bg-cosmos p-7 sm:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)]"
+              className="flex min-w-full shrink-0 snap-start flex-col rounded-card border border-[rgba(184,146,40,0.1)] border-l-[3px] border-l-gold-400 bg-bg-cosmos p-7 sm:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)]"
               style={{
                 backgroundImage:
                   "linear-gradient(165deg, rgba(255,255,255,0.025), rgba(255,255,255,0) 60%)",
