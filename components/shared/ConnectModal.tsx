@@ -117,7 +117,7 @@ export default function ConnectModal() {
                 <div className="text-center mb-sp-4">
                   <span className="eyebrow text-gold-500 block">Vedic Destiny</span>
                   <h2 className="font-display text-2xl font-bold text-text-primary mt-1">
-                    Connect with Soumitra
+                    Astrologer Acharya Soumitra Roy Chowdhury
                   </h2>
                   <p className="font-sans text-xs text-text-secondary mt-1 max-w-[320px] mx-auto leading-relaxed">
                     Leave your details below. Receive guidance and practical solutions directly from Lucknow's trusted Vedic expert.
@@ -193,7 +193,7 @@ export default function ConnectModal() {
                   Thank You, {name}!
                 </h3>
                 <p className="font-sans text-sm text-text-secondary leading-relaxed max-w-[280px] mx-auto">
-                  Your request has been received. Soumitra Chowdhury will get in touch with you shortly.
+                  Your request has been received. Astrologer Acharya Soumitra Roy Chowdhury will get in touch with you shortly.
                 </p>
 
                 <div className="pt-4 max-w-[160px] mx-auto">

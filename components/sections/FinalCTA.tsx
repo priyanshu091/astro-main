@@ -71,7 +71,7 @@ export default function FinalCTA() {
             Contact Us
           </h2>
           <p className="mt-sp-3 max-w-[600px] mx-auto font-sans text-base text-text-secondary leading-relaxed">
-            Connect directly with Soumitra Roy Chowdhury for career, marriage, health, and Vastu consultations.
+            Connect directly with Astrologer Acharya Soumitra Roy Chowdhury for career, marriage, health, and Vastu consultations.
           </p>
         </div>
 
@@ -248,7 +248,7 @@ export default function FinalCTA() {
                   Thank You, {name}!
                 </h3>
                 <p className="font-sans text-sm text-text-secondary leading-relaxed max-w-[320px] mx-auto">
-                  Your message has been sent successfully. Soumitra Chowdhury will get in touch with you shortly.
+                  Your message has been sent successfully. Astrologer Acharya Soumitra Roy Chowdhury will get in touch with you shortly.
                 </p>
 
                 <div className="pt-4 max-w-[160px] mx-auto">

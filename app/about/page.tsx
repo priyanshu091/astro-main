@@ -299,7 +299,7 @@ export default function AboutPage() {
         <section id="social-profiles" className="bg-bg-cosmos border-t border-gold-400/10 py-12 px-sp-5">
           <div className="max-w-content mx-auto text-center">
             <h2 className="font-display text-xl font-semibold text-text-primary mb-6">
-              Connect With Soumitra On Other Platforms
+              Connect With Astrologer Acharya Soumitra Roy Chowdhury On Other Platforms
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-[800px] mx-auto">
               {[

@@ -57,7 +57,7 @@ export default function HeroText() {
         className="mt-sp-6 flex flex-col gap-sp-4 sm:flex-row sm:items-center"
       >
         <Button as="a" href="/about" variant="primary" size="lg">
-          Connect with Soumitra
+          Connect with Astrologer Acharya Soumitra Roy Chowdhury
         </Button>
       </motion.div>
 
