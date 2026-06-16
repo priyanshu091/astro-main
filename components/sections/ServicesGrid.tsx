@@ -332,9 +332,13 @@ export default function ServicesGrid() {
               key={s.name}
               data-card
               variants={item}
-              className="h-full min-w-full shrink-0 snap-start md:min-w-0 md:shrink"
+              className="flex h-full min-w-full shrink-0 snap-center justify-center md:block md:min-w-0 md:shrink"
             >
-              <Card as="a" href="#contact" className="flex h-full flex-col p-6">
+              <Card
+                as="a"
+                href="#contact"
+                className="flex h-full w-full max-w-xs flex-col p-6 min-h-[200px] md:max-w-none md:min-h-0"
+              >
                 <s.Icon className="text-gold-400 transition-transform duration-300 group-hover:scale-105" />
                 <h3 className="mt-sp-4 font-sans text-base font-semibold text-text-primary">
                   {s.name}

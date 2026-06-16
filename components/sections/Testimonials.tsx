@@ -106,42 +106,46 @@ export default function Testimonials() {
           ref={trackRef}
           onMouseEnter={() => (hovering.current = true)}
           onMouseLeave={() => (hovering.current = false)}
-          className="mt-sp-8 flex snap-x snap-mandatory gap-sp-5 overflow-x-auto pb-2 lg:mt-sp-10 [-ms-overflow-style:none] [scrollbar-width:none]"
+          className="no-scrollbar mt-sp-8 flex snap-x snap-mandatory gap-sp-5 overflow-x-auto pb-2 lg:mt-sp-10"
         >
           {REVIEWS.map((r) => (
-            <article
+            <div
               key={r.name}
               data-card
-              className="flex min-w-full shrink-0 snap-start flex-col rounded-card border border-[rgba(184,146,40,0.1)] border-l-[3px] border-l-gold-400 bg-bg-cosmos p-7 sm:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(165deg, rgba(255,255,255,0.025), rgba(255,255,255,0) 60%)",
-              }}
+              className="flex min-w-full shrink-0 snap-center justify-center sm:block sm:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)]"
             >
-              {/* Stars */}
-              <div className="flex gap-0.5 text-saffron-400" aria-label={`${r.stars} out of 5 stars`}>
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <IconStarFilled
-                    key={i}
-                    size={15}
-                    className={i < r.stars ? "" : "opacity-20"}
-                  />
-                ))}
-              </div>
+              <article
+                className="flex h-full w-full max-w-sm flex-col rounded-card border border-[rgba(184,146,40,0.1)] border-l-[3px] border-l-gold-400 bg-bg-cosmos p-7 sm:max-w-none"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(165deg, rgba(255,255,255,0.025), rgba(255,255,255,0) 60%)",
+                }}
+              >
+                {/* Stars */}
+                <div className="flex gap-0.5 text-saffron-400" aria-label={`${r.stars} out of 5 stars`}>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <IconStarFilled
+                      key={i}
+                      size={15}
+                      className={i < r.stars ? "" : "opacity-20"}
+                    />
+                  ))}
+                </div>
 
-              <p className="mt-sp-4 flex-1 font-sans text-base italic leading-relaxed text-text-primary">
-                &ldquo;{r.quote}&rdquo;
-              </p>
+                <p className="mt-sp-4 flex-1 font-sans text-base italic leading-relaxed text-text-primary">
+                  &ldquo;{r.quote}&rdquo;
+                </p>
 
-              <div className="mt-sp-5">
-                <p className="font-sans text-sm font-semibold text-text-primary">
-                  {r.name}
-                </p>
-                <p className="mt-0.5 font-sans text-[13px] text-text-muted">
-                  {r.detail}
-                </p>
-              </div>
-            </article>
+                <div className="mt-sp-5">
+                  <p className="font-sans text-sm font-semibold text-text-primary">
+                    {r.name}
+                  </p>
+                  <p className="mt-0.5 font-sans text-[13px] text-text-muted">
+                    {r.detail}
+                  </p>
+                </div>
+              </article>
+            </div>
           ))}
         </div>
       </div>
