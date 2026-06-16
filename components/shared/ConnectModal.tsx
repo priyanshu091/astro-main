@@ -39,7 +39,14 @@ export default function ConnectModal() {
     const timer = setTimeout(() => {
       setIsOpen(true);
     }, 5000);
-    return () => clearTimeout(timer);
+
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener("open-connect-modal", handleOpen);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("open-connect-modal", handleOpen);
+    };
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
