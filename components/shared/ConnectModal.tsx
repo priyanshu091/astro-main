@@ -31,23 +31,47 @@ export default function ConnectModal() {
   const [contact, setContact] = useState("");
   const [query, setQuery] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    // Check localStorage
-    const hasVisited = localStorage.getItem("hasVisitedConnect");
-    if (!hasVisited) {
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-        localStorage.setItem("hasVisitedConnect", "true");
-      }, 2500); // 2.5s delay
-      return () => clearTimeout(timer);
-    }
+    // Show popup on every visit after 5 seconds
+    const timer = setTimeout(() => {
+      setIsOpen(true);
+    }, 5000);
+    return () => clearTimeout(timer);
   }, []);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Simulate submission
-    setSubmitted(true);
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          access_key: "3bf10923-e0fb-45d8-9e24-ee3e8ec97194",
+          name,
+          contact,
+          message: query,
+          subject: `New Popup Contact from ${name} — Vedic Destiny`,
+          from_name: "Vedic Destiny Website (Popup)",
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setSubmitted(true);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+    } catch {
+      setError("Network error. Please check your connection.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   function handleClose() {
@@ -129,9 +153,15 @@ export default function ConnectModal() {
                   </div>
                 </div>
 
+                {error && (
+                  <p className="text-center font-sans text-sm text-error font-medium">
+                    {error}
+                  </p>
+                )}
+
                 <div className="pt-2">
-                  <Button type="submit" variant="primary" size="lg" className="w-full">
-                    Submit Details
+                  <Button type="submit" variant="primary" size="lg" className="w-full" disabled={loading}>
+                    {loading ? "Sending..." : "Submit Details"}
                   </Button>
                 </div>
 
