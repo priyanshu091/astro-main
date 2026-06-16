@@ -14,10 +14,39 @@ export default function FinalCTA() {
   const [contact, setContact] = useState("");
   const [query, setQuery] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          access_key: "3bf10923-e0fb-45d8-9e24-ee3e8ec97194",
+          name,
+          contact,
+          message: query,
+          subject: `New Contact from ${name} — Vedic Destiny`,
+          from_name: "Vedic Destiny Website",
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setSubmitted(true);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -179,9 +208,15 @@ export default function FinalCTA() {
                   />
                 </div>
 
+                {error && (
+                  <p className="text-center font-sans text-sm text-error font-medium">
+                    {error}
+                  </p>
+                )}
+
                 <div className="pt-2">
-                  <Button type="submit" variant="primary" size="lg" className="w-full">
-                    Submit Details
+                  <Button type="submit" variant="primary" size="lg" className="w-full" disabled={loading}>
+                    {loading ? "Sending..." : "Submit Details"}
                   </Button>
                 </div>
 
@@ -217,7 +252,7 @@ export default function FinalCTA() {
                 </p>
 
                 <div className="pt-4 max-w-[160px] mx-auto">
-                  <Button type="button" variant="secondary" size="md" className="w-full" onClick={() => setSubmitted(false)}>
+                  <Button type="button" variant="secondary" size="md" className="w-full" onClick={() => { setSubmitted(false); setName(""); setContact(""); setQuery(""); setError(""); }}>
                     Send Another Message
                   </Button>
                 </div>
