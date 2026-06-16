@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -26,6 +27,7 @@ function IconX({ size = 24, className }: { size?: number; className?: string }) 
 }
 
 export default function ConnectModal() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
@@ -35,18 +37,23 @@ export default function ConnectModal() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (pathname !== "/") {
+      setIsOpen(false);
+      return;
+    }
+
     // Show popup on every visit after 5 seconds
     const timer = setTimeout(() => {
       setIsOpen(true);
     }, 5000);
 
+    return () => clearTimeout(timer);
+  }, [pathname]);
+
+  useEffect(() => {
     const handleOpen = () => setIsOpen(true);
     window.addEventListener("open-connect-modal", handleOpen);
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("open-connect-modal", handleOpen);
-    };
+    return () => window.removeEventListener("open-connect-modal", handleOpen);
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
