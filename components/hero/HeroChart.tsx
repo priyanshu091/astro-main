@@ -1,13 +1,22 @@
 "use client";
 
-import ZodiacWheel from "@/components/ZodiacWheel";
+import { motion, useReducedMotion } from "framer-motion";
+import KundliChart from "@/components/chart/KundliChart";
+
+const EASE = [0.22, 0.61, 0.36, 1] as const;
 
 export default function HeroChart() {
-  // Free-floating — no card, no box, no background. The wheel handles its own
-  // mount animation (scale 0.85 → 1, fade in) and is fully transparent.
+  const reduced = useReducedMotion() ?? false;
+
+  // Free-floating — no card, border, fill, or shadow behind the wheel.
   return (
-    <div className="mx-auto w-full max-w-[460px]">
-      <ZodiacWheel size={460} />
-    </div>
+    <motion.div
+      initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={reduced ? { duration: 0 } : { duration: 0.6, delay: 0.6, ease: EASE }}
+      className="relative mx-auto w-full max-w-[460px]"
+    >
+      <KundliChart />
+    </motion.div>
   );
 }
