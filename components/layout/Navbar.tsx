@@ -24,110 +24,148 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
-    <header
-      className="fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-[350ms] ease-out"
-      style={{
-        backgroundColor: scrolled ? "rgba(255, 253, 247, 0.85)" : "transparent",
-        backdropFilter: scrolled ? "blur(16px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
-        borderBottom: `1px solid ${scrolled ? "rgba(184,146,40, 0.1)" : "transparent"}`,
-      }}
-    >
-      <nav className="mx-auto flex max-w-content items-center justify-between px-sp-5 py-sp-4">
-        {/* Logo */}
-        <Logo />
+    <>
+      <header
+        className="fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-[350ms] ease-out"
+        style={{
+          backgroundColor: scrolled ? "rgba(255, 253, 247, 0.85)" : "transparent",
+          backdropFilter: scrolled ? "blur(16px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
+          borderBottom: `1px solid ${scrolled ? "rgba(184,146,40, 0.1)" : "transparent"}`,
+        }}
+      >
+        <nav className="mx-auto flex max-w-content items-center justify-between px-sp-5 py-sp-4">
+          {/* Logo */}
+          <Logo />
 
-        {/* Center links — desktop */}
-        <ul className="hidden items-center gap-sp-6 md:flex">
-          {LINKS.map((l) => (
-            <li key={l.href}>
-              <a
-                href={l.href}
-                className="font-sans text-sm font-medium text-text-primary opacity-70 transition-opacity duration-200 hover:opacity-100"
-              >
-                {l.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        {/* CTA — desktop */}
-        <div className="hidden md:block">
-          <Button as="a" href="/#contact" variant="primary" size="md">
-            Connect
-          </Button>
-        </div>
-
-        {/* Hamburger — mobile */}
-        <button
-          onClick={() => setOpen((v) => !v)}
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          className="relative z-50 flex h-10 w-10 cursor-pointer flex-col items-center justify-center gap-[5px] md:hidden"
-        >
-          <motion.span
-            animate={open ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
-            className="block h-[1.5px] w-6 bg-text-primary"
-          />
-          <motion.span
-            animate={open ? { opacity: 0 } : { opacity: 1 }}
-            className="block h-[1.5px] w-6 bg-text-primary"
-          />
-          <motion.span
-            animate={open ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
-            className="block h-[1.5px] w-6 bg-text-primary"
-          />
-        </button>
-      </nav>
-
-      {/* Mobile backdrop + slide-in panel */}
-      <AnimatePresence>
-        {open && (
-          <>
-            {/* Backdrop overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-30 bg-black/50 md:hidden"
-              onClick={() => setOpen(false)}
-            />
-
-            {/* Slide-in panel */}
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 260, damping: 30 }}
-              className="fixed inset-y-0 right-0 z-40 flex h-full w-72 flex-col gap-sp-5 px-sp-6 pt-[96px] shadow-xl md:hidden"
-              style={{ backgroundColor: "#FDFAF3" }}
-            >
-              {LINKS.map((l) => (
+          {/* Center links — desktop */}
+          <ul className="hidden items-center gap-sp-6 md:flex">
+            {LINKS.map((l) => (
+              <li key={l.href}>
                 <a
-                  key={l.href}
                   href={l.href}
-                  onClick={() => setOpen(false)}
-                  className="font-sans text-base font-medium text-text-primary opacity-80 transition-opacity hover:opacity-100"
+                  className="font-sans text-sm font-medium text-text-primary opacity-70 transition-opacity duration-200 hover:opacity-100"
                 >
                   {l.label}
                 </a>
-              ))}
-              <Button
-                as="a"
-                href="/#contact"
-                variant="primary"
-                size="lg"
-                className="mt-sp-3 w-full"
-                onClick={() => setOpen(false)}
-              >
-                Connect
-              </Button>
-            </motion.div>
-          </>
+              </li>
+            ))}
+          </ul>
+
+          {/* CTA — desktop */}
+          <div className="hidden md:block">
+            <Button as="a" href="/#contact" variant="primary" size="md">
+              Connect
+            </Button>
+          </div>
+
+          {/* Hamburger — mobile */}
+          <button
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            className="relative z-[60] flex h-10 w-10 cursor-pointer flex-col items-center justify-center gap-[5px] md:hidden"
+          >
+            <motion.span
+              animate={open ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
+              className="block h-[1.5px] w-6 bg-text-primary"
+            />
+            <motion.span
+              animate={open ? { opacity: 0 } : { opacity: 1 }}
+              className="block h-[1.5px] w-6 bg-text-primary"
+            />
+            <motion.span
+              animate={open ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
+              className="block h-[1.5px] w-6 bg-text-primary"
+            />
+          </button>
+        </nav>
+      </header>
+
+      {/* Mobile backdrop overlay */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            key="mobile-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden"
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 51,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+            }}
+            onClick={() => setOpen(false)}
+          />
         )}
       </AnimatePresence>
-    </header>
+
+      {/* Mobile slide-in panel */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            key="mobile-panel"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 260, damping: 30 }}
+            className="md:hidden"
+            style={{
+              position: "fixed",
+              top: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 52,
+              width: "288px",
+              backgroundColor: "#FDFAF3",
+              display: "flex",
+              flexDirection: "column",
+              gap: "20px",
+              paddingLeft: "24px",
+              paddingRight: "24px",
+              paddingTop: "96px",
+              boxShadow: "-8px 0 30px rgba(0, 0, 0, 0.15)",
+            }}
+          >
+            {LINKS.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className="font-sans text-base font-medium text-text-primary opacity-80 transition-opacity hover:opacity-100"
+              >
+                {l.label}
+              </a>
+            ))}
+            <Button
+              as="a"
+              href="/#contact"
+              variant="primary"
+              size="lg"
+              className="mt-sp-3 w-full"
+              onClick={() => setOpen(false)}
+            >
+              Connect
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
