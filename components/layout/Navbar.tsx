@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import Logo from "@/components/shared/Logo";
 
 const LINKS = [
+  { label: "Home", href: "/" },
   { label: "Services", href: "/#services" },
   { label: "About", href: "/about" },
   { label: "FAQ", href: "/faq" },
