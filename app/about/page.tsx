@@ -287,7 +287,7 @@ export default function AboutPage() {
               </div>
 
               <div className="mt-8 text-center">
-                <Button as="a" href="#social-profiles" variant="primary" size="md" className="w-full">
+                <Button as="a" href="/#contact" variant="primary" size="md" className="w-full">
                   Book A Consultation
                 </Button>
               </div>

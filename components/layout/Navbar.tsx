@@ -54,7 +54,7 @@ export default function Navbar() {
 
         {/* CTA — desktop */}
         <div className="hidden md:block">
-          <Button as="a" href="/about" variant="primary" size="md">
+          <Button as="a" href="/#contact" variant="primary" size="md">
             Connect
           </Button>
         </div>
@@ -103,7 +103,7 @@ export default function Navbar() {
             ))}
             <Button
               as="a"
-              href="/about"
+              href="/#contact"
               variant="primary"
               size="lg"
               className="mt-sp-3 w-full"
