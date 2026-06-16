@@ -81,37 +81,51 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile slide-in panel */}
+      {/* Mobile backdrop + slide-in panel */}
       <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 260, damping: 30 }}
-            className="fixed inset-y-0 right-0 z-40 flex h-full w-72 flex-col gap-sp-5 bg-bg-elevated px-sp-6 pt-[96px] md:hidden"
-          >
-            {LINKS.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="font-sans text-base font-medium text-text-primary opacity-80 transition-opacity hover:opacity-100"
-              >
-                {l.label}
-              </a>
-            ))}
-            <Button
-              as="a"
-              href="/#contact"
-              variant="primary"
-              size="lg"
-              className="mt-sp-3 w-full"
+          <>
+            {/* Backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-30 bg-black/50 md:hidden"
               onClick={() => setOpen(false)}
+            />
+
+            {/* Slide-in panel */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 260, damping: 30 }}
+              className="fixed inset-y-0 right-0 z-40 flex h-full w-72 flex-col gap-sp-5 px-sp-6 pt-[96px] shadow-xl md:hidden"
+              style={{ backgroundColor: "#FDFAF3" }}
             >
-              Connect
-            </Button>
-          </motion.div>
+              {LINKS.map((l) => (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  className="font-sans text-base font-medium text-text-primary opacity-80 transition-opacity hover:opacity-100"
+                >
+                  {l.label}
+                </a>
+              ))}
+              <Button
+                as="a"
+                href="/#contact"
+                variant="primary"
+                size="lg"
+                className="mt-sp-3 w-full"
+                onClick={() => setOpen(false)}
+              >
+                Connect
+              </Button>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>
