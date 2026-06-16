@@ -1,8 +1,12 @@
 "use client";
 
+import { useCallback, useRef } from "react";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import SectionHeader from "@/components/shared/SectionHeader";
-import { StaggerReveal, StaggerItem } from "@/components/shared/StaggerReveal";
 import Card from "@/components/ui/Card";
+import { IconChevronLeft, IconChevronRight } from "@/components/ui/Icon";
+
+const EASE = [0.22, 0.61, 0.36, 1] as const;
 
 // Custom inline SVG icons
 function IconChildren(props: React.SVGProps<SVGSVGElement>) {
@@ -261,25 +265,77 @@ const SERVICES = [
 ];
 
 export default function ServicesGrid() {
+  const reduced = useReducedMotion() ?? false;
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  // Scroll the mobile carousel one card at a time; loop back at the end.
+  const step = useCallback(
+    (dir: 1 | -1) => {
+      const el = trackRef.current;
+      if (!el) return;
+      const card = el.querySelector<HTMLElement>("[data-card]");
+      const amount = (card?.offsetWidth ?? el.clientWidth) + 24; // card + gap (sp-5)
+      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 4;
+      if (dir === 1 && atEnd) {
+        el.scrollTo({ left: 0, behavior: reduced ? "auto" : "smooth" });
+      } else {
+        el.scrollBy({ left: dir * amount, behavior: reduced ? "auto" : "smooth" });
+      }
+    },
+    [reduced]
+  );
+
+  const container: Variants = {
+    hidden: {},
+    show: { transition: { staggerChildren: reduced ? 0 : 0.05 } },
+  };
+  const item: Variants = {
+    hidden: reduced ? { opacity: 1 } : { opacity: 0, y: 16 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: reduced ? 0 : 0.5, ease: EASE },
+    },
+  };
+
   return (
     <section id="services" className="bg-bg-void">
       <div className="mx-auto max-w-content px-sp-5 py-sp-10 lg:py-sp-16">
-        <SectionHeader
-          eyebrow="Services"
-          title="Astrological remedies for every aspect of life’s challenges."
-        />
+        <div className="flex items-end justify-between gap-sp-4">
+          <SectionHeader
+            eyebrow="Services"
+            title="Astrological remedies for every aspect of life’s challenges."
+          />
 
-        <StaggerReveal
-          stagger={0.05}
-          amount={0.1}
-          className="mt-sp-8 grid grid-cols-1 gap-sp-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:mt-sp-10"
+          {/* Carousel arrows — mobile only (desktop shows the full grid) */}
+          <div className="flex shrink-0 gap-sp-3 md:hidden">
+            <ArrowButton label="Previous services" onClick={() => step(-1)}>
+              <IconChevronLeft size={18} />
+            </ArrowButton>
+            <ArrowButton label="Next services" onClick={() => step(1)}>
+              <IconChevronRight size={18} />
+            </ArrowButton>
+          </div>
+        </div>
+
+        {/* Mobile: swipeable left/right carousel · md+: static grid */}
+        <motion.div
+          ref={trackRef}
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
+          className="no-scrollbar mt-sp-8 flex snap-x snap-mandatory gap-sp-5 overflow-x-auto pb-3 md:mt-sp-10 md:grid md:grid-cols-3 md:gap-sp-5 md:overflow-visible md:pb-0 lg:grid-cols-4"
         >
           {SERVICES.map((s) => (
-            <StaggerItem key={s.name} className="h-full">
+            <motion.div
+              key={s.name}
+              data-card
+              variants={item}
+              className="h-full min-w-[78%] shrink-0 snap-start sm:min-w-[44%] md:min-w-0 md:shrink"
+            >
               <Card as="a" href="#contact" className="flex h-full flex-col p-6">
-                <s.Icon
-                  className="text-gold-400 transition-transform duration-300 group-hover:scale-105"
-                />
+                <s.Icon className="text-gold-400 transition-transform duration-300 group-hover:scale-105" />
                 <h3 className="mt-sp-4 font-sans text-base font-semibold text-text-primary">
                   {s.name}
                 </h3>
@@ -287,10 +343,31 @@ export default function ServicesGrid() {
                   {s.desc}
                 </p>
               </Card>
-            </StaggerItem>
+            </motion.div>
           ))}
-        </StaggerReveal>
+        </motion.div>
       </div>
     </section>
+  );
+}
+
+function ArrowButton({
+  children,
+  onClick,
+  label,
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-gold-400 text-gold-500 transition-colors duration-200 hover:bg-[rgba(184,146,40,0.08)]"
+    >
+      {children}
+    </button>
   );
 }

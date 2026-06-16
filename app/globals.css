@@ -118,6 +118,15 @@ input[type="time"]:focus::-webkit-calendar-picker-indicator {
   }
 }
 
+/* Hide scrollbar on horizontal carousels while keeping scroll/swipe */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes rotate-zodiac {
   from {
     transform: rotate(0deg);
