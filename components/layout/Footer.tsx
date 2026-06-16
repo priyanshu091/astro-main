@@ -17,6 +17,7 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
       { label: "About Soumitra", href: "/about" },
       { label: "FAQ", href: "/faq" },
       { label: "Blog", href: "/blog" },
+      { label: "Admin Portal", href: "/admin" },
     ],
   },
   {
