@@ -132,6 +132,66 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, categories });
     }
 
+    if (action === "save_testimonial") {
+      const { testimonial } = body;
+      if (!testimonial || !testimonial.quote || !testimonial.name || testimonial.stars === undefined) {
+        return NextResponse.json({ error: "Missing required testimonial fields" }, { status: 400 });
+      }
+
+      if (!data.testimonials) {
+        data.testimonials = [];
+      }
+
+      // If no ID, generate a unique one
+      if (!testimonial.id) {
+        testimonial.id = `review-${Date.now()}`;
+      }
+
+      const existingIndex = data.testimonials.findIndex((t: any) => t.id === testimonial.id);
+
+      if (existingIndex > -1) {
+        data.testimonials[existingIndex] = { ...data.testimonials[existingIndex], ...testimonial };
+      } else {
+        data.testimonials.unshift(testimonial); // Add to the top of list
+      }
+
+      try {
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
+      } catch (writeErr: any) {
+        return NextResponse.json({
+          success: true,
+          testimonial,
+          warning: "Testimonial saved in-memory/temp only. " + writeErr.message,
+        });
+      }
+
+      return NextResponse.json({ success: true, testimonial });
+    }
+
+    if (action === "delete_testimonial") {
+      const { id } = body;
+      if (!id) {
+        return NextResponse.json({ error: "Missing testimonial ID" }, { status: 400 });
+      }
+
+      if (!data.testimonials) {
+        data.testimonials = [];
+      }
+
+      data.testimonials = data.testimonials.filter((t: any) => t.id !== id);
+
+      try {
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
+      } catch (writeErr: any) {
+        return NextResponse.json({
+          success: true,
+          warning: "Testimonial deleted in-memory/temp only. " + writeErr.message,
+        });
+      }
+
+      return NextResponse.json({ success: true });
+    }
+
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });
   } catch (error: any) {
     console.error("API write error:", error);

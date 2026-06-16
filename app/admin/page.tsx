@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { IconStarFilled } from "@/components/ui/Icon";
 
 type BlogPost = {
   slug: string;
@@ -16,9 +17,18 @@ type BlogPost = {
   content: string[];
 };
 
+type Review = {
+  id?: string;
+  quote: string;
+  name: string;
+  detail: string;
+  stars: number;
+};
+
 type BlogsData = {
   categories: string[];
   posts: BlogPost[];
+  testimonials: Review[];
 };
 
 export default function AdminPage() {
@@ -28,14 +38,14 @@ export default function AdminPage() {
   const [loginError, setLoginError] = useState("");
 
   // Data State
-  const [data, setData] = useState<BlogsData>({ categories: [], posts: [] });
+  const [data, setData] = useState<BlogsData>({ categories: [], posts: [], testimonials: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [operationError, setOperationError] = useState("");
   const [operationSuccess, setOperationSuccess] = useState("");
   const [warningMessage, setWarningMessage] = useState("");
 
   // Dashboard Tabs & Search
-  const [activeTab, setActiveTab] = useState<"posts" | "categories">("posts");
+  const [activeTab, setActiveTab] = useState<"posts" | "categories" | "testimonials">("posts");
   const [searchQuery, setSearchQuery] = useState("");
 
   // Blog Editor Form
@@ -50,6 +60,10 @@ export default function AdminPage() {
     reduction: string;
   } | null>(null);
   const [isCompressing, setIsCompressing] = useState(false);
+
+  // Testimonial Editor Form
+  const [isEditingTestimonial, setIsEditingTestimonial] = useState(false);
+  const [editingTestimonial, setEditingTestimonial] = useState<Partial<Review> | null>(null);
 
   // Category Editor Form
   const [newCategory, setNewCategory] = useState("");
@@ -78,19 +92,25 @@ export default function AdminPage() {
           throw new Error("Failed to load blog data from API");
         }
         const json = await res.json();
+
+        // Defensive initialization
+        if (!json.posts) json.posts = [];
+        if (!json.categories) json.categories = [];
+        if (!json.testimonials) json.testimonials = [];
+
         setData(json);
 
         // Merge client-side local edits if there are any
         const localBlogs = localStorage.getItem("astro_blogs_local");
         if (localBlogs) {
           const parsed = JSON.parse(localBlogs) as BlogsData;
-          // Use local blogs if they exist, but verify we have something
-          if (parsed.posts && parsed.posts.length > 0) {
-            setData(parsed);
-          }
+          if (!parsed.posts) parsed.posts = [];
+          if (!parsed.categories) parsed.categories = [];
+          if (!parsed.testimonials) parsed.testimonials = [];
+          setData(parsed);
         }
       } catch (err: any) {
-        setOperationError("Could not retrieve blogs database: " + err.message);
+        setOperationError("Could not retrieve database: " + err.message);
         // Fallback to local storage only if file fetch failed
         const localBlogs = localStorage.getItem("astro_blogs_local");
         if (localBlogs) {
@@ -190,16 +210,6 @@ export default function AdminPage() {
     }
   };
 
-  // Format File Size
-  const formatSize = (bytes: number) => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const dm = 1;
-    const sizes = ["Bytes", "KB", "MB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-  };
-
   // Open Editor for Creating/Editing Post
   const openEditor = (post: BlogPost | null = null) => {
     setOperationError("");
@@ -209,14 +219,12 @@ export default function AdminPage() {
     setImageSizeStats(null);
 
     if (post) {
-      // Editing
       setEditingPost(post);
       setFormContent(post.content.join("\n\n"));
       if (post.image) {
         setImagePreview(post.image);
       }
     } else {
-      // Creating
       setEditingPost({
         title: "",
         excerpt: "",
@@ -234,7 +242,6 @@ export default function AdminPage() {
     setIsEditing(true);
   };
 
-  // Close Editor
   const closeEditor = () => {
     setIsEditing(false);
     setEditingPost(null);
@@ -242,6 +249,29 @@ export default function AdminPage() {
     setImageFile(null);
     setImagePreview(null);
     setImageSizeStats(null);
+  };
+
+  // Open Editor for Testimonial
+  const openTestimonialEditor = (testimonial: Review | null = null) => {
+    setOperationError("");
+    setOperationSuccess("");
+
+    if (testimonial) {
+      setEditingTestimonial(testimonial);
+    } else {
+      setEditingTestimonial({
+        quote: "",
+        name: "",
+        detail: "",
+        stars: 5,
+      });
+    }
+    setIsEditingTestimonial(true);
+  };
+
+  const closeTestimonialEditor = () => {
+    setIsEditingTestimonial(false);
+    setEditingTestimonial(null);
   };
 
   // Save Blog Post
@@ -257,7 +287,6 @@ export default function AdminPage() {
       .map((p) => p.trim())
       .filter(Boolean);
 
-    // Estimate Read Time if not set
     let readTime = editingPost.readTime;
     if (!readTime) {
       const words = paragraphs.join(" ").split(/\s+/).length;
@@ -294,7 +323,6 @@ export default function AdminPage() {
         throw new Error(result.error || "Failed to save post");
       }
 
-      // Update UI state
       let updatedPosts = [...data.posts];
       const existingIdx = updatedPosts.findIndex((p) => p.slug === finalPost.slug);
 
@@ -307,7 +335,6 @@ export default function AdminPage() {
       const updatedData = { ...data, posts: updatedPosts };
       setData(updatedData);
 
-      // Save to localStorage as redundancy
       localStorage.setItem("astro_blogs_local", JSON.stringify(updatedData));
 
       if (result.warning) {
@@ -346,12 +373,10 @@ export default function AdminPage() {
         throw new Error(result.error || "Failed to delete post");
       }
 
-      // Update UI state
       const updatedPosts = data.posts.filter((p) => p.slug !== slug);
       const updatedData = { ...data, posts: updatedPosts };
       setData(updatedData);
 
-      // Save to localStorage as redundancy
       localStorage.setItem("astro_blogs_local", JSON.stringify(updatedData));
 
       if (result.warning) {
@@ -363,6 +388,111 @@ export default function AdminPage() {
       setOperationSuccess(`Successfully deleted article: "${title}"`);
     } catch (err: any) {
       setOperationError("Error deleting post: " + err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Save Testimonial
+  const handleSaveTestimonial = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingTestimonial || !editingTestimonial.quote || !editingTestimonial.name) {
+      setOperationError("Please fill in all required fields (Client Name, Quote).");
+      return;
+    }
+
+    const finalTestimonial: Review = {
+      id: editingTestimonial.id,
+      quote: editingTestimonial.quote,
+      name: editingTestimonial.name,
+      detail: editingTestimonial.detail || "",
+      stars: Number(editingTestimonial.stars || 5),
+    };
+
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/blogs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "save_testimonial",
+          testimonial: finalTestimonial,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.error || "Failed to save testimonial");
+      }
+
+      // Update UI state
+      let updatedTestimonials = [...(data.testimonials || [])];
+      const savedTestimonial = result.testimonial || finalTestimonial;
+      const existingIdx = updatedTestimonials.findIndex((t) => t.id === savedTestimonial.id);
+
+      if (existingIdx > -1) {
+        updatedTestimonials[existingIdx] = savedTestimonial;
+      } else {
+        updatedTestimonials.unshift(savedTestimonial);
+      }
+
+      const updatedData = { ...data, testimonials: updatedTestimonials };
+      setData(updatedData);
+
+      localStorage.setItem("astro_blogs_local", JSON.stringify(updatedData));
+
+      if (result.warning) {
+        setWarningMessage(result.warning);
+      } else {
+        setWarningMessage("");
+      }
+
+      setOperationSuccess(`Successfully saved testimonial from: "${savedTestimonial.name}"`);
+      closeTestimonialEditor();
+    } catch (err: any) {
+      setOperationError("Error saving testimonial: " + err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Delete Testimonial
+  const handleDeleteTestimonial = async (id: string, name: string) => {
+    if (!confirm(`Are you sure you want to delete the testimonial from "${name}"?`)) return;
+
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/blogs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "delete_testimonial",
+          id,
+        }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.error || "Failed to delete testimonial");
+      }
+
+      const updatedTestimonials = (data.testimonials || []).filter((t) => t.id !== id);
+      const updatedData = { ...data, testimonials: updatedTestimonials };
+      setData(updatedData);
+
+      localStorage.setItem("astro_blogs_local", JSON.stringify(updatedData));
+
+      if (result.warning) {
+        setWarningMessage(result.warning);
+      } else {
+        setWarningMessage("");
+      }
+
+      setOperationSuccess(`Successfully deleted testimonial from: "${name}"`);
+    } catch (err: any) {
+      setOperationError("Error deleting testimonial: " + err.message);
     } finally {
       setIsLoading(false);
     }
@@ -400,7 +530,6 @@ export default function AdminPage() {
       const updatedData = { ...data, categories: updatedCategories };
       setData(updatedData);
 
-      // Save to localStorage
       localStorage.setItem("astro_blogs_local", JSON.stringify(updatedData));
 
       setNewCategory("");
@@ -450,7 +579,6 @@ export default function AdminPage() {
       const updatedData = { ...data, categories: updatedCategories };
       setData(updatedData);
 
-      // Save to localStorage
       localStorage.setItem("astro_blogs_local", JSON.stringify(updatedData));
 
       setOperationSuccess(`Category "${categoryToDelete}" deleted successfully.`);
@@ -488,6 +616,14 @@ export default function AdminPage() {
       post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Filter testimonials by search query
+  const filteredTestimonials = (data.testimonials || []).filter(
+    (review) =>
+      review.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      review.quote.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      review.detail.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   // Unauthenticated UI (Login Gate)
   if (!isAuthenticated) {
     return (
@@ -496,14 +632,13 @@ export default function AdminPage() {
 
         <div className="pt-32 pb-20 flex-1 flex items-center justify-center px-sp-5">
           <div className="w-full max-w-[420px] bg-card border border-gold-400/20 rounded-card p-8 shadow-lg relative overflow-hidden">
-            {/* Top cosmic glowing light */}
             <div className="absolute -top-12 -left-12 w-36 h-36 rounded-full bg-gold-400/10 blur-xl pointer-events-none" />
             <div className="absolute -bottom-12 -right-12 w-36 h-36 rounded-full bg-accent/5 blur-xl pointer-events-none" />
 
             <div className="text-center mb-6">
               <span className="eyebrow text-gold-500 tracking-[0.2em] uppercase text-xs">Vedic Destiny</span>
               <h1 className="font-display mt-2 text-2xl font-bold text-text-primary">Admin Access Portal</h1>
-              <p className="mt-1 font-sans text-xs text-text-muted">Enter administrative password to manage blog content</p>
+              <p className="mt-1 font-sans text-xs text-text-muted">Enter administrative password to manage website content</p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-4">
@@ -549,7 +684,7 @@ export default function AdminPage() {
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center pt-32 pb-20">
           <div className="w-12 h-12 border-2 border-gold-500 border-t-transparent rounded-full animate-spin" />
-          <p className="mt-4 font-sans text-sm text-gold-600 animate-pulse font-semibold">Connecting to blogs database...</p>
+          <p className="mt-4 font-sans text-sm text-gold-600 animate-pulse font-semibold">Connecting to database...</p>
         </div>
         <Footer />
       </main>
@@ -588,16 +723,31 @@ export default function AdminPage() {
                 Export blogs.json
               </button>
 
-              <button
-                onClick={() => openEditor(null)}
-                className="inline-flex items-center gap-1.5 rounded-btn bg-gold-500 hover:bg-gold-600 text-text-on-gold px-4 py-2 font-sans text-xs font-semibold cursor-pointer transition-colors shadow-sm"
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19" />
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                </svg>
-                New Post
-              </button>
+              {activeTab === "posts" && !isEditing && (
+                <button
+                  onClick={() => openEditor(null)}
+                  className="inline-flex items-center gap-1.5 rounded-btn bg-gold-500 hover:bg-gold-600 text-text-on-gold px-4 py-2 font-sans text-xs font-semibold cursor-pointer transition-colors shadow-sm"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                  New Post
+                </button>
+              )}
+
+              {activeTab === "testimonials" && !isEditingTestimonial && (
+                <button
+                  onClick={() => openTestimonialEditor(null)}
+                  className="inline-flex items-center gap-1.5 rounded-btn bg-gold-500 hover:bg-gold-600 text-text-on-gold px-4 py-2 font-sans text-xs font-semibold cursor-pointer transition-colors shadow-sm"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                  New Testimonial
+                </button>
+              )}
 
               <button
                 onClick={handleLogout}
@@ -634,12 +784,12 @@ export default function AdminPage() {
           )}
 
           {/* Main Dashboard Workspace */}
-          {!isEditing ? (
+          {!isEditing && !isEditingTestimonial ? (
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
               {/* Sidebar Tabs */}
               <aside className="lg:col-span-1 space-y-2">
                 <button
-                  onClick={() => setActiveTab("posts")}
+                  onClick={() => { setActiveTab("posts"); setSearchQuery(""); }}
                   className={`w-full text-left rounded-btn px-4 py-2.5 font-sans text-sm font-semibold transition-all cursor-pointer flex items-center justify-between ${
                     activeTab === "posts"
                       ? "bg-gold-500 text-text-on-gold shadow-sm"
@@ -653,7 +803,21 @@ export default function AdminPage() {
                 </button>
 
                 <button
-                  onClick={() => setActiveTab("categories")}
+                  onClick={() => { setActiveTab("testimonials"); setSearchQuery(""); }}
+                  className={`w-full text-left rounded-btn px-4 py-2.5 font-sans text-sm font-semibold transition-all cursor-pointer flex items-center justify-between ${
+                    activeTab === "testimonials"
+                      ? "bg-gold-500 text-text-on-gold shadow-sm"
+                      : "text-text-secondary hover:bg-gold-400/10"
+                  }`}
+                >
+                  <span>Manage Testimonials</span>
+                  <span className="font-mono text-xs opacity-70 bg-black/10 px-1.5 py-0.5 rounded">
+                    {(data.testimonials || []).length}
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => { setActiveTab("categories"); setSearchQuery(""); }}
                   className={`w-full text-left rounded-btn px-4 py-2.5 font-sans text-sm font-semibold transition-all cursor-pointer flex items-center justify-between ${
                     activeTab === "categories"
                       ? "bg-gold-500 text-text-on-gold shadow-sm"
@@ -669,7 +833,7 @@ export default function AdminPage() {
 
               {/* Workspace Contents */}
               <div className="lg:col-span-3 bg-card border border-gold-400/15 rounded-card p-6 shadow-sm min-h-[400px]">
-                {activeTab === "posts" ? (
+                {activeTab === "posts" && (
                   <div>
                     {/* Search and Filters */}
                     <div className="mb-6 relative">
@@ -756,7 +920,106 @@ export default function AdminPage() {
                       </div>
                     )}
                   </div>
-                ) : (
+                )}
+
+                {activeTab === "testimonials" && (
+                  <div>
+                    {/* Search and Filters */}
+                    <div className="mb-6 relative">
+                      <input
+                        type="text"
+                        placeholder="Search testimonials by name, quote, detail..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full rounded-input border border-gold-400/20 px-10 py-2 font-sans text-sm text-text-primary placeholder-gold-400/40 bg-bg-void focus:outline-none focus:border-gold-500 transition-colors"
+                      />
+                      <svg
+                        className="absolute left-3.5 top-3 text-gold-400/60"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                      >
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                      </svg>
+                      {searchQuery && (
+                        <button
+                          onClick={() => setSearchQuery("")}
+                          className="absolute right-3.5 top-2.5 text-text-muted hover:text-text-primary text-xs font-semibold cursor-pointer"
+                        >
+                          Clear
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Testimonials Table */}
+                    {filteredTestimonials.length > 0 ? (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left font-sans border-collapse">
+                          <thead>
+                            <tr className="border-b border-gold-400/10 text-text-muted text-[11px] font-bold uppercase tracking-wider">
+                              <th className="py-3 px-2">Client Info</th>
+                              <th className="py-3 px-2">Stars</th>
+                              <th className="py-3 px-2">Review Quote</th>
+                              <th className="py-3 px-2 text-right">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gold-400/5 text-sm text-text-primary">
+                            {filteredTestimonials.map((review) => (
+                              <tr key={review.id} className="hover:bg-gold-400/5 transition-colors">
+                                <td className="py-3.5 px-2 max-w-[200px]">
+                                  <div className="font-semibold">{review.name}</div>
+                                  <div className="text-text-muted text-xs line-clamp-1 mt-0.5">{review.detail}</div>
+                                </td>
+                                <td className="py-3.5 px-2 whitespace-nowrap">
+                                  <div className="flex gap-0.5 text-saffron-400">
+                                    {Array.from({ length: 5 }).map((_, i) => (
+                                      <IconStarFilled
+                                        key={i}
+                                        size={12}
+                                        className={i < review.stars ? "" : "opacity-20"}
+                                      />
+                                    ))}
+                                  </div>
+                                </td>
+                                <td className="py-3.5 px-2 max-w-[320px]">
+                                  <div className="text-text-secondary text-xs italic line-clamp-2 leading-relaxed">
+                                    &ldquo;{review.quote}&rdquo;
+                                  </div>
+                                </td>
+                                <td className="py-3.5 px-2 text-right whitespace-nowrap">
+                                  <div className="flex items-center justify-end gap-2">
+                                    <button
+                                      onClick={() => openTestimonialEditor(review)}
+                                      className="text-gold-600 hover:text-gold-700 text-xs font-semibold cursor-pointer py-1 px-2 hover:bg-gold-400/10 rounded"
+                                    >
+                                      Edit
+                                    </button>
+                                    <button
+                                      onClick={() => handleDeleteTestimonial(review.id!, review.name)}
+                                      className="text-error hover:text-red-700 text-xs font-semibold cursor-pointer py-1 px-2 hover:bg-error/10 rounded"
+                                    >
+                                      Delete
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    ) : (
+                      <div className="text-center py-16 text-text-muted font-sans text-xs">
+                        No testimonials match search keywords. Create a new testimonial using the button above.
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {activeTab === "categories" && (
                   <div>
                     {/* Categories UI */}
                     <div className="max-w-[480px]">
@@ -804,12 +1067,12 @@ export default function AdminPage() {
                 )}
               </div>
             </div>
-          ) : (
+          ) : isEditing ? (
             /* Blog Editor Form */
-            <div className="bg-card border border-gold-400/15 rounded-card p-6 lg:p-8 shadow-sm">
+            <div className="bg-card border border-gold-400/15 rounded-card p-6 lg:p-8 shadow-sm animate-fade-in">
               <div className="flex items-center justify-between border-b border-gold-400/10 pb-4 mb-6">
                 <h2 className="font-display text-lg lg:text-xl font-bold text-text-primary">
-                  {editingPost?.slug ? "Modify Article details" : "Draft New Article"}
+                  {editingPost?.slug ? "Modify Article Details" : "Draft New Article"}
                 </h2>
                 <button
                   onClick={closeEditor}
@@ -1019,6 +1282,107 @@ export default function AdminPage() {
                   <button
                     type="button"
                     onClick={closeEditor}
+                    className="rounded-btn border border-gold-400/30 text-text-secondary hover:bg-gold-400/5 px-6 py-2.5 font-sans text-sm font-semibold cursor-pointer transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          ) : (
+            /* Testimonial Editor Form */
+            <div className="bg-card border border-gold-400/15 rounded-card p-6 lg:p-8 shadow-sm animate-fade-in">
+              <div className="flex items-center justify-between border-b border-gold-400/10 pb-4 mb-6">
+                <h2 className="font-display text-lg lg:text-xl font-bold text-text-primary">
+                  {editingTestimonial?.id ? "Modify Testimonial" : "Draft New Testimonial"}
+                </h2>
+                <button
+                  onClick={closeTestimonialEditor}
+                  className="font-sans text-xs text-text-muted hover:text-text-primary font-semibold cursor-pointer border border-gold-400/20 rounded px-2.5 py-1 hover:bg-gold-400/5"
+                >
+                  Discard Changes
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveTestimonial} className="space-y-6 max-w-[800px]">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Client Name */}
+                  <div>
+                    <label className="block font-sans text-xs font-semibold text-text-secondary mb-1">
+                      Client Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={editingTestimonial?.name || ""}
+                      onChange={(e) => setEditingTestimonial((prev) => ({ ...prev, name: e.target.value }))}
+                      placeholder="e.g. Arjun Mehta"
+                      className="w-full rounded-input border border-gold-400/20 px-3 py-2 font-sans text-sm text-text-primary placeholder-gold-400/40 bg-bg-void focus:outline-none focus:border-gold-500 transition-colors"
+                      required
+                    />
+                  </div>
+
+                  {/* Client Details */}
+                  <div>
+                    <label className="block font-sans text-xs font-semibold text-text-secondary mb-1">
+                      Client Detail / Context
+                    </label>
+                    <input
+                      type="text"
+                      value={editingTestimonial?.detail || ""}
+                      onChange={(e) => setEditingTestimonial((prev) => ({ ...prev, detail: e.target.value }))}
+                      placeholder="e.g. Software Engineer, Bangalore · Career Prediction"
+                      className="w-full rounded-input border border-gold-400/20 px-3 py-2 font-sans text-sm text-text-primary placeholder-gold-400/40 bg-bg-void focus:outline-none focus:border-gold-500 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Star Rating */}
+                  <div>
+                    <label className="block font-sans text-xs font-semibold text-text-secondary mb-1">
+                      Star Rating *
+                    </label>
+                    <select
+                      value={editingTestimonial?.stars || 5}
+                      onChange={(e) => setEditingTestimonial((prev) => ({ ...prev, stars: Number(e.target.value) }))}
+                      className="w-full rounded-input border border-gold-400/20 px-3 py-2 font-sans text-sm text-text-primary bg-bg-void focus:outline-none focus:border-gold-500 transition-colors cursor-pointer"
+                      required
+                    >
+                      <option value={5}>5 Stars ★★★★★</option>
+                      <option value={4}>4 Stars ★★★★☆</option>
+                      <option value={3}>3 Stars ★★★☆☆</option>
+                      <option value={2}>2 Stars ★★☆☆☆</option>
+                      <option value={1}>1 Star ★☆☆☆☆</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Review Quote */}
+                <div>
+                  <label className="block font-sans text-xs font-semibold text-text-secondary mb-1">
+                    Review / Quote Text *
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={editingTestimonial?.quote || ""}
+                    onChange={(e) => setEditingTestimonial((prev) => ({ ...prev, quote: e.target.value }))}
+                    placeholder="Enter the client's review text here..."
+                    className="w-full rounded-input border border-gold-400/20 px-3 py-2.5 font-sans text-sm text-text-primary placeholder-gold-400/40 bg-bg-void focus:outline-none focus:border-gold-500 transition-colors resize-y"
+                    required
+                  />
+                </div>
+
+                {/* Form Actions */}
+                <div className="flex items-center gap-3 border-t border-gold-400/10 pt-6">
+                  <button
+                    type="submit"
+                    className="rounded-btn bg-gold-500 hover:bg-gold-600 text-text-on-gold px-6 py-2.5 font-sans text-sm font-semibold cursor-pointer transition-colors shadow-sm"
+                  >
+                    Save Testimonial
+                  </button>
+                  <button
+                    type="button"
+                    onClick={closeTestimonialEditor}
                     className="rounded-btn border border-gold-400/30 text-text-secondary hover:bg-gold-400/5 px-6 py-2.5 font-sans text-sm font-semibold cursor-pointer transition-colors"
                   >
                     Cancel

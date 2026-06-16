@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
 import SectionHeader from "@/components/shared/SectionHeader";
+import blogsData from "@/data/blogs.json";
 import {
   IconStarFilled,
   IconChevronLeft,
@@ -10,54 +11,49 @@ import {
 } from "@/components/ui/Icon";
 
 type Review = {
+  id?: string;
   quote: string;
   name: string;
   detail: string;
   stars: number;
 };
 
-const REVIEWS: Review[] = [
-  {
-    quote:
-      "I went in skeptical and came out with a genuinely useful framework for a job decision. No fear-mongering, no upselling — just a clear read of my chart.",
-    name: "Arjun Mehta",
-    detail: "Software Engineer, Bangalore · Career & Finance",
-    stars: 5,
-  },
-  {
-    quote:
-      "The compatibility session was thorough and surprisingly grounded. He walked us through the actual placements instead of vague reassurances.",
-    name: "Sneha & Karthik",
-    detail: "Couple, Pune · Marriage Compatibility",
-    stars: 5,
-  },
-  {
-    quote:
-      "Booking was effortless and the recorded session meant I could revisit the remedies later. Soumitra was patient with every question.",
-    name: "Priya Nair",
-    detail: "Product Manager, Mumbai · Annual Predictions",
-    stars: 5,
-  },
-  {
-    quote:
-      "Got my muhurta for the house registration in minutes, with a clear explanation of why those dates worked. Felt like talking to a real expert.",
-    name: "Rahul Deshpande",
-    detail: "Entrepreneur, Hyderabad · Muhurta",
-    stars: 4,
-  },
-  {
-    quote:
-      "The detailed reading covered my dasha periods in a way no app ever has. It's the first time astrology felt precise rather than generic.",
-    name: "Ananya Rao",
-    detail: "Doctor, Chennai · Birth Chart Analysis",
-    stars: 5,
-  },
-];
-
 export default function Testimonials() {
+  const [reviews, setReviews] = useState<Review[]>(blogsData.testimonials || []);
   const reduced = useReducedMotion() ?? false;
   const trackRef = useRef<HTMLDivElement>(null);
   const hovering = useRef(false);
+
+  // Sync client-side
+  useEffect(() => {
+    const localBlogs = localStorage.getItem("astro_blogs_local");
+    if (localBlogs) {
+      try {
+        const parsed = JSON.parse(localBlogs);
+        if (parsed.testimonials && parsed.testimonials.length > 0) {
+          setReviews(parsed.testimonials);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    const fetchLatest = async () => {
+      try {
+        const res = await fetch("/api/blogs");
+        if (res.ok) {
+          const json = await res.json();
+          if (json.testimonials) {
+            setReviews(json.testimonials);
+            localStorage.setItem("astro_blogs_local", JSON.stringify(json));
+          }
+        }
+      } catch (e) {
+        console.error("Failed to fetch latest testimonials", e);
+      }
+    };
+    fetchLatest();
+  }, []);
 
   const step = useCallback(
     (dir: 1 | -1) => {
@@ -78,12 +74,16 @@ export default function Testimonials() {
 
   // Auto-scroll every 6s, paused on hover and under reduced-motion.
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || reviews.length <= 1) return;
     const id = window.setInterval(() => {
       if (!hovering.current) step(1);
     }, 6000);
     return () => window.clearInterval(id);
-  }, [reduced, step]);
+  }, [reduced, step, reviews.length]);
+
+  if (reviews.length === 0) {
+    return null; // Don't render empty section
+  }
 
   return (
     <section id="testimonials" className="bg-bg-void">
@@ -92,14 +92,16 @@ export default function Testimonials() {
           <SectionHeader eyebrow="Testimonials" title="What clients say" />
 
           {/* Nav arrows */}
-          <div className="flex shrink-0 gap-sp-3">
-            <ArrowButton label="Previous testimonial" onClick={() => step(-1)}>
-              <IconChevronLeft size={18} />
-            </ArrowButton>
-            <ArrowButton label="Next testimonial" onClick={() => step(1)}>
-              <IconChevronRight size={18} />
-            </ArrowButton>
-          </div>
+          {reviews.length > 1 && (
+            <div className="flex shrink-0 gap-sp-3">
+              <ArrowButton label="Previous testimonial" onClick={() => step(-1)}>
+                <IconChevronLeft size={18} />
+              </ArrowButton>
+              <ArrowButton label="Next testimonial" onClick={() => step(1)}>
+                <IconChevronRight size={18} />
+              </ArrowButton>
+            </div>
+          )}
         </div>
 
         <div
@@ -108,9 +110,9 @@ export default function Testimonials() {
           onMouseLeave={() => (hovering.current = false)}
           className="no-scrollbar mt-sp-8 flex snap-x snap-mandatory gap-sp-5 overflow-x-auto pb-2 lg:mt-sp-10"
         >
-          {REVIEWS.map((r) => (
+          {reviews.map((r) => (
             <div
-              key={r.name}
+              key={r.id || r.name}
               data-card
               className="flex min-w-full shrink-0 snap-center justify-center sm:block sm:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)]"
             >

@@ -1,5 +1,42 @@
 {
   "categories": ["Astrology", "Numerology", "Vastu", "Lal Kitab", "Remedies", "Spirituality"],
+  "testimonials": [
+    {
+      "id": "review-1",
+      "quote": "I went in skeptical and came out with a genuinely useful framework for a job decision. No fear-mongering, no upselling — just a clear read of my chart.",
+      "name": "Arjun Mehta",
+      "detail": "Software Engineer, Bangalore · Career & Finance",
+      "stars": 5
+    },
+    {
+      "id": "review-2",
+      "quote": "The compatibility session was thorough and surprisingly grounded. He walked us through the actual placements instead of vague reassurances.",
+      "name": "Sneha & Karthik",
+      "detail": "Couple, Pune · Marriage Compatibility",
+      "stars": 5
+    },
+    {
+      "id": "review-3",
+      "quote": "Booking was effortless and the recorded session meant I could revisit the remedies later. Soumitra was patient with every question.",
+      "name": "Priya Nair",
+      "detail": "Product Manager, Mumbai · Annual Predictions",
+      "stars": 5
+    },
+    {
+      "id": "review-4",
+      "quote": "Got my muhurta for the house registration in minutes, with a clear explanation of why those dates worked. Felt like talking to a real expert.",
+      "name": "Rahul Deshpande",
+      "detail": "Entrepreneur, Hyderabad · Muhurta",
+      "stars": 4
+    },
+    {
+      "id": "review-5",
+      "quote": "The detailed reading covered my dasha periods in a way no app ever has. It's the first time astrology felt precise rather than generic.",
+      "name": "Ananya Rao",
+      "detail": "Doctor, Chennai · Birth Chart Analysis",
+      "stars": 5
+    }
+  ],
   "posts": [
     {
       "slug": "understanding-birth-chart",
