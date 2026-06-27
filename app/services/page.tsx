@@ -17,23 +17,29 @@ const SERVICES = [
     title: "Astrology Services",
     description: "Deep dive into your cosmic blueprint. Our Vedic Astrology services provide profound insights into your life path, career, relationships, and health based on precise planetary alignments.",
     subcategories: [
-      "Natal Chart (Kundli) Analysis",
-      "Career & Finance Prediction",
-      "Marriage & Compatibility Matching",
-      "Health & Well-being Reading",
-      "Dasha & Transit Analysis",
+      { name: "Children Section", href: "/services/astrology#children" },
+      { name: "Career Section", href: "/services/astrology#career" },
+      { name: "Property & Business Section", href: "/services/astrology#property" },
+      { name: "Medical Section", href: "/services/astrology#medical" },
+      { name: "Education Section", href: "/services/astrology#education" },
+      { name: "Court & Legal Issues", href: "/services/astrology#legal" },
+      { name: "Marriage Section", href: "/services/astrology#marriage" },
+      { name: "Foreign Visit/Settlement", href: "/services/astrology#foreign" },
+      { name: "Loan & Debt", href: "/services/astrology#debt" },
+      { name: "Share Market Section", href: "/services/astrology#share-market" },
     ],
+    viewAllLink: "/services/astrology",
   },
   {
     id: "lal-kitab",
     title: "Lal Kitab Remedies",
     description: "Discover simple, practical, and highly effective remedies based on Lal Kitab principles. We provide actionable solutions to alleviate planetary afflictions and bring harmony to your life.",
     subcategories: [
-      "Personalized Lal Kitab Remedies",
-      "Debt & Financial Crisis Solutions",
-      "Ancestral Dosha (Pitra Dosh) Remedies",
-      "Family Dispute Resolution",
-      "Business Blockage Removal",
+      { name: "Personalized Lal Kitab Remedies" },
+      { name: "Debt & Financial Crisis Solutions" },
+      { name: "Ancestral Dosha (Pitra Dosh) Remedies" },
+      { name: "Family Dispute Resolution" },
+      { name: "Business Blockage Removal" },
     ],
   },
   {
@@ -41,11 +47,11 @@ const SERVICES = [
     title: "Numerology",
     description: "Unlock the hidden meaning behind your numbers. Our numerology services analyze your birth date and name to reveal your core strengths, life cycles, and optimal career paths.",
     subcategories: [
-      "Name Correction & Optimization",
-      "Life Path & Destiny Number Analysis",
-      "Business Name & Brand Numerology",
-      "Lucky Numbers & Dates Selection",
-      "Compatibility by Numbers",
+      { name: "Name Correction & Optimization" },
+      { name: "Life Path & Destiny Number Analysis" },
+      { name: "Business Name & Brand Numerology" },
+      { name: "Lucky Numbers & Dates Selection" },
+      { name: "Compatibility by Numbers" },
     ],
   },
   {
@@ -53,11 +59,11 @@ const SERVICES = [
     title: "Vastu Shastra",
     description: "Harmonize your living and workspace with the ancient science of architecture. We offer expert Vastu consultations to enhance prosperity, health, and peace in your environment without structural demolition.",
     subcategories: [
-      "Residential Vastu Consultation",
-      "Commercial & Office Vastu",
-      "Industrial & Factory Vastu",
-      "Plot & Property Selection",
-      "Remedial Vastu (Without Demolition)",
+      { name: "Residential Vastu Consultation" },
+      { name: "Commercial & Office Vastu" },
+      { name: "Industrial & Factory Vastu" },
+      { name: "Plot & Property Selection" },
+      { name: "Remedial Vastu (Without Demolition)" },
     ],
   },
 ];
@@ -118,10 +124,24 @@ export default function ServicesPage() {
                           {service.subcategories.map((sub, i) => (
                             <li key={i} className="flex items-start gap-3">
                               <span className="mt-1.5 flex h-1.5 w-1.5 shrink-0 items-center justify-center rounded-full bg-gold-400" />
-                              <span className="font-sans text-[15px] text-text-primary">{sub}</span>
+                              {'href' in sub && sub.href ? (
+                                <a href={sub.href as string} className="font-sans text-[15px] text-text-primary hover:text-gold-600 transition-colors">
+                                  {sub.name}
+                                </a>
+                              ) : (
+                                <span className="font-sans text-[15px] text-text-primary">{sub.name}</span>
+                              )}
                             </li>
                           ))}
                         </ul>
+                        {service.viewAllLink && (
+                          <div className="mt-sp-5 pt-sp-4 border-t border-gold-400/10">
+                            <a href={service.viewAllLink} className="font-sans text-[13px] font-bold text-gold-600 hover:text-gold-800 transition-colors inline-flex items-center gap-1">
+                              View all details 
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
+                          </div>
+                        )}
                       </div>
 
                     </div>
