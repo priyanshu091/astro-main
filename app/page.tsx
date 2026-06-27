@@ -4,6 +4,7 @@ import TrustStrip from "@/components/sections/TrustStrip";
 import PromotionalBanners from "@/components/sections/PromotionalBanners";
 import ServicesGrid from "@/components/sections/ServicesGrid";
 import Testimonials from "@/components/sections/Testimonials";
+import VedicWisdom from "@/components/sections/VedicWisdom";
 import FinalCTA from "@/components/sections/FinalCTA";
 import Footer from "@/components/layout/Footer";
 
@@ -16,6 +17,7 @@ export default function Home() {
       <TrustStrip />
       <ServicesGrid />
       <Testimonials />
+      <VedicWisdom />
       <FinalCTA />
       <Footer />
     </main>
