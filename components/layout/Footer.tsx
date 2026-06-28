@@ -5,10 +5,10 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
   {
     title: "Services",
     links: [
-      { label: "Birth chart analysis", href: "/#services" },
-      { label: "Marriage compatibility", href: "/#services" },
-      { label: "Career & finance", href: "/#services" },
-      { label: "Muhurta", href: "/#services" },
+      { label: "Astrology", href: "/services/astrology" },
+      { label: "Vastu Shastra", href: "/services/prediction#vastu" },
+      { label: "Numerology", href: "/services/prediction#numerology" },
+      { label: "Lal Kitab Remedies", href: "/services/prediction#lal-kitab" },
     ],
   },
   {
@@ -31,10 +31,10 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
 ];
 
 const SOCIALS = [
-  { label: "Instagram", href: "#", Icon: IconInstagram },
-  { label: "Facebook", href: "#", Icon: IconFacebook },
-  { label: "LinkedIn", href: "#", Icon: IconLinkedin },
-  { label: "Threads", href: "#", Icon: IconThreads },
+  { label: "Instagram", href: "https://www.instagram.com/vedicdestiny_astro_guidance/", Icon: IconInstagram },
+  { label: "Facebook", href: "https://www.facebook.com/profile.php?id=61589009564931", Icon: IconFacebook },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/soumitra-roy-chowdhury-97368420/", Icon: IconLinkedin },
+  { label: "Threads", href: "https://www.threads.net/@vedicdestiny_astro_guidance", Icon: IconThreads },
 ];
 
 export default function Footer() {

@@ -12,7 +12,7 @@ export function StaggerReveal({
   children,
   stagger = 0.08,
   className = "",
-  amount = 0.3,
+  amount = 0.05,
 }: {
   children: React.ReactNode;
   stagger?: number;

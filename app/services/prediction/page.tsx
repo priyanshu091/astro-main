@@ -5,6 +5,7 @@ import FinalCTA from "@/components/sections/FinalCTA";
 import SectionHeader from "@/components/shared/SectionHeader";
 import { StaggerReveal, StaggerItem } from "@/components/shared/StaggerReveal";
 import Card from "@/components/ui/Card";
+import SpecializedServicesList from "@/components/sections/SpecializedServicesList";
 
 export const metadata: Metadata = {
   title: "Prediction Services | Vedic Destiny",
@@ -27,6 +28,9 @@ const SERVICES = [
       { name: "Foreign Visit/Settlement", href: "/services/astrology#foreign" },
       { name: "Loan & Debt", href: "/services/astrology#debt" },
       { name: "Share Market Section", href: "/services/astrology#share-market" },
+      { name: "Birth Time Rectification", href: "/services/astrology#btr" },
+      { name: "Predictive Section", href: "/services/astrology#predictive" },
+      { name: "Remedial Section", href: "/services/astrology#remedial" },
     ],
     viewAllLink: "/services/astrology",
   },
@@ -97,7 +101,7 @@ export default function ServicesPage() {
       {/* Services Content Section */}
       <section className="bg-bg-void pb-sp-16 lg:pb-24">
         <div className="mx-auto max-w-content px-sp-5">
-          <StaggerReveal className="flex flex-col gap-sp-10 lg:gap-sp-16">
+          <StaggerReveal amount={0.01} className="flex flex-col gap-sp-10 lg:gap-sp-16">
             {SERVICES.map((service, index) => (
               <StaggerItem key={service.id}>
                 <div id={service.id} className="scroll-mt-32">
@@ -107,7 +111,14 @@ export default function ServicesPage() {
                       {/* Left: Title & Description */}
                       <div className="flex-1 lg:max-w-[55%]">
                         <h2 className="font-display text-2xl font-bold text-text-primary lg:text-3xl">
-                          {service.title}
+                          {service.viewAllLink ? (
+                            <a href={service.viewAllLink} className="hover:text-gold-600 transition-colors inline-flex items-center gap-2 group/title">
+                              {service.title}
+                              <svg className="w-5 h-5 opacity-40 group-hover/title:opacity-100 group-hover/title:translate-x-1 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
+                          ) : (
+                            service.title
+                          )}
                         </h2>
                         <div className="mt-sp-4 h-1 w-12 bg-gold-400 opacity-50 rounded-full" />
                         <p className="mt-sp-5 font-sans text-[15px] leading-relaxed text-text-secondary lg:text-base">
@@ -120,28 +131,7 @@ export default function ServicesPage() {
                         <h3 className="font-sans text-sm font-bold uppercase tracking-wider text-gold-600 mb-sp-4">
                           Specialized Services
                         </h3>
-                        <ul className="space-y-3">
-                          {service.subcategories.map((sub, i) => (
-                            <li key={i} className="flex items-start gap-3">
-                              <span className="mt-1.5 flex h-1.5 w-1.5 shrink-0 items-center justify-center rounded-full bg-gold-400" />
-                              {'href' in sub && sub.href ? (
-                                <a href={sub.href as string} className="font-sans text-[15px] text-text-primary hover:text-gold-600 transition-colors">
-                                  {sub.name}
-                                </a>
-                              ) : (
-                                <span className="font-sans text-[15px] text-text-primary">{sub.name}</span>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                        {service.viewAllLink && (
-                          <div className="mt-sp-5 pt-sp-4 border-t border-gold-400/10">
-                            <a href={service.viewAllLink} className="font-sans text-[13px] font-bold text-gold-600 hover:text-gold-800 transition-colors inline-flex items-center gap-1">
-                              View all details 
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                            </a>
-                          </div>
-                        )}
+                        <SpecializedServicesList subcategories={service.subcategories} />
                       </div>
 
                     </div>

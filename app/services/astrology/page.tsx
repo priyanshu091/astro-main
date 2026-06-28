@@ -62,6 +62,21 @@ const ASTROLOGY_SERVICES = [
     title: "Share Market Section",
     description: "Speculative investments require precise timing. By analyzing the 5th and 8th houses, we offer insights into your aptitude for share market trading, identifying periods of sudden gains, and warning against high-risk periods for investments.",
   },
+  {
+    id: "btr",
+    title: "Birth Time Rectification",
+    description: "Unsure of your exact birth time? Even a few minutes' difference can significantly alter your horoscope. We fine-tune and rectify your birth time down to the minute by mapping major life events against sub-divisional charts, ensuring highly accurate future readings.",
+  },
+  {
+    id: "predictive",
+    title: "Predictive Section",
+    description: "Receive deep, comprehensive predictions regarding your future based on major dasha cycles, planetary transits, and progressive charts. Learn about upcoming trends, opportunities, and challenges in key areas of your life, and how to navigate them.",
+  },
+  {
+    id: "remedial",
+    title: "Remedial Section",
+    description: "Vedic astrology is not just about prediction; it is about finding solutions. We prescribe highly customized, practical, and authentic remedies—such as specific rituals, gemstone recommendations, mantra recitations, and donations—to neutralize negative planetary influences and align your cosmic path.",
+  },
 ];
 
 export default function AstrologyServicesPage() {
@@ -93,7 +108,7 @@ export default function AstrologyServicesPage() {
       {/* Services Content Section */}
       <section className="bg-bg-void pb-sp-16 lg:pb-24">
         <div className="mx-auto max-w-content px-sp-5">
-          <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 gap-sp-8 lg:gap-sp-10">
+          <StaggerReveal amount={0.01} className="grid grid-cols-1 md:grid-cols-2 gap-sp-8 lg:gap-sp-10">
             {ASTROLOGY_SERVICES.map((service) => (
               <StaggerItem key={service.id}>
                 <div id={service.id} className="scroll-mt-32 h-full">

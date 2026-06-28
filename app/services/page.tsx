@@ -56,7 +56,7 @@ export default function ServicesHubPage() {
       {/* Categories Grid */}
       <section className="bg-bg-void pb-sp-16 lg:pb-24">
         <div className="mx-auto max-w-content px-sp-5">
-          <StaggerReveal className="grid grid-cols-1 md:grid-cols-2 gap-sp-8 lg:gap-sp-10">
+          <StaggerReveal amount={0.01} className="grid grid-cols-1 md:grid-cols-2 gap-sp-8 lg:gap-sp-10">
             {CATEGORIES.map((category) => (
               <StaggerItem key={category.id}>
                 <Card as="a" href={category.href} interactive={true} className="p-sp-6 lg:p-sp-8 h-full flex flex-col group">
