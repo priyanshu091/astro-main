@@ -175,22 +175,19 @@ const SERVICES = [
   {
     Icon: IconChildren,
     name: "Children Section",
-    desc: "Astrological guidance regarding children’s health, personality development, well-being, and growth prospects.",
+    desc: "Astrological guidance regarding children's health, personality development, well-being, and growth prospects.",
+    href: "/services/children",
   },
   {
     Icon: IconCareer,
-    name: "Career Section",
-    desc: "Auspicious timings, optimal paths, job changes, and professional promotions aligned with your natal chart.",
+    name: "Career & Business Section",
+    desc: "Astrological direction for professional growth, job changes, commercial ventures, investments, and long-term stability.",
+    href: "/services/career-business",
   },
   {
     Icon: IconProperty,
     name: "Property Section",
     desc: "Guidance on property transactions, land acquisition, inheritance, investments, and home purchases.",
-  },
-  {
-    Icon: IconBusiness,
-    name: "Business Section",
-    desc: "Astrological direction for commercial ventures, partnership options, investments, and business growth.",
   },
   {
     Icon: IconMedical,
@@ -211,6 +208,7 @@ const SERVICES = [
     Icon: IconMarriage,
     name: "Marriage Section",
     desc: "Detailed relationship compatibility (Kundli Matching), marital harmony, and auspicious wedding timing.",
+    href: "/services/marriage",
   },
   {
     Icon: IconForeign,
@@ -336,7 +334,7 @@ export default function ServicesGrid() {
             >
               <Card
                 as="a"
-                href="#contact"
+                href={s.href ?? "#contact"}
                 className="flex h-full w-full max-w-xs flex-col p-6 min-h-[200px] md:max-w-none md:min-h-0"
               >
                 <s.Icon className="text-gold-400 transition-transform duration-300 group-hover:scale-105" />
