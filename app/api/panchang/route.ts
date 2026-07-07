@@ -1,10 +1,9 @@
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 
 let cachedToken: { value: string; expiresAt: number } | null = null;
-
-const requestCache = new Map<string, { data: any; expiresAt: number }>();
 
 async function getAccessToken(): Promise<string> {
   if (cachedToken && Date.now() < cachedToken.expiresAt - 60_000) {
@@ -26,6 +25,26 @@ async function getAccessToken(): Promise<string> {
   return cachedToken.value;
 }
 
+const getCachedPanchang = unstable_cache(
+  async (ayanamsa: string, coords: string, datetime: string, token: string) => {
+    const res = await fetch(
+      `https://api.prokerala.com/v2/astrology/panchang/advanced?ayanamsa=${ayanamsa}&coordinates=${coords}&datetime=${encodeURIComponent(datetime)}&la=en`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err); // Throwing prevents unstable_cache from caching the error
+    }
+    const json = await res.json();
+    return json.data;
+  },
+  ["prokerala-panchang-data"], // base cache key
+  { revalidate: 3600 } // cache globally for 1 hour
+);
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -37,30 +56,12 @@ export async function GET(request: Request) {
     const token = await getAccessToken();
     const coords = `${lat},${lng}`;
     
-    const cacheKey = `panchang-${coords}-${datetime.split('T')[0]}`;
-    const cached = requestCache.get(cacheKey);
-    if (cached && Date.now() < cached.expiresAt) {
-      return NextResponse.json({ panchang: cached.data });
-    }
-
-    const panchangRes = await fetch(
-      `https://api.prokerala.com/v2/astrology/panchang/advanced?ayanamsa=${ayanamsa}&coordinates=${coords}&datetime=${encodeURIComponent(datetime)}&la=en`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-        cache: "no-store",
-      }
-    );
-
-    if (!panchangRes.ok) {
-      const err = await panchangRes.text();
-      return NextResponse.json({ error: err }, { status: panchangRes.status });
-    }
-
-    const json = await panchangRes.json();
-    requestCache.set(cacheKey, { data: json.data, expiresAt: Date.now() + 3600 * 1000 });
-    return NextResponse.json({ panchang: json.data });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Unknown error";
-    return NextResponse.json({ error: message }, { status: 500 });
+    // We pass only the date part of datetime so it caches per day, avoiding cache misses on seconds
+    const dateOnly = datetime.split("T")[0];
+    const data = await getCachedPanchang(ayanamsa, coords, dateOnly, token);
+    
+    return NextResponse.json({ panchang: data });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message || "Unknown error" }, { status: 500 });
   }
 }

@@ -1,10 +1,9 @@
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 
 let cachedToken: { value: string; expiresAt: number } | null = null;
-
-const requestCache = new Map<string, { data: any; expiresAt: number }>();
 
 async function getAccessToken(): Promise<string> {
   if (cachedToken && Date.now() < cachedToken.expiresAt - 60_000) return cachedToken.value;
@@ -24,21 +23,9 @@ async function getAccessToken(): Promise<string> {
   return cachedToken.value;
 }
 
-export async function GET(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const datetime = searchParams.get("datetime") ?? new Date().toISOString().slice(0, 19) + "+05:30";
-    const lat = searchParams.get("lat") ?? "26.8467";
-    const lng = searchParams.get("lng") ?? "80.9462";
-
-    const token = await getAccessToken();
+const getCachedHora = unstable_cache(
+  async (lat: string, lng: string, datetime: string, token: string) => {
     const base = `ayanamsa=1&coordinates=${lat},${lng}&datetime=${encodeURIComponent(datetime)}&la=en`;
-
-    const cacheKey = `hora-chog-${lat}-${lng}-${datetime.split('T')[0]}`;
-    const cached = requestCache.get(cacheKey);
-    if (cached && Date.now() < cached.expiresAt) {
-      return NextResponse.json(cached.data);
-    }
 
     const [horaRes, chogRes] = await Promise.all([
       fetch(`https://api.prokerala.com/v2/astrology/hora?${base}`, {
@@ -52,21 +39,33 @@ export async function GET(request: Request) {
     ]);
 
     if (!horaRes.ok || !chogRes.ok) {
-      return NextResponse.json({ error: "Failed to fetch hora/choghadiya" }, { status: 500 });
+      throw new Error("Failed to fetch hora/choghadiya"); // Prevents caching on error
     }
 
     const [hora, chog] = await Promise.all([horaRes.json(), chogRes.json()]);
 
-    const result = {
+    return {
       hora: hora.data,
       choghadiya: chog.data,
     };
+  },
+  ["prokerala-hora-data"],
+  { revalidate: 3600 }
+);
 
-    requestCache.set(cacheKey, { data: result, expiresAt: Date.now() + 3600 * 1000 });
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const datetime = searchParams.get("datetime") ?? new Date().toISOString().slice(0, 19) + "+05:30";
+    const lat = searchParams.get("lat") ?? "26.8467";
+    const lng = searchParams.get("lng") ?? "80.9462";
 
+    const token = await getAccessToken();
+    const dateOnly = datetime.split('T')[0];
+    
+    const result = await getCachedHora(lat, lng, dateOnly, token);
     return NextResponse.json(result);
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Unknown error";
-    return NextResponse.json({ error: message }, { status: 500 });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message || "Unknown error" }, { status: 500 });
   }
 }
