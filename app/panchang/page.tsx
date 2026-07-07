@@ -67,6 +67,9 @@ export default function PanchangPage() {
       if (!panRes.ok) {
         throw new Error(panJson.error || "Failed to fetch Panchang data");
       }
+      if (!horaRes.ok) {
+        throw new Error(horaJson.error || "Failed to fetch Hora & Chaughadiya data");
+      }
 
       setData(panJson.panchang);
       setHoraData(horaJson.hora);
