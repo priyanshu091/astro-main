@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 let cachedToken: { value: string; expiresAt: number } | null = null;
 
+const requestCache = new Map<string, { data: any; expiresAt: number }>();
+
 async function getAccessToken(): Promise<string> {
   if (cachedToken && Date.now() < cachedToken.expiresAt - 60_000) {
     return cachedToken.value;
@@ -32,6 +34,12 @@ export async function GET(request: Request) {
 
     const token = await getAccessToken();
     const coords = `${lat},${lng}`;
+    
+    const cacheKey = `panchang-${coords}-${datetime.split('T')[0]}`;
+    const cached = requestCache.get(cacheKey);
+    if (cached && Date.now() < cached.expiresAt) {
+      return NextResponse.json({ panchang: cached.data });
+    }
 
     const panchangRes = await fetch(
       `https://api.prokerala.com/v2/astrology/panchang/advanced?ayanamsa=${ayanamsa}&coordinates=${coords}&datetime=${encodeURIComponent(datetime)}&la=en`,
@@ -47,6 +55,7 @@ export async function GET(request: Request) {
     }
 
     const json = await panchangRes.json();
+    requestCache.set(cacheKey, { data: json.data, expiresAt: Date.now() + 3600 * 1000 });
     return NextResponse.json({ panchang: json.data });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Unknown error";

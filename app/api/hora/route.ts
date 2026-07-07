@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 let cachedToken: { value: string; expiresAt: number } | null = null;
 
+const requestCache = new Map<string, { data: any; expiresAt: number }>();
+
 async function getAccessToken(): Promise<string> {
   if (cachedToken && Date.now() < cachedToken.expiresAt - 60_000) return cachedToken.value;
   const res = await fetch("https://api.prokerala.com/token", {
@@ -30,6 +32,12 @@ export async function GET(request: Request) {
     const token = await getAccessToken();
     const base = `ayanamsa=1&coordinates=${lat},${lng}&datetime=${encodeURIComponent(datetime)}&la=en`;
 
+    const cacheKey = `hora-chog-${lat}-${lng}-${datetime.split('T')[0]}`;
+    const cached = requestCache.get(cacheKey);
+    if (cached && Date.now() < cached.expiresAt) {
+      return NextResponse.json(cached.data);
+    }
+
     const [horaRes, chogRes] = await Promise.all([
       fetch(`https://api.prokerala.com/v2/astrology/hora?${base}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -47,10 +55,14 @@ export async function GET(request: Request) {
 
     const [hora, chog] = await Promise.all([horaRes.json(), chogRes.json()]);
 
-    return NextResponse.json({
+    const result = {
       hora: hora.data,
       choghadiya: chog.data,
-    });
+    };
+
+    requestCache.set(cacheKey, { data: result, expiresAt: Date.now() + 3600 * 1000 });
+
+    return NextResponse.json(result);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json({ error: message }, { status: 500 });
