@@ -51,9 +51,11 @@ export default function PanchangPage() {
   const [horaData, setHoraData] = useState<{ hora_timing: HoraTiming[] } | null>(null);
   const [chogData, setChogData] = useState<{ muhurat: ChoghadiyaMuhurat[] } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [apiError, setApiError] = useState("");
 
   const load = useCallback(async (dateStr: string, latitude: string, longitude: string) => {
     setLoading(true);
+    setApiError("");
     const dt = toISO(dateStr);
     try {
       const [panRes, horaRes] = await Promise.all([
@@ -61,10 +63,19 @@ export default function PanchangPage() {
         fetch(`/api/hora?datetime=${encodeURIComponent(dt)}&lat=${latitude}&lng=${longitude}`)
       ]);
       const [panJson, horaJson] = await Promise.all([panRes.json(), horaRes.json()]);
+      
+      if (!panRes.ok) {
+        throw new Error(panJson.error || "Failed to fetch Panchang data");
+      }
+
       setData(panJson.panchang);
       setHoraData(horaJson.hora);
       setChogData(horaJson.choghadiya);
-    } catch (err) { console.error(err); }
+    } catch (err: any) { 
+      console.error(err); 
+      setApiError(err.message || "An unexpected error occurred while fetching data.");
+      setData(null);
+    }
     finally { setLoading(false); }
   }, []);
 
@@ -221,12 +232,25 @@ export default function PanchangPage() {
           </div>
         )}
 
+        {apiError && (
+          <div className="mx-auto mt-8 max-w-content px-sp-5">
+            <div className="rounded-card border border-red-500/30 bg-red-500/5 p-8 text-center">
+              <span className="text-3xl">⚠️</span>
+              <h2 className="mt-4 font-display text-lg font-bold text-red-600">Failed to load Astro Data</h2>
+              <p className="mt-2 font-sans text-sm text-red-500/80">{apiError}</p>
+              <button onClick={() => load(selectedDate, lat, lng)} className="mt-6 rounded-full bg-gold-500 px-6 py-2 font-sans text-sm font-bold text-bg-void transition-colors hover:bg-gold-600">
+                Try Again
+              </button>
+            </div>
+          </div>
+        )}
+
         {loading ? (
           <div className="mx-auto max-w-content space-y-8 px-sp-5 py-sp-10 animate-pulse">
             <div className="h-32 rounded-2xl bg-gold-100" />
             <div className="grid grid-cols-2 gap-4"><div className="h-48 rounded-2xl bg-gold-100"/><div className="h-48 rounded-2xl bg-gold-100"/></div>
           </div>
-        ) : data ? (
+        ) : data && !apiError ? (
           <div className="mx-auto max-w-content space-y-sp-10 px-sp-5 py-sp-8">
             
             {/* 1. At A Glance Strip */}
