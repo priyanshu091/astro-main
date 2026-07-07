@@ -43,8 +43,27 @@ async function getAccessToken(forceRefresh = false): Promise<string> {
   return cachedToken.value;
 }
 
+import clientPromise from "@/lib/mongodb";
+
 const getCachedPanchang = unstable_cache(
   async (ayanamsa: string, coords: string, datetime: string, token: string) => {
+    // 1. Check MongoDB
+    const client = await clientPromise;
+    const db = client.db("astro_cache");
+    const collection = db.collection("panchang");
+    const dateStr = datetime.slice(0, 10); // Use just the YYYY-MM-DD part for caching
+
+    const cachedDbDoc = await collection.findOne({
+      ayanamsa,
+      coords,
+      dateStr,
+    });
+
+    if (cachedDbDoc) {
+      return cachedDbDoc.data; // Return from MongoDB
+    }
+
+    // 2. Not in MongoDB, fetch from API
     const res = await fetch(
       `https://api.prokerala.com/v2/astrology/panchang/advanced?ayanamsa=${ayanamsa}&coordinates=${coords}&datetime=${encodeURIComponent(datetime)}&la=en`,
       {
@@ -57,6 +76,16 @@ const getCachedPanchang = unstable_cache(
       throw new Error(err); // Throwing prevents unstable_cache from caching the error
     }
     const json = await res.json();
+
+    // 3. Save to MongoDB
+    await collection.insertOne({
+      ayanamsa,
+      coords,
+      dateStr,
+      data: json.data,
+      createdAt: new Date(),
+    });
+
     return json.data;
   },
   ["prokerala-panchang-data"], // base cache key

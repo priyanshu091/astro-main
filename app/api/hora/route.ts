@@ -43,10 +43,29 @@ async function getAccessToken(forceRefresh = false): Promise<string> {
   return cachedToken.value;
 }
 
+import clientPromise from "@/lib/mongodb";
+
 const getCachedHora = unstable_cache(
   async (lat: string, lng: string, datetime: string, token: string) => {
     const base = `ayanamsa=1&coordinates=${lat},${lng}&datetime=${encodeURIComponent(datetime)}&la=en`;
+    const dateStr = datetime.slice(0, 10); // YYYY-MM-DD
 
+    // 1. Check MongoDB
+    const client = await clientPromise;
+    const db = client.db("astro_cache");
+    const collection = db.collection("hora");
+
+    const cachedDbDoc = await collection.findOne({
+      lat,
+      lng,
+      dateStr,
+    });
+
+    if (cachedDbDoc) {
+      return cachedDbDoc.data; // Return from MongoDB
+    }
+
+    // 2. Fetch from API
     const [horaRes, chogRes] = await Promise.all([
       fetch(`https://api.prokerala.com/v2/astrology/hora?${base}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -58,16 +77,32 @@ const getCachedHora = unstable_cache(
       }),
     ]);
 
-    if (!horaRes.ok || !chogRes.ok) {
-      throw new Error("Failed to fetch hora/choghadiya"); // Prevents caching on error
+    if (!horaRes.ok) {
+      const errText = await horaRes.text();
+      throw new Error(errText);
+    }
+    if (!chogRes.ok) {
+      const errText = await chogRes.text();
+      throw new Error(errText);
     }
 
     const [hora, chog] = await Promise.all([horaRes.json(), chogRes.json()]);
 
-    return {
+    const result = {
       hora: hora.data,
       choghadiya: chog.data,
     };
+
+    // 3. Save to MongoDB
+    await collection.insertOne({
+      lat,
+      lng,
+      dateStr,
+      data: result,
+      createdAt: new Date(),
+    });
+
+    return result;
   },
   ["prokerala-hora-data"],
   { revalidate: 3600 }
