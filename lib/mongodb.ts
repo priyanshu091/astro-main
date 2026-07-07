@@ -1,29 +1,37 @@
 import { MongoClient } from "mongodb";
 
-if (!process.env.MONGODB_URI) {
-  // We'll throw an error if the user hasn't set this up yet, 
-  // but they'll need to know to set it in .env
-  console.warn('Missing environment variable: "MONGODB_URI". Please set it in .env');
+const uri = process.env.MONGODB_URI;
+if (!uri) {
+  throw new Error('Missing environment variable: "MONGODB_URI"');
 }
 
-const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/astro_cache";
-const options = {};
-
-let client;
+// Use a module-level cached promise so the connection is reused across
+// invocations in the same serverless instance (warm starts)
 let clientPromise: Promise<MongoClient>;
 
-if (process.env.NODE_ENV === "development") {
-  let globalWithMongo = global as typeof globalThis & {
-    _mongoClientPromise?: Promise<MongoClient>;
-  };
+declare global {
+  // Allow global reuse in development (hot reload)
+  // eslint-disable-next-line no-var
+  var _mongoClientPromise: Promise<MongoClient> | undefined;
+}
 
-  if (!globalWithMongo._mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    globalWithMongo._mongoClientPromise = client.connect();
+if (process.env.NODE_ENV === "development") {
+  if (!global._mongoClientPromise) {
+    const client = new MongoClient(uri, {
+      connectTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 5000,
+    });
+    global._mongoClientPromise = client.connect();
   }
-  clientPromise = globalWithMongo._mongoClientPromise;
+  clientPromise = global._mongoClientPromise;
 } else {
-  client = new MongoClient(uri, options);
+  // In production / serverless, create a new client per module load.
+  // Vercel freezes the module between requests so this IS reused on warm starts.
+  const client = new MongoClient(uri, {
+    connectTimeoutMS: 5000,
+    serverSelectionTimeoutMS: 5000,
+    maxPoolSize: 1, // Keep it small for serverless
+  });
   clientPromise = client.connect();
 }
 
