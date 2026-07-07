@@ -8,6 +8,7 @@ import Logo from "@/components/shared/Logo";
 const LINKS = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
+  { label: "Panchang", href: "/panchang" },
   { label: "About", href: "/about" },
   { label: "FAQ", href: "/faq" },
   { label: "Blog", href: "/blog" },

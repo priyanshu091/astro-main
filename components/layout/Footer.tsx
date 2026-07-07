@@ -17,6 +17,7 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
     title: "Practitioner",
     links: [
       { label: "About Soumitra", href: "/about" },
+      { label: "Panchang", href: "/panchang" },
       { label: "FAQ", href: "/faq" },
       { label: "Blog", href: "/blog" },
     ],

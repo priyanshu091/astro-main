@@ -1,0 +1,69 @@
+import { NextResponse } from "next/server";
+
+// Cache the access token in module scope to reuse across requests (server-side only)
+let cachedToken: { value: string; expiresAt: number } | null = null;
+
+async function getAccessToken(): Promise<string> {
+  if (cachedToken && Date.now() < cachedToken.expiresAt - 60_000) {
+    return cachedToken.value;
+  }
+
+  const res = await fetch("https://api.prokerala.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "client_credentials",
+      client_id: process.env.PROKERALA_CLIENT_ID!,
+      client_secret: process.env.PROKERALA_CLIENT_SECRET!,
+    }),
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error(`Token fetch failed: ${res.status}`);
+  }
+
+  const data = await res.json();
+  cachedToken = {
+    value: data.access_token,
+    expiresAt: Date.now() + data.expires_in * 1000,
+  };
+  return cachedToken.value;
+}
+
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+
+    // Default: today, Lucknow (lat/lng)
+    const datetime = searchParams.get("datetime") ?? new Date().toISOString().slice(0, 19) + "+05:30";
+    const lat = searchParams.get("lat") ?? "26.8467";
+    const lng = searchParams.get("lng") ?? "80.9462";
+    const ayanamsa = searchParams.get("ayanamsa") ?? "1"; // 1 = Lahiri
+
+    const token = await getAccessToken();
+
+    const coords = `${lat},${lng}`;
+
+    // Fetch Panchang data
+    const panchangRes = await fetch(
+      `https://api.prokerala.com/v2/astrology/panchang?ayanamsa=${ayanamsa}&coordinates=${coords}&datetime=${encodeURIComponent(datetime)}&la=en`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        next: { revalidate: 3600 }, // cache 1 hour
+      }
+    );
+
+    if (!panchangRes.ok) {
+      const err = await panchangRes.text();
+      return NextResponse.json({ error: err }, { status: panchangRes.status });
+    }
+
+    const panchangData = await panchangRes.json();
+
+    return NextResponse.json({ panchang: panchangData.data });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
