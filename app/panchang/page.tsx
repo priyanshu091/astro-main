@@ -43,6 +43,10 @@ export default function PanchangPage() {
   const [locName, setLocName] = useState("Lucknow, India");
   const [locError, setLocError] = useState("");
 
+  const [isSearchingLoc, setIsSearchingLoc] = useState(false);
+  const [locQuery, setLocQuery] = useState("");
+  const [locResults, setLocResults] = useState<any[]>([]);
+
   const [data, setData] = useState<PanchangData | null>(null);
   const [horaData, setHoraData] = useState<{ hora_timing: HoraTiming[] } | null>(null);
   const [chogData, setChogData] = useState<{ muhurat: ChoghadiyaMuhurat[] } | null>(null);
@@ -63,6 +67,17 @@ export default function PanchangPage() {
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
   }, []);
+
+  const searchLocation = async () => {
+    if (!locQuery.trim()) return;
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locQuery)}&format=json&limit=5`);
+      const data = await res.json();
+      setLocResults(data);
+    } catch {
+      setLocResults([]);
+    }
+  };
 
   // Request location on mount
   useEffect(() => {
@@ -134,7 +149,46 @@ export default function PanchangPage() {
               </div>
               <div>
                 <h1 className="font-display text-xl font-bold tracking-wide text-text-primary">VEDIC ALMANAC</h1>
-                <p className="font-sans text-xs text-gold-500">{locName}</p>
+                {!isSearchingLoc ? (
+                  <div className="group flex cursor-pointer items-center gap-2" onClick={() => setIsSearchingLoc(true)}>
+                    <p className="font-sans text-xs text-gold-500 transition-colors group-hover:text-gold-400">{locName}</p>
+                    <svg className="h-3 w-3 text-gold-500 opacity-50 transition-opacity group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                  </div>
+                ) : (
+                  <div className="relative mt-1">
+                    <div className="flex items-center gap-1">
+                      <input 
+                        type="text" 
+                        autoFocus
+                        value={locQuery} 
+                        onChange={(e) => setLocQuery(e.target.value)} 
+                        onKeyDown={(e) => e.key === 'Enter' && searchLocation()}
+                        placeholder="Search city..." 
+                        className="rounded-full border border-[rgba(184,146,40,0.3)] bg-[rgba(212,168,83,0.05)] px-3 py-1 text-xs text-text-primary outline-none focus:border-gold-500 w-32 sm:w-48"
+                      />
+                      <button onClick={searchLocation} className="rounded-full bg-gold-500 px-2 py-1 font-sans text-xs font-bold text-bg-void">Find</button>
+                      <button onClick={() => { setIsSearchingLoc(false); setLocResults([]); }} className="ml-1 text-xs text-text-muted hover:text-text-primary">✕</button>
+                    </div>
+                    {locResults.length > 0 && (
+                      <div className="absolute left-0 top-full mt-1 max-h-48 w-full min-w-[240px] overflow-y-auto rounded-lg border border-[rgba(184,146,40,0.2)] bg-bg-void shadow-xl z-50">
+                        {locResults.map((r, i) => (
+                          <div 
+                            key={i} 
+                            className="cursor-pointer border-b border-[rgba(184,146,40,0.1)] p-2 font-sans text-xs text-text-primary transition-colors hover:bg-[rgba(212,168,83,0.1)] last:border-0"
+                            onClick={() => {
+                              setLat(r.lat); setLng(r.lon); 
+                              const parts = r.display_name.split(',');
+                              setLocName(parts[0] + ', ' + (parts[parts.length-1]?.trim() || ''));
+                              setIsSearchingLoc(false); setLocResults([]); setLocError("");
+                            }}
+                          >
+                            {r.display_name}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -160,7 +214,7 @@ export default function PanchangPage() {
         {locError && (
           <div className="border-b border-red-500/20 bg-red-500/10 px-sp-5 py-3 text-center">
             <p className="font-sans text-xs font-medium text-red-400">
-              ⚠️ {locError}
+              ⚠️ {locError} <button onClick={() => { setLocError(""); setIsSearchingLoc(true); }} className="ml-2 underline font-bold hover:text-red-300">Search Manually</button>
             </p>
           </div>
         )}
