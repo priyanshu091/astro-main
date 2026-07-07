@@ -52,6 +52,15 @@ export default function PanchangPage() {
   const [chogData, setChogData] = useState<{ muhurat: ChoghadiyaMuhurat[] } | null>(null);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState("");
+  const [retryCountdown, setRetryCountdown] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (retryCountdown === null || retryCountdown <= 0) return;
+    const timer = setInterval(() => {
+      setRetryCountdown((prev) => (prev !== null && prev > 1 ? prev - 1 : null));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [retryCountdown]);
 
   const load = useCallback(async (dateStr: string, latitude: string, longitude: string) => {
     setLoading(true);
@@ -78,7 +87,8 @@ export default function PanchangPage() {
       console.error(err); 
       let errMsg = err.message;
       if (errMsg.includes("rate limit")) {
-        errMsg = "You have exceeded the free API rate limit (5 requests per minute). Please wait a moment and try again.";
+        errMsg = "You have exceeded the free API rate limit (5 requests per minute). Please wait 60 seconds and try again.";
+        setRetryCountdown(60);
       } else if (errMsg.startsWith("{")) {
         try {
           const parsed = JSON.parse(errMsg);
@@ -252,8 +262,16 @@ export default function PanchangPage() {
               <span className="text-3xl">⚠️</span>
               <h2 className="mt-4 font-display text-lg font-bold text-red-600">Failed to load Astro Data</h2>
               <p className="mt-2 font-sans text-sm text-red-500/80">{apiError}</p>
-              <button onClick={() => load(selectedDate, lat, lng)} className="mt-6 rounded-full bg-gold-500 px-6 py-2 font-sans text-sm font-bold text-bg-void transition-colors hover:bg-gold-600">
-                Try Again
+              <button 
+                onClick={() => load(selectedDate, lat, lng)} 
+                disabled={retryCountdown !== null}
+                className={`mt-6 rounded-full px-6 py-2 font-sans text-sm font-bold text-bg-void transition-colors ${
+                  retryCountdown !== null 
+                    ? "bg-gold-500/50 cursor-not-allowed" 
+                    : "bg-gold-500 hover:bg-gold-600"
+                }`}
+              >
+                {retryCountdown !== null ? `Wait ${retryCountdown}s...` : "Try Again"}
               </button>
             </div>
           </div>
