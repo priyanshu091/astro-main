@@ -73,7 +73,18 @@ export default function PanchangPage() {
       setChogData(horaJson.choghadiya);
     } catch (err: any) { 
       console.error(err); 
-      setApiError(err.message || "An unexpected error occurred while fetching data.");
+      let errMsg = err.message;
+      if (errMsg.includes("rate limit")) {
+        errMsg = "You have exceeded the free API rate limit (5 requests per minute). Please wait a moment and try again.";
+      } else if (errMsg.startsWith("{")) {
+        try {
+          const parsed = JSON.parse(errMsg);
+          if (parsed.errors && parsed.errors[0]) {
+            errMsg = parsed.errors[0].detail || parsed.errors[0].title;
+          }
+        } catch (e) {}
+      }
+      setApiError(errMsg || "An unexpected error occurred while fetching data.");
       setData(null);
     }
     finally { setLoading(false); }
@@ -95,8 +106,8 @@ export default function PanchangPage() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
-          const newLat = pos.coords.latitude.toString();
-          const newLng = pos.coords.longitude.toString();
+          const newLat = pos.coords.latitude.toFixed(2);
+          const newLng = pos.coords.longitude.toFixed(2);
           setLat(newLat);
           setLng(newLng);
           setLocError("");
@@ -189,7 +200,7 @@ export default function PanchangPage() {
                             key={i} 
                             className="cursor-pointer border-b border-[rgba(184,146,40,0.1)] p-2 font-sans text-xs text-text-primary transition-colors hover:bg-[rgba(212,168,83,0.1)] last:border-0"
                             onClick={() => {
-                              setLat(r.lat); setLng(r.lon); 
+                              setLat(Number(r.lat).toFixed(2)); setLng(Number(r.lon).toFixed(2)); 
                               const parts = r.display_name.split(',');
                               setLocName(parts[0] + ', ' + (parts[parts.length-1]?.trim() || ''));
                               setIsSearchingLoc(false); setLocResults([]); setLocError("");
