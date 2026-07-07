@@ -9,6 +9,8 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
       { label: "Vastu Shastra", href: "/services/prediction#vastu" },
       { label: "Numerology", href: "/services/prediction#numerology" },
       { label: "Lal Kitab Remedies", href: "/services/prediction#lal-kitab" },
+      { label: "Brighu Nandi Nadi", href: "/services/prediction#brighu-nandi-nadi" },
+      { label: "Vedic Astrology", href: "/services/prediction#vedic-astrology" },
     ],
   },
   {
@@ -17,7 +19,6 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
       { label: "About Soumitra", href: "/about" },
       { label: "FAQ", href: "/faq" },
       { label: "Blog", href: "/blog" },
-      { label: "Admin Portal", href: "/admin" },
     ],
   },
   {

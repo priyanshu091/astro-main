@@ -7,6 +7,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import bannerKundli from "@/public/banner_kundli.png";
 import bannerVastu from "@/public/banner_vastu.png";
 import bannerProblem from "@/public/banner_problem.png";
+import bannerLalKitab from "@/public/banner_lal_kitab.png";
+import bannerBrighuNandi from "@/public/banner_brighu_nandi.png";
+import bannerNumerology from "@/public/banner_numerology.png";
+import bannerVedicAstrology from "@/public/banner_vedic_astrology.png";
 
 const BANNERS = [
   {
@@ -25,6 +29,30 @@ const BANNERS = [
     title: "Problem Detection",
     image: bannerProblem,
     alt: "Problem Detection - Identify hidden challenges and find the right solutions.",
+    href: "#contact",
+  },
+  {
+    title: "Lal Kitab Remedies and Prediction",
+    image: bannerLalKitab,
+    alt: "Lal Kitab Remedies and Prediction - Discover time-tested remedies and accurate predictions for a better tomorrow.",
+    href: "#contact",
+  },
+  {
+    title: "Brighu Nandi Nadi",
+    image: bannerBrighuNandi,
+    alt: "Brighu Nandi Nadi - Ancient wisdom. Accurate insights. Discover your destined path.",
+    href: "#contact",
+  },
+  {
+    title: "Numerology",
+    image: bannerNumerology,
+    alt: "Numerology - Decode numbers. Discover possibilities. Unlock the hidden patterns in your life.",
+    href: "#contact",
+  },
+  {
+    title: "Vedic Astrology",
+    image: bannerVedicAstrology,
+    alt: "Vedic Astrology - Discover ancient wisdom to understand your life, purpose and destiny.",
     href: "#contact",
   },
 ];

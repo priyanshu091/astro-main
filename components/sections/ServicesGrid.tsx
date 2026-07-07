@@ -188,21 +188,25 @@ const SERVICES = [
     Icon: IconProperty,
     name: "Property Section",
     desc: "Guidance on property transactions, land acquisition, inheritance, investments, and home purchases.",
+    href: "/services/property",
   },
   {
     Icon: IconMedical,
     name: "Medical Section",
     desc: "Understanding physical/mental health timings, dasha indicators, and suitable holistic wellness practices.",
+    href: "/services/medical",
   },
   {
     Icon: IconEducation,
     name: "Education Section",
     desc: "Subject choices, academic success periods, higher study paths, and competitive exam alignments.",
+    href: "/services/education",
   },
   {
     Icon: IconLegal,
     name: "Court & Legal Issues",
     desc: "Astrological analysis of transit houses and planets influencing legal disputes and court outcomes.",
+    href: "/services/legal",
   },
   {
     Icon: IconMarriage,
@@ -214,11 +218,13 @@ const SERVICES = [
     Icon: IconForeign,
     name: "Foreign Visit/Settlement",
     desc: "Opportunities for global travel, higher studies abroad, foreign job postings, and visa approvals.",
+    href: "/services/foreign-visit",
   },
   {
     Icon: IconLoan,
     name: "Loan & Debt",
     desc: "Navigating debt release, release from financial pressure, and managing compound interest blocks.",
+    href: "/services/loan-debt",
   },
   {
     Icon: IconStock,
@@ -229,16 +235,19 @@ const SERVICES = [
     Icon: IconClockEdit,
     name: "Birth Time Rectification",
     desc: "Fine-tuning birth times down to the minute by matching significant life events with sub-divisional charts.",
+    href: "/services/birth-time",
   },
   {
     Icon: IconPredictive,
     name: "Predictive Section",
     desc: "Detailed future predictions based on dasha cycles, planetary transits, and progressive charts.",
+    href: "/services/predictive",
   },
   {
     Icon: IconRemedial,
-    name: "Remedial Section",
+    name: "Remedial Solutions",
     desc: "Authentic, realistic remedies tailored to neutralize planetary afflictions and enhance beneficial placements.",
+    href: "/services/remedial-solutions",
   },
   {
     Icon: IconVastu,
@@ -247,18 +256,21 @@ const SERVICES = [
   },
   {
     Icon: IconLalKitabPred,
-    name: "Lal Kitab Predictions",
+    name: "Lal Kitab Predictive",
     desc: "Unique, character-focused horoscope predictions using classic Lal Kitab house placement methods.",
+    href: "/services/lal-kitab-predictive",
   },
   {
     Icon: IconLalKitabRem,
     name: "Lal Kitab Remedies",
     desc: "Highly practical, simple, and realistic remedies to clear deep karmic debts and planetary blockages.",
+    href: "/services/remedies",
   },
   {
     Icon: IconRudrakshaGems,
-    name: "Rudraksha & Gems",
+    name: "Rudraksh, Gemstones & Crystals",
     desc: "Prescribing highly accurate gemstones, bead counts, and metals to restore physical and energetic balances.",
+    href: "/services/rudraksha-gems",
   },
 ];
 
