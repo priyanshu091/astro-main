@@ -45,7 +45,7 @@ export async function GET(request: Request) {
       `https://api.prokerala.com/v2/astrology/panchang/advanced?ayanamsa=${ayanamsa}&coordinates=${coords}&datetime=${encodeURIComponent(datetime)}&la=en`,
       {
         headers: { Authorization: `Bearer ${token}` },
-        next: { revalidate: 3600 },
+        cache: "no-store",
       }
     );
 

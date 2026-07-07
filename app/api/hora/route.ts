@@ -41,11 +41,11 @@ export async function GET(request: Request) {
     const [horaRes, chogRes] = await Promise.all([
       fetch(`https://api.prokerala.com/v2/astrology/hora?${base}`, {
         headers: { Authorization: `Bearer ${token}` },
-        next: { revalidate: 3600 },
+        cache: "no-store",
       }),
       fetch(`https://api.prokerala.com/v2/astrology/choghadiya?${base}`, {
         headers: { Authorization: `Bearer ${token}` },
-        next: { revalidate: 3600 },
+        cache: "no-store",
       }),
     ]);
 
