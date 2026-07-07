@@ -150,9 +150,11 @@ export default function PanchangPage() {
               <div>
                 <h1 className="font-display text-xl font-bold tracking-wide text-text-primary">VEDIC ALMANAC</h1>
                 {!isSearchingLoc ? (
-                  <div className="group flex cursor-pointer items-center gap-2" onClick={() => setIsSearchingLoc(true)}>
+                  <div className="group flex cursor-pointer items-center gap-2 mt-1" onClick={() => setIsSearchingLoc(true)}>
                     <p className="font-sans text-xs text-gold-500 transition-colors group-hover:text-gold-400">{locName}</p>
-                    <svg className="h-3 w-3 text-gold-500 opacity-50 transition-opacity group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                    <span className="rounded bg-[rgba(184,146,40,0.1)] px-1.5 py-0.5 font-sans text-[9px] font-bold text-gold-500 uppercase tracking-widest opacity-70 transition-opacity group-hover:opacity-100">
+                      Choose Location
+                    </span>
                   </div>
                 ) : (
                   <div className="relative mt-1">
