@@ -76,21 +76,20 @@ const getCachedHora = unstable_cache(
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const datetime = searchParams.get("datetime") ?? new Date().toISOString().slice(0, 19) + "+05:30";
+    const datetime = searchParams.get("datetime") ?? new Date().toISOString().slice(0, 10) + "T00:00:00+05:30";
     const lat = searchParams.get("lat") ?? "26.8467";
     const lng = searchParams.get("lng") ?? "80.9462";
 
     let token = await getAccessToken();
-    const dateOnly = datetime.split('T')[0];
     
     let result;
     try {
-      result = await getCachedHora(lat, lng, dateOnly, token);
+      result = await getCachedHora(lat, lng, datetime, token);
     } catch(err: any) {
       if ((err.message?.includes("credit balance") || err.message?.includes("rate limit") || err.message?.includes("Too Many Requests")) && currentKeyIndex < clientIds.length - 1) {
         currentKeyIndex++;
         token = await getAccessToken(true);
-        result = await getCachedHora(lat, lng, dateOnly, token);
+        result = await getCachedHora(lat, lng, datetime, token);
       } else {
         throw err;
       }

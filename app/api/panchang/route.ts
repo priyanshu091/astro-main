@@ -66,7 +66,7 @@ const getCachedPanchang = unstable_cache(
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const datetime = searchParams.get("datetime") ?? new Date().toISOString().slice(0, 19) + "+05:30";
+    const datetime = searchParams.get("datetime") ?? new Date().toISOString().slice(0, 10) + "T00:00:00+05:30";
     const lat = searchParams.get("lat") ?? "26.8467";
     const lng = searchParams.get("lng") ?? "80.9462";
     const ayanamsa = searchParams.get("ayanamsa") ?? "1";
@@ -74,17 +74,14 @@ export async function GET(request: Request) {
     let token = await getAccessToken();
     const coords = `${lat},${lng}`;
     
-    // We pass only the date part of datetime so it caches per day, avoiding cache misses on seconds
-    const dateOnly = datetime.split("T")[0];
-    
     let data;
     try {
-      data = await getCachedPanchang(ayanamsa, coords, dateOnly, token);
+      data = await getCachedPanchang(ayanamsa, coords, datetime, token);
     } catch(err: any) {
       if ((err.message?.includes("credit balance") || err.message?.includes("rate limit") || err.message?.includes("Too Many Requests")) && currentKeyIndex < clientIds.length - 1) {
         currentKeyIndex++;
         token = await getAccessToken(true);
-        data = await getCachedPanchang(ayanamsa, coords, dateOnly, token);
+        data = await getCachedPanchang(ayanamsa, coords, datetime, token);
       } else {
         throw err;
       }
