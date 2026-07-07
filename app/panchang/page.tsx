@@ -38,17 +38,23 @@ const CHOG_DESC: Record<string, string> = { Amrut: "Nectar", Shubh: "Auspicious"
 export default function PanchangPage() {
   const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
   const [selectedDate, setSelectedDate] = useState(todayStr);
+  const [lat, setLat] = useState("26.8467");
+  const [lng, setLng] = useState("80.9462");
+  const [locName, setLocName] = useState("Lucknow, India");
+  const [locError, setLocError] = useState("");
+
   const [data, setData] = useState<PanchangData | null>(null);
   const [horaData, setHoraData] = useState<{ hora_timing: HoraTiming[] } | null>(null);
   const [chogData, setChogData] = useState<{ muhurat: ChoghadiyaMuhurat[] } | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const load = useCallback(async (dateStr: string) => {
+  const load = useCallback(async (dateStr: string, latitude: string, longitude: string) => {
     setLoading(true);
     const dt = toISO(dateStr);
     try {
       const [panRes, horaRes] = await Promise.all([
-        fetch(`/api/panchang?datetime=${encodeURIComponent(dt)}`), fetch(`/api/hora?datetime=${encodeURIComponent(dt)}`)
+        fetch(`/api/panchang?datetime=${encodeURIComponent(dt)}&lat=${latitude}&lng=${longitude}`),
+        fetch(`/api/hora?datetime=${encodeURIComponent(dt)}&lat=${latitude}&lng=${longitude}`)
       ]);
       const [panJson, horaJson] = await Promise.all([panRes.json(), horaRes.json()]);
       setData(panJson.panchang);
@@ -58,7 +64,36 @@ export default function PanchangPage() {
     finally { setLoading(false); }
   }, []);
 
-  useEffect(() => { load(selectedDate); }, [selectedDate, load]);
+  // Request location on mount
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const newLat = pos.coords.latitude.toString();
+          const newLng = pos.coords.longitude.toString();
+          setLat(newLat);
+          setLng(newLng);
+          setLocError("");
+          try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${newLat}&lon=${newLng}`);
+            const locData = await res.json();
+            if (locData.address) {
+              const city = locData.address.city || locData.address.town || locData.address.county || "Current Location";
+              const country = locData.address.country || "";
+              setLocName(`${city}${country ? `, ${country}` : ""}`);
+            }
+          } catch { setLocName("Current Location"); }
+        },
+        (err) => {
+          if (err.code === err.PERMISSION_DENIED) {
+            setLocError("You denied permission of location. Search location manually or allow the location permission.");
+          }
+        }
+      );
+    }
+  }, []);
+
+  useEffect(() => { load(selectedDate, lat, lng); }, [selectedDate, lat, lng, load]);
 
   const isToday = selectedDate === todayStr;
   const now = new Date();
@@ -99,7 +134,7 @@ export default function PanchangPage() {
               </div>
               <div>
                 <h1 className="font-display text-xl font-bold text-white tracking-wide">VEDIC ALMANAC</h1>
-                <p className="font-sans text-xs text-gold-400">Lucknow, India</p>
+                <p className="font-sans text-xs text-gold-400">{locName}</p>
               </div>
             </div>
 
@@ -121,6 +156,14 @@ export default function PanchangPage() {
             </div>
           </div>
         </div>
+
+        {locError && (
+          <div className="bg-rose-500/10 border-b border-rose-500/20 px-sp-5 py-3 text-center">
+            <p className="font-sans text-xs text-rose-300 font-medium">
+              ⚠️ {locError}
+            </p>
+          </div>
+        )}
 
         {loading ? (
           <div className="mx-auto max-w-content px-sp-5 py-sp-10 animate-pulse space-y-8">
@@ -348,6 +391,11 @@ export default function PanchangPage() {
                 </div>
               </div>
             </section>
+
+            {/* Disclaimer */}
+            <p className="font-sans text-xs text-white/40 text-center pt-8 border-t border-white/5">
+              Panchang for {locName} ({Number(lat).toFixed(2)}°N, {Number(lng).toFixed(2)}°E) · IST (UTC+5:30) · Powered by Prokerala
+            </p>
           </div>
         ) : null}
       </main>
