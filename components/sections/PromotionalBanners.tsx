@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
 
 import bannerKundli from "@/public/banner_kundli.png";
 import bannerVastu from "@/public/banner_vastu.png";
@@ -111,33 +110,36 @@ export default function PromotionalBanners() {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Slides Container */}
+        {/* Slides Container — all slides rendered in DOM so images preload on mount, no white flash */}
         <div className="relative w-full h-full">
-          <AnimatePresence initial={false}>
-            <motion.a
-              key={currentIndex}
-              href={BANNERS[currentIndex].href}
+          {BANNERS.map((banner, idx) => (
+            <a
+              key={idx}
+              href={banner.href}
               className="absolute inset-0 block w-full h-full cursor-pointer overflow-hidden"
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -30 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
+              style={{
+                opacity: idx === currentIndex ? 1 : 0,
+                transition: "opacity 0.4s ease-in-out",
+                pointerEvents: idx === currentIndex ? "auto" : "none",
+                zIndex: idx === currentIndex ? 1 : 0,
+              }}
+              tabIndex={idx === currentIndex ? 0 : -1}
+              aria-hidden={idx !== currentIndex}
             >
-              {/* Banner Image */}
+              {/* Banner Image — priority on first, eager on rest to preload all */}
               <Image
-                src={BANNERS[currentIndex].image}
-                alt={BANNERS[currentIndex].alt}
+                src={banner.image}
+                alt={banner.alt}
                 fill
                 sizes="100vw"
-                priority
+                priority={idx === 0}
+                loading={idx === 0 ? "eager" : "eager"}
                 unoptimized
                 className="object-cover transition-transform duration-700 hover:scale-[1.01]"
               />
-              
-              {/* Accessibility label */}
-              <span className="sr-only">{BANNERS[currentIndex].title}</span>
-            </motion.a>
-          </AnimatePresence>
+              <span className="sr-only">{banner.title}</span>
+            </a>
+          ))}
         </div>
 
         {/* Left Arrow Button */}
