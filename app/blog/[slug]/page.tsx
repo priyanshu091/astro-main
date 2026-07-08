@@ -120,22 +120,29 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
         {/* Featured Cover Image */}
         <div className="max-w-[720px] mx-auto px-sp-5 mb-10">
-          <div className="relative h-56 lg:h-72 rounded-card overflow-hidden bg-bg-surface border border-gold-400/10 shadow-sm">
+          <div className="relative rounded-card overflow-hidden bg-bg-surface border border-gold-400/10 shadow-sm">
             {post.image ? (
-              <img
-                src={post.image}
-                alt={post.title}
-                className="w-full h-full object-cover"
-              />
-            ) : (
               <>
+                <img
+                  src={post.image}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover blur-xl opacity-30 scale-110"
+                />
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="relative w-full h-auto max-h-[600px] object-contain mx-auto"
+                />
+              </>
+            ) : (
+              <div className="relative h-56 lg:h-72 w-full">
                 <div className="absolute inset-0 bg-gradient-to-br from-gold-100/60 via-bg-surface to-gold-200/40" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="font-display text-2xl font-bold text-gold-600 opacity-25">
                     {post.category}
                   </span>
                 </div>
-              </>
+              </div>
             )}
           </div>
         </div>

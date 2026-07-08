@@ -55,13 +55,20 @@ function BlogCard({ post }: { post: BlogPost }) {
       className="group block bg-card border border-gold-400/10 rounded-card overflow-hidden shadow-sm hover:shadow-md hover:border-gold-400/25 transition-all duration-300 animate-fade-in"
     >
       {/* Image */}
-      <div className="relative h-48 w-full overflow-hidden bg-bg-surface border-b border-gold-400/5">
+      <div className="relative h-48 w-full overflow-hidden bg-bg-surface border-b border-gold-400/5 group-hover:shadow-inner">
         {post.image ? (
-          <img
-            src={post.image}
-            alt={post.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
+          <>
+            <img
+              src={post.image}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover blur-md opacity-30 scale-110"
+            />
+            <img
+              src={post.image}
+              alt={post.title}
+              className="relative w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+            />
+          </>
         ) : (
           <>
             <div className="absolute inset-0 bg-gradient-to-br from-gold-100/60 via-bg-surface to-gold-200/40" />
@@ -177,13 +184,20 @@ export default function BlogPage() {
               >
                 <div className="grid grid-cols-1 lg:grid-cols-2">
                   {/* Featured Image */}
-                  <div className="relative h-64 lg:h-full overflow-hidden bg-bg-surface min-h-[260px] border-b lg:border-b-0 lg:border-r border-gold-400/5">
+                  <div className="relative h-64 lg:h-full overflow-hidden bg-bg-surface min-h-[260px] border-b lg:border-b-0 lg:border-r border-gold-400/5 group-hover:shadow-inner">
                     {featured.image ? (
-                      <img
-                        src={featured.image}
-                        alt={featured.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 absolute inset-0"
-                      />
+                      <>
+                        <img
+                          src={featured.image}
+                          alt=""
+                          className="absolute inset-0 w-full h-full object-cover blur-lg opacity-30 scale-110"
+                        />
+                        <img
+                          src={featured.image}
+                          alt={featured.title}
+                          className="relative w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 z-10"
+                        />
+                      </>
                     ) : (
                       <>
                         <div className="absolute inset-0 bg-gradient-to-br from-gold-100/60 via-bg-surface to-gold-200/40" />
@@ -196,7 +210,7 @@ export default function BlogPage() {
                         </div>
                       </>
                     )}
-                    <span className="absolute top-4 left-4 rounded-full bg-gold-500 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-text-on-gold z-10">
+                    <span className="absolute top-4 left-4 rounded-full bg-gold-500 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-text-on-gold z-20">
                       {featured.category}
                     </span>
                   </div>
