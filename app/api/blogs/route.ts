@@ -121,10 +121,21 @@ export async function POST(request: Request) {
         });
       }
 
-      // Check if existing post to retain image
+      // Add timestamps for tracking created vs edited
+      const now = new Date().toISOString();
       const existingPost = await postsCollection.findOne({ _id: post.slug });
-      if (existingPost && !post.image && existingPost.image) {
-        post.image = existingPost.image;
+      
+      if (existingPost) {
+        // Retain image if not provided
+        if (!post.image && existingPost.image) {
+          post.image = existingPost.image;
+        }
+        post.updatedAt = now;
+        // Keep original creation time if it exists, otherwise fall back to now
+        post.createdAt = existingPost.createdAt || now;
+      } else {
+        post.createdAt = now;
+        post.updatedAt = now;
       }
 
       // Upsert

@@ -15,6 +15,8 @@ type BlogPost = {
   date: string;
   readTime: string;
   content: string[];
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 type Review = {
@@ -289,6 +291,8 @@ export default function AdminPage() {
       date: editingPost.date || new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
       readTime,
       content: paragraphs,
+      createdAt: editingPost.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     setIsLoading(true);
@@ -593,13 +597,23 @@ export default function AdminPage() {
     URL.revokeObjectURL(url);
   };
 
-  // Filter posts by search query
-  const filteredPosts = data.posts.filter(
-    (post) =>
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter and sort posts by search query and date
+  const filteredPosts = data.posts
+    .filter(
+      (post) =>
+        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      const timeA = new Date(a.updatedAt || a.createdAt || a.date).getTime();
+      const timeB = new Date(b.updatedAt || b.createdAt || b.date).getTime();
+      
+      if (isNaN(timeA) || isNaN(timeB)) {
+        return (b.updatedAt || b.createdAt || b.date).localeCompare(a.updatedAt || a.createdAt || a.date);
+      }
+      return timeB - timeA;
+    });
 
   // Filter testimonials by search query
   const filteredTestimonials = (data.testimonials || []).filter(
@@ -876,7 +890,18 @@ export default function AdminPage() {
                                   </span>
                                 </td>
                                 <td className="py-3.5 px-2 text-xs text-text-muted whitespace-nowrap">
-                                  {post.date}
+                                  <div className="flex flex-col gap-0.5">
+                                    <span>{post.date}</span>
+                                    {post.updatedAt && post.createdAt && post.updatedAt !== post.createdAt && (
+                                      <span className="text-[10px] text-gold-500 font-semibold italic flex items-center gap-1">
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                        </svg>
+                                        Edited
+                                      </span>
+                                    )}
+                                  </div>
                                 </td>
                                 <td className="py-3.5 px-2 text-right whitespace-nowrap">
                                   <div className="flex items-center justify-end gap-2">
