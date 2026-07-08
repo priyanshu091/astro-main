@@ -268,7 +268,7 @@ export default function CareerBusinessServicePage() {
             <div className="mt-sp-5 space-y-4 max-w-[700px]">
               <p className="font-sans text-[15px] leading-relaxed text-text-secondary lg:text-base">
                 For individuals seeking long-term clarity and strategic
-                direction, Soumitra Roy Chowdhury offers personalized and
+                direction, Acharya Soumitra Roy Chowdhury offers personalized and
                 time-based Career & Business reports designed to support
                 informed professional decisions.
               </p>
@@ -433,7 +433,7 @@ export default function CareerBusinessServicePage() {
                   <p className="mx-auto mt-sp-4 max-w-[640px] font-sans text-[15px] leading-relaxed text-text-secondary lg:text-base">
                     Do not allow uncertainty, confusion, or repeated setbacks to
                     limit your true potential. Get personalized Career & Business
-                    consultation from Soumitra Roy Chowdhury and gain practical
+                    consultation from Acharya Soumitra Roy Chowdhury and gain practical
                     insight into your professional path, financial growth, and
                     future opportunities.
                   </p>

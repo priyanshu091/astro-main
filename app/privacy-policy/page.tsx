@@ -251,7 +251,7 @@ export default function PrivacyPolicyPage() {
                   Pinterest: SRC19 soumitrarc101010
                 </a>
                 <a href="https://www.quora.com/profile/Soumitra-Roy-Chowdhury-1" target="_blank" rel="noopener noreferrer" className="hover:text-gold-800 transition-colors">
-                  Quora: Soumitra Roy Chowdhury
+                  Quora: Acharya Soumitra Roy Chowdhury
                 </a>
                 <a href="https://www.reddit.com/user/According-Vast1873" target="_blank" rel="noopener noreferrer" className="hover:text-gold-800 transition-colors">
                   Reddit: Vedic Destiny u/According-Vast1873

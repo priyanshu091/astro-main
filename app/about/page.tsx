@@ -16,7 +16,7 @@ export default function AboutPage() {
         <section className="relative px-sp-5 py-sp-8 text-center max-w-content mx-auto">
           <span className="eyebrow text-gold-500 tracking-[0.2em]">About the Astrologer</span>
           <h1 className="font-display mt-sp-3 text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.1] tracking-[-0.02em] text-text-primary">
-            Soumitra Roy Chowdhury
+            Acharya Soumitra Roy Chowdhury
           </h1>
           <p className="mt-sp-2 text-md font-medium tracking-tight text-gold-600 font-sans uppercase">
             Lucknow &bull; Guiding Lives With Ancient Wisdom &amp; Cosmic Insight
@@ -60,7 +60,7 @@ export default function AboutPage() {
               <div className="relative h-72 w-72 overflow-hidden rounded-card ring-4 ring-gold-400/35 shadow-chart-float mb-6">
                 <Image
                   src="/astrologer.jpg"
-                  alt="Portrait of Soumitra Roy Chowdhury"
+                  alt="Portrait of Acharya Soumitra Roy Chowdhury"
                   fill
                   sizes="288px"
                   className="object-cover"
@@ -96,7 +96,7 @@ export default function AboutPage() {
               
               <div className="space-y-4 text-base leading-relaxed text-text-secondary font-sans">
                 <p>
-                  Soumitra Roy Chowdhury is a highly respected practitioner of Vedic sciences with over 30 years of experience in Astrology, Numerology, and Vastu Shastra. Based in Lucknow, India, his work today reaches clients across the globe, helping individuals and businesses align with the natural laws of the universe.
+                  Acharya Soumitra Roy Chowdhury is a highly respected practitioner of Vedic sciences with over 30 years of experience in Astrology, Numerology, and Vastu Shastra. Based in Lucknow, India, his work today reaches clients across the globe, helping individuals and businesses align with the natural laws of the universe.
                 </p>
                 <p>
                   His approach combines ancient Vedic wisdom with practical, modern-day application, offering clarity, direction, and meaningful solutions for life’s most important decisions. Clients from Lucknow and other parts of India trust his guidance for both personal and professional challenges.
@@ -272,7 +272,7 @@ export default function AboutPage() {
               <div className="space-y-4 relative before:absolute before:left-3.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-gold-400/20">
                 {[
                   { title: "Pre-Session Review", desc: "In-depth review based on birth details before we connect." },
-                  { title: "One-on-One Session", desc: "Conducted directly by Soumitra Roy Chowdhury (strictly confidential)." },
+                  { title: "One-on-One Session", desc: "Conducted directly by Acharya Soumitra Roy Chowdhury (strictly confidential)." },
                   { title: "Personalized Remedies", desc: "Practical guidance and karmic corrections suggested." },
                   { title: "Post-Session Support", desc: "Support for additional clarity on topics covered." },
                 ].map((step, idx) => (
@@ -314,7 +314,7 @@ export default function AboutPage() {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-[800px] mx-auto">
               {[
-                { name: "Quora", value: "Soumitra Roy Chowdhury", href: "https://www.quora.com/profile/Soumitra-Roy-Chowdhury-1" },
+                { name: "Quora", value: "Acharya Soumitra Roy Chowdhury", href: "https://www.quora.com/profile/Soumitra-Roy-Chowdhury-1" },
                 { name: "Medium", value: "Soumitrarc", href: "https://medium.com/@soumitrarc101010" },
                 { name: "Reddit", value: "u/According-Vast1873", href: "https://www.reddit.com/user/According-Vast1873" },
                 { name: "Pinterest", value: "SRC19 soumitrarc101010", href: "https://in.pinterest.com/soumitrarc101010/" },

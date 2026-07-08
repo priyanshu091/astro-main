@@ -9,3 +9,5 @@
 - Added feature flag `PANCHANG_SOURCE=local` in the API routes (`/api/panchang` and `/api/hora`) to enable gradual rollout and allow side-by-side comparison with the existing ProKerala endpoint.
 - Updated the prefetch cron job (`/api/cron/prefetch`) to directly compute and cache local data to MongoDB (collections `panchang_local` and `hora_local`), removing the overhead of internal HTTP calls.
 - Validated the logic with unit tests and created a manual `compare-prokerala.ts` script for exact field-by-field verification.
+- **Bugfix**: Resolved an issue where selecting a date from the frontend calendar would crash because `astronomy-engine` was mistakenly anchoring searches to the previous day's UTC midnight, returning a sunset earlier than sunrise. Corrected to anchor searches strictly from local timezone midnight.
+- **Content Update**: Added the prenominal title "Acharya" to all mentions of "Soumitra Roy Chowdhury" throughout the entire codebase, ensuring consistency across all pages, components, and data files.

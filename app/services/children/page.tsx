@@ -337,7 +337,7 @@ export default function ChildrenServicePage() {
               title="Support for Modern Child & Parenthood Choices"
             />
             <p className="mt-sp-4 max-w-[700px] font-sans text-[15px] leading-relaxed text-text-secondary lg:text-base">
-              Soumitra Roy Chowdhury provides tailored guidance for modern
+              Acharya Soumitra Roy Chowdhury provides tailored guidance for modern
               parenthood challenges and choices:
             </p>
 
@@ -367,7 +367,7 @@ export default function ChildrenServicePage() {
           <div>
             <SectionHeader
               eyebrow="Expertise"
-              title="How Soumitra Roy Chowdhury Helps You"
+              title="How Acharya Soumitra Roy Chowdhury Helps You"
             />
             <p className="mt-sp-5 font-sans text-[15px] leading-relaxed text-text-secondary lg:text-base max-w-[700px]">
               With deep expertise in Vedic Astrology and specialized knowledge
@@ -455,7 +455,7 @@ export default function ChildrenServicePage() {
                     </p>
                     <p className="font-sans text-sm italic leading-relaxed text-text-secondary">
                       With the right guidance, confusion transforms into clarity—and
-                      hope transforms into direction. Soumitra Roy Chowdhury helps
+                      hope transforms into direction. Acharya Soumitra Roy Chowdhury helps
                       you move forward with confidence, peace, and trust in your
                       journey toward a blessed and fulfilling life with your child.
                     </p>

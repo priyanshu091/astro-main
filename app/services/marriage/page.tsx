@@ -359,11 +359,11 @@ export default function MarriageServicePage() {
           <div>
             <SectionHeader
               eyebrow="Your Guide"
-              title="How Soumitra Roy Chowdhury Helps You"
+              title="How Acharya Soumitra Roy Chowdhury Helps You"
             />
             <p className="mt-sp-5 font-sans text-[15px] leading-relaxed text-text-secondary lg:text-base max-w-[700px]">
               With years of experience in Vedic Astrology, relationship
-              analysis, Numerology, and Vastu, Soumitra Roy Chowdhury provides
+              analysis, Numerology, and Vastu, Acharya Soumitra Roy Chowdhury provides
               honest and personalized guidance designed to help individuals
               make confident life decisions.
             </p>
@@ -476,7 +476,7 @@ export default function MarriageServicePage() {
                   <p className="mx-auto mt-sp-4 max-w-[640px] font-sans text-[15px] leading-relaxed text-text-secondary lg:text-base">
                     Do not leave one of life&apos;s most important decisions to
                     confusion or uncertainty. Get trusted astrology guidance from
-                    Soumitra Roy Chowdhury and gain clarity about your future
+                    Acharya Soumitra Roy Chowdhury and gain clarity about your future
                     partner, compatibility, timing, and relationship journey.
                   </p>
 

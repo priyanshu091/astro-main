@@ -300,7 +300,7 @@ export default function PropertyServicePage() {
             <div className="mt-sp-5 space-y-4 max-w-[700px]">
               <p className="font-sans text-[15px] leading-relaxed text-text-secondary lg:text-base">
                 With years of experience in Vedic Astrology, Numerology, and Vastu,
-                Soumitra Roy Chowdhury offers practical consultation for individuals
+                Acharya Soumitra Roy Chowdhury offers practical consultation for individuals
                 dealing with complex property-related situations. The focus is always
                 on accurate analysis, practical remedies, and realistic guidance
                 rather than fear-based predictions.
@@ -466,7 +466,7 @@ export default function PropertyServicePage() {
                     Do not let confusion, delays, or uncertainty prevent you from moving
                     forward. Expert astrological consultation can help you gain clarity
                     before making important financial commitments. Get personalized
-                    guidance from Soumitra Roy Chowdhury and make decisions with
+                    guidance from Acharya Soumitra Roy Chowdhury and make decisions with
                     confidence, clarity, and proper timing.
                   </p>
 

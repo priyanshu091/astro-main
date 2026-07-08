@@ -12,11 +12,11 @@ const FAQS: AccordionItem[] = [
   },
   {
     q: "What are the credentials of the astrologer?",
-    a: "Soumitra Roy Chowdhury is a certified, professional Vedic astrologer with over 30 years of consulting experience. Trained in classical Vedic traditions (Parashari, KP, and Lal Kitab), he offers logical, practical remedies based on structural analysis of planetary positions, avoiding fear-based or deterministic predictions.",
+    a: "Acharya Soumitra Roy Chowdhury is a certified, professional Vedic astrologer with over 30 years of consulting experience. Trained in classical Vedic traditions (Parashari, KP, and Lal Kitab), he offers logical, practical remedies based on structural analysis of planetary positions, avoiding fear-based or deterministic predictions.",
   },
   {
     q: "Is my birth data private?",
-    a: "Yes. Your birth details are used exclusively to prepare your chart for your personal consultation with Soumitra Roy Chowdhury. Your personal information is kept strictly confidential and is never shared with third parties.",
+    a: "Yes. Your birth details are used exclusively to prepare your chart for your personal consultation with Acharya Soumitra Roy Chowdhury. Your personal information is kept strictly confidential and is never shared with third parties.",
   },
   {
     q: "Can I reschedule or cancel?",

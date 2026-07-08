@@ -23,9 +23,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vedic Destiny — Expert Vedic Astrology by Soumitra Roy Chowdhury",
+  title: "Vedic Destiny — Expert Vedic Astrology by Acharya Soumitra Roy Chowdhury",
   description:
-    "Personalized, logical Vedic astrology consultations and practical remedies for career, marriage, health, and Vastu by expert Soumitra Roy Chowdhury.",
+    "Personalized, logical Vedic astrology consultations and practical remedies for career, marriage, health, and Vastu by expert Acharya Soumitra Roy Chowdhury.",
 };
 
 export default function RootLayout({

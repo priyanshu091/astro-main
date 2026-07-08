@@ -364,7 +364,7 @@ export default function LegalServicePage() {
             />
             <div className="mt-sp-5 space-y-4 max-w-[700px]">
               <p className="font-sans text-[15px] leading-relaxed text-text-secondary lg:text-base">
-                Soumitra Roy Chowdhury provides practical astrological insight designed
+                Acharya Soumitra Roy Chowdhury provides practical astrological insight designed
                 to help individuals to navigate court matters more carefully and
                 confidently.
               </p>
@@ -553,7 +553,7 @@ export default function LegalServicePage() {
                       Guidance That Brings Awareness, Not Fear
                     </p>
                     <p className="font-sans text-sm italic leading-relaxed text-text-secondary">
-                      Soumitra Roy Chowdhury provides trusted guidance based on Vedic
+                      Acharya Soumitra Roy Chowdhury provides trusted guidance based on Vedic
                       Astrology to help individuals navigate court-related challenges
                       with clarity, timing awareness, and practical insight. The goal
                       is to help you face difficult situations with greater confidence,

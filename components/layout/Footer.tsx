@@ -116,7 +116,7 @@ export default function Footer() {
 
         <div className="mt-sp-6 border-t border-[rgba(184,146,40,0.08)] pt-sp-4 text-center">
           <p className="font-sans text-xs text-text-muted">
-            Copyright © {new Date().getFullYear()} Soumitra Roy Chowdhury | All Rights Reserved.
+            Copyright © {new Date().getFullYear()} Acharya Soumitra Roy Chowdhury | All Rights Reserved.
           </p>
         </div>
       </div>

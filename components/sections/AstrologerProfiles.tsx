@@ -10,7 +10,7 @@ export default function AstrologerProfiles() {
       <div className="mx-auto max-w-content px-sp-5 py-sp-10 lg:py-sp-16">
         <SectionHeader
           eyebrow="Meet Your Astrologer"
-          title="Soumitra Roy Chowdhury"
+          title="Acharya Soumitra Roy Chowdhury"
         />
 
         <div className="mt-sp-8 grid grid-cols-1 gap-sp-8 lg:mt-sp-10 lg:grid-cols-12 lg:gap-sp-10 items-center">
@@ -19,7 +19,7 @@ export default function AstrologerProfiles() {
             <div className="relative h-72 w-72 overflow-hidden rounded-card ring-4 ring-gold-400/35 shadow-chart-float">
               <Image
                 src="/astrologer.jpg"
-                alt="Portrait of Soumitra Roy Chowdhury"
+                alt="Portrait of Acharya Soumitra Roy Chowdhury"
                 fill
                 sizes="288px"
                 className="object-cover"
@@ -34,7 +34,7 @@ export default function AstrologerProfiles() {
             </h3>
             
             <p className="font-sans text-base leading-relaxed text-text-secondary">
-              Based in Lucknow, **Soumitra Roy Chowdhury** is a professional astrologer with over 30 years of consulting experience. His practice stands apart by providing logical, practical, and highly realistic remedies rather than fear-based, deterministic predictions.
+              Based in Lucknow, **Acharya Soumitra Roy Chowdhury** is a professional astrologer with over 30 years of consulting experience. His practice stands apart by providing logical, practical, and highly realistic remedies rather than fear-based, deterministic predictions.
             </p>
 
             <p className="font-sans text-base leading-relaxed text-text-secondary">
