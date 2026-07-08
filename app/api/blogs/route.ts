@@ -1,19 +1,83 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import clientPromise from "@/lib/mongodb";
 
-const getFilePath = () => path.join(process.cwd(), "data", "blogs.json");
+const DB_NAME = "astro";
+
+const getFallbackData = () => {
+  try {
+    const filePath = path.join(process.cwd(), "data", "blogs.json");
+    if (fs.existsSync(filePath)) {
+      const fileData = fs.readFileSync(filePath, "utf8");
+      return JSON.parse(fileData);
+    }
+  } catch (err) {
+    console.error("Error reading fallback blogs.json:", err);
+  }
+  return { posts: [], categories: [], testimonials: [] };
+};
 
 export async function GET() {
   try {
-    const filePath = getFilePath();
-    if (!fs.existsSync(filePath)) {
-      return NextResponse.json({ error: "File not found" }, { status: 404 });
+    const client = await clientPromise;
+    const db = client.db(DB_NAME);
+
+    // Fetch from MongoDB
+    const postsCollection = db.collection<any>("posts");
+    const testimonialsCollection = db.collection<any>("testimonials");
+    const settingsCollection = db.collection<any>("settings");
+
+    let posts = await postsCollection.find({}).sort({ date: -1 }).toArray();
+    let testimonials = await testimonialsCollection.find({}).sort({ _id: -1 }).toArray();
+    let settingsDoc = await settingsCollection.findOne({ _id: "blog_categories" });
+    let categories = settingsDoc ? settingsDoc.categories : [];
+
+    // Seed data if DB is empty
+    if (posts.length === 0 && categories.length === 0 && testimonials.length === 0) {
+      console.log("Database empty, seeding from local JSON...");
+      const fallbackData = getFallbackData();
+      
+      if (fallbackData.posts && fallbackData.posts.length > 0) {
+        // Prepare posts for insertion (remove _id if it exists to let mongo auto-generate, or use slug as _id)
+        const postsToInsert = fallbackData.posts.map((p: any) => ({ ...p, _id: p.slug }));
+        await postsCollection.insertMany(postsToInsert);
+        posts = postsToInsert;
+      }
+      
+      if (fallbackData.testimonials && fallbackData.testimonials.length > 0) {
+        const testsToInsert = fallbackData.testimonials.map((t: any) => ({ ...t, _id: t.id }));
+        await testimonialsCollection.insertMany(testsToInsert);
+        testimonials = testsToInsert;
+      }
+      
+      if (fallbackData.categories && fallbackData.categories.length > 0) {
+        await settingsCollection.updateOne(
+          { _id: "blog_categories" },
+          { $set: { categories: fallbackData.categories } },
+          { upsert: true }
+        );
+        categories = fallbackData.categories;
+      }
     }
-    const fileData = fs.readFileSync(filePath, "utf8");
-    const data = JSON.parse(fileData);
-    return NextResponse.json(data);
+
+    // Clean up _id for frontend compatibility
+    const formattedPosts = posts.map(p => {
+      const { _id, ...rest } = p;
+      return { ...rest, slug: _id || rest.slug };
+    });
+    const formattedTestimonials = testimonials.map(t => {
+      const { _id, ...rest } = t;
+      return { ...rest, id: _id || rest.id };
+    });
+
+    return NextResponse.json({
+      posts: formattedPosts,
+      categories,
+      testimonials: formattedTestimonials,
+    });
   } catch (error: any) {
+    console.error("GET API Error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -23,13 +87,11 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { action } = body;
 
-    const filePath = getFilePath();
-    if (!fs.existsSync(filePath)) {
-      return NextResponse.json({ error: "Data file not found" }, { status: 404 });
-    }
-
-    const fileData = fs.readFileSync(filePath, "utf8");
-    const data = JSON.parse(fileData);
+    const client = await clientPromise;
+    const db = client.db(DB_NAME);
+    const postsCollection = db.collection<any>("posts");
+    const testimonialsCollection = db.collection<any>("testimonials");
+    const settingsCollection = db.collection<any>("settings");
 
     if (action === "save_post") {
       const { post } = body;
@@ -37,7 +99,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Missing required post fields" }, { status: 400 });
       }
 
-      // Auto-generate slug if not present
       if (!post.slug) {
         post.slug = post.title
           .toLowerCase()
@@ -45,7 +106,6 @@ export async function POST(request: Request) {
           .replace(/(^-|-$)+/g, "");
       }
 
-      // Calculate read time if not provided
       if (!post.readTime) {
         const wordCount = post.content ? post.content.join(" ").split(/\s+/).length : 0;
         const wpm = 200;
@@ -53,7 +113,6 @@ export async function POST(request: Request) {
         post.readTime = `${minutes} min read`;
       }
 
-      // Set date if not provided
       if (!post.date) {
         post.date = new Date().toLocaleDateString("en-US", {
           year: "numeric",
@@ -62,30 +121,18 @@ export async function POST(request: Request) {
         });
       }
 
-      const existingIndex = data.posts.findIndex((p: any) => p.slug === post.slug);
-
-      if (existingIndex > -1) {
-        // Update existing post
-        // Retain image if new post doesn't upload one and it had one previously
-        if (!post.image && data.posts[existingIndex].image) {
-          post.image = data.posts[existingIndex].image;
-        }
-        data.posts[existingIndex] = { ...data.posts[existingIndex], ...post };
-      } else {
-        // Add new post
-        data.posts.unshift(post); // Add to beginning of array so it shows first
+      // Check if existing post to retain image
+      const existingPost = await postsCollection.findOne({ _id: post.slug });
+      if (existingPost && !post.image && existingPost.image) {
+        post.image = existingPost.image;
       }
 
-      try {
-        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
-      } catch (writeErr: any) {
-        // Handle read-only file systems (like Vercel production)
-        return NextResponse.json({
-          success: true,
-          post,
-          warning: "Data saved in-memory/temp only. " + writeErr.message,
-        });
-      }
+      // Upsert
+      await postsCollection.updateOne(
+        { _id: post.slug },
+        { $set: post },
+        { upsert: true }
+      );
 
       return NextResponse.json({ success: true, post });
     }
@@ -96,18 +143,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Missing slug for deletion" }, { status: 400 });
       }
 
-      const newPosts = data.posts.filter((p: any) => p.slug !== slug);
-      data.posts = newPosts;
-
-      try {
-        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
-      } catch (writeErr: any) {
-        return NextResponse.json({
-          success: true,
-          warning: "Data deleted in-memory/temp only. " + writeErr.message,
-        });
-      }
-
+      await postsCollection.deleteOne({ _id: slug });
       return NextResponse.json({ success: true });
     }
 
@@ -117,17 +153,11 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Categories must be an array" }, { status: 400 });
       }
 
-      data.categories = categories;
-
-      try {
-        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
-      } catch (writeErr: any) {
-        return NextResponse.json({
-          success: true,
-          categories,
-          warning: "Categories saved in-memory/temp only. " + writeErr.message,
-        });
-      }
+      await settingsCollection.updateOne(
+        { _id: "blog_categories" },
+        { $set: { categories } },
+        { upsert: true }
+      );
 
       return NextResponse.json({ success: true, categories });
     }
@@ -138,32 +168,15 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Missing required testimonial fields" }, { status: 400 });
       }
 
-      if (!data.testimonials) {
-        data.testimonials = [];
-      }
-
-      // If no ID, generate a unique one
       if (!testimonial.id) {
         testimonial.id = `review-${Date.now()}`;
       }
 
-      const existingIndex = data.testimonials.findIndex((t: any) => t.id === testimonial.id);
-
-      if (existingIndex > -1) {
-        data.testimonials[existingIndex] = { ...data.testimonials[existingIndex], ...testimonial };
-      } else {
-        data.testimonials.unshift(testimonial); // Add to the top of list
-      }
-
-      try {
-        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
-      } catch (writeErr: any) {
-        return NextResponse.json({
-          success: true,
-          testimonial,
-          warning: "Testimonial saved in-memory/temp only. " + writeErr.message,
-        });
-      }
+      await testimonialsCollection.updateOne(
+        { _id: testimonial.id },
+        { $set: testimonial },
+        { upsert: true }
+      );
 
       return NextResponse.json({ success: true, testimonial });
     }
@@ -174,21 +187,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Missing testimonial ID" }, { status: 400 });
       }
 
-      if (!data.testimonials) {
-        data.testimonials = [];
-      }
-
-      data.testimonials = data.testimonials.filter((t: any) => t.id !== id);
-
-      try {
-        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
-      } catch (writeErr: any) {
-        return NextResponse.json({
-          success: true,
-          warning: "Testimonial deleted in-memory/temp only. " + writeErr.message,
-        });
-      }
-
+      await testimonialsCollection.deleteOne({ _id: id });
       return NextResponse.json({ success: true });
     }
 
@@ -196,9 +195,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("API write error:", error);
     return NextResponse.json(
-      {
-        error: error.message,
-      },
+      { error: error.message },
       { status: 500 }
     );
   }
