@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
 import SectionHeader from "@/components/shared/SectionHeader";
-import blogsData from "@/data/blogs.json";
 import {
   IconStarFilled,
   IconChevronLeft,
@@ -19,7 +18,7 @@ type Review = {
 };
 
 export default function Testimonials() {
-  const [reviews, setReviews] = useState<Review[]>(blogsData.testimonials || []);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const reduced = useReducedMotion() ?? false;
   const trackRef = useRef<HTMLDivElement>(null);
   const hovering = useRef(false);

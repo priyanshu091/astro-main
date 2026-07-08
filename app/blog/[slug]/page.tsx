@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import blogsData from "@/data/blogs.json";
+import clientPromise from "@/lib/mongodb";
 
 type BlogPostData = {
   slug: string;
@@ -13,14 +13,47 @@ type BlogPostData = {
   image?: string;
 };
 
-export function generateStaticParams() {
-  return blogsData.posts.map((post) => ({
-    slug: post.slug,
-  }));
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  try {
+    const client = await clientPromise;
+    const db = client.db("astro");
+    const postsCollection = db.collection<any>("posts");
+    const posts = await postsCollection.find({}, { projection: { _id: 1, slug: 1 } }).toArray();
+    
+    return posts.map((post) => ({
+      slug: post._id || post.slug,
+    }));
+  } catch (err) {
+    console.error("Failed to generate static params for blogs:", err);
+    return [];
+  }
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = blogsData.posts.find((p) => p.slug === params.slug);
+export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+  let post: BlogPostData | null = null;
+  
+  try {
+    const client = await clientPromise;
+    const db = client.db("astro");
+    const postsCollection = db.collection<any>("posts");
+    const doc = await postsCollection.findOne({ _id: params.slug });
+    
+    if (doc) {
+      post = {
+        slug: doc._id || doc.slug,
+        title: doc.title,
+        category: doc.category,
+        date: doc.date,
+        readTime: doc.readTime,
+        content: doc.content || [],
+        image: doc.image,
+      };
+    }
+  } catch (err) {
+    console.error("Failed to fetch blog post:", err);
+  }
 
   if (!post) {
     return (
@@ -171,4 +204,3 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     </main>
   );
 }
-

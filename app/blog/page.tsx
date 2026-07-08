@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import blogsData from "@/data/blogs.json";
 
 type BlogPost = {
   slug: string;
@@ -103,8 +102,8 @@ function BlogCard({ post }: { post: BlogPost }) {
 }
 
 export default function BlogPage() {
-  const [posts, setPosts] = useState<BlogPost[]>(blogsData.posts);
-  const [categories, setCategories] = useState<string[]>(["All", ...blogsData.categories]);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [categories, setCategories] = useState<string[]>(["All"]);
   const [activeCategory, setActiveCategory] = useState("All");
 
   useEffect(() => {
