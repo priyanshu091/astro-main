@@ -241,7 +241,20 @@ export default function PanchangPage() {
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </button>
               <div className="relative border-l border-[rgba(184,146,40,0.2)] pl-1">
-                <input type="date" value={selectedDate} onChange={(e) => e.target.value && setSelectedDate(e.target.value)} className="absolute inset-0 w-full cursor-pointer opacity-0" />
+                <input 
+                  type="date" 
+                  value={selectedDate} 
+                  onChange={(e) => e.target.value && setSelectedDate(e.target.value)} 
+                  onClick={(e) => {
+                    try {
+                      if ('showPicker' in HTMLInputElement.prototype) {
+                        e.currentTarget.showPicker();
+                      }
+                    } catch (err) {}
+                  }}
+                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0" 
+                  style={{ zIndex: 10 }}
+                />
                 <button className="pointer-events-none h-8 rounded-full bg-gold-400 px-4 font-sans text-xs font-bold text-bg-void transition-colors hover:bg-gold-500">PICK DATE</button>
               </div>
             </div>
