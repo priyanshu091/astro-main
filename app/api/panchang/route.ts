@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
+import { computePanchang, extractTzOffset } from "@/lib/panchang";
 
 const clientIds = (process.env.PROKERALA_CLIENT_ID || "").split(',').map(s => s.trim()).filter(Boolean);
 const clientSecrets = (process.env.PROKERALA_CLIENT_SECRET || "").split(',').map(s => s.trim()).filter(Boolean);
@@ -35,7 +36,6 @@ async function getAccessToken(forceRefresh = false): Promise<string> {
 }
 
 async function fetchPanchangWithFallback(ayanamsa: string, coords: string, datetime: string): Promise<any> {
-  // Try each credential
   for (let i = currentKeyIndex; i < clientIds.length; i++) {
     currentKeyIndex = i;
     try {
@@ -47,7 +47,7 @@ async function fetchPanchangWithFallback(ayanamsa: string, coords: string, datet
       if (!res.ok) {
         const errText = await res.text();
         if ((errText.includes("credit balance") || errText.includes("rate limit") || errText.includes("Too Many Requests")) && i < clientIds.length - 1) {
-          continue; // try next credential
+          continue;
         }
         throw new Error(errText);
       }
@@ -55,7 +55,7 @@ async function fetchPanchangWithFallback(ayanamsa: string, coords: string, datet
       return json.data;
     } catch (err: any) {
       if ((err.message?.includes("credit balance") || err.message?.includes("rate limit") || err.message?.includes("Too Many Requests")) && i < clientIds.length - 1) {
-        continue; // try next credential
+        continue;
       }
       throw err;
     }
@@ -73,30 +73,50 @@ export async function GET(request: Request) {
 
     const coords = `${lat},${lng}`;
     const dateStr = datetime.slice(0, 10); // YYYY-MM-DD only
+    
+    // Feature flag: "local" (default) or "prokerala"
+    const source = process.env.PANCHANG_SOURCE || "local";
 
-    // 1. Check MongoDB first (the real cache)
     try {
       const mongoClient = await clientPromise;
       const db = mongoClient.db("astro_cache");
-      const collection = db.collection("panchang");
+      
+      if (source === "local") {
+        const collection = db.collection("panchang_local");
+        const cachedDoc = await collection.findOne({ coords, dateStr });
+        if (cachedDoc) {
+          return NextResponse.json({ panchang: cachedDoc.data });
+        }
 
-      const cachedDoc = await collection.findOne({ ayanamsa, coords, dateStr });
-      if (cachedDoc) {
-        return NextResponse.json({ panchang: cachedDoc.data });
+        const tzOffset = extractTzOffset(datetime);
+        const data = computePanchang(datetime, parseFloat(lat), parseFloat(lng), tzOffset);
+        
+        await collection.insertOne({ coords, dateStr, lat, lng, data, createdAt: new Date() });
+        return NextResponse.json({ panchang: data });
+      } else {
+        // Fallback to existing ProKerala logic
+        const collection = db.collection("panchang");
+        const cachedDoc = await collection.findOne({ ayanamsa, coords, dateStr });
+        if (cachedDoc) {
+          return NextResponse.json({ panchang: cachedDoc.data });
+        }
+
+        const data = await fetchPanchangWithFallback(ayanamsa, coords, datetime);
+        await collection.insertOne({ ayanamsa, coords, dateStr, data, createdAt: new Date() });
+        return NextResponse.json({ panchang: data });
       }
-
-      // 2. Not in MongoDB — fetch from Prokerala with fallback
-      const data = await fetchPanchangWithFallback(ayanamsa, coords, datetime);
-
-      // 3. Save to MongoDB for all future requests
-      await collection.insertOne({ ayanamsa, coords, dateStr, data, createdAt: new Date() });
-
-      return NextResponse.json({ panchang: data });
     } catch (mongoErr: any) {
-      // If MongoDB itself fails, still try Prokerala directly
-      console.error("MongoDB error, falling back to direct API:", mongoErr.message);
-      const data = await fetchPanchangWithFallback(ayanamsa, coords, datetime);
-      return NextResponse.json({ panchang: data });
+      console.error("MongoDB or Compute error, falling back:", mongoErr.message);
+      
+      if (source === "local") {
+        // If DB fails, try compute again and just return
+        const tzOffset = extractTzOffset(datetime);
+        const data = computePanchang(datetime, parseFloat(lat), parseFloat(lng), tzOffset);
+        return NextResponse.json({ panchang: data });
+      } else {
+        const data = await fetchPanchangWithFallback(ayanamsa, coords, datetime);
+        return NextResponse.json({ panchang: data });
+      }
     }
   } catch (err: any) {
     return NextResponse.json({ error: err.message || "Unknown error" }, { status: 500 });

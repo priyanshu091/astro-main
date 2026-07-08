@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
+import { computeHoraChaughadiya, extractTzOffset } from "@/lib/panchang";
 
 const clientIds = (process.env.PROKERALA_CLIENT_ID || "").split(',').map(s => s.trim()).filter(Boolean);
 const clientSecrets = (process.env.PROKERALA_CLIENT_SECRET || "").split(',').map(s => s.trim()).filter(Boolean);
@@ -82,30 +83,49 @@ export async function GET(request: Request) {
 
     const dateStr = datetime.slice(0, 10); // YYYY-MM-DD only
     const coords = `${lat},${lng}`;
+    
+    // Feature flag: "local" (default) or "prokerala"
+    const source = process.env.PANCHANG_SOURCE || "local";
 
-    // 1. Check MongoDB first (the real cache)
     try {
       const mongoClient = await clientPromise;
       const db = mongoClient.db("astro_cache");
-      const collection = db.collection("hora");
 
-      const cachedDoc = await collection.findOne({ coords, dateStr });
-      if (cachedDoc) {
-        return NextResponse.json(cachedDoc.data);
+      if (source === "local") {
+        const collection = db.collection("hora_local");
+        const cachedDoc = await collection.findOne({ coords, dateStr });
+        if (cachedDoc) {
+          return NextResponse.json(cachedDoc.data);
+        }
+
+        const tzOffset = extractTzOffset(datetime);
+        const data = computeHoraChaughadiya(datetime, parseFloat(lat), parseFloat(lng), tzOffset);
+        
+        await collection.insertOne({ coords, lat, lng, dateStr, data, createdAt: new Date() });
+        return NextResponse.json(data);
+      } else {
+        // Fallback to existing ProKerala logic
+        const collection = db.collection("hora");
+        const cachedDoc = await collection.findOne({ coords, dateStr });
+        if (cachedDoc) {
+          return NextResponse.json(cachedDoc.data);
+        }
+
+        const result = await fetchHoraWithFallback(lat, lng, datetime);
+        await collection.insertOne({ coords, lat, lng, dateStr, data: result, createdAt: new Date() });
+        return NextResponse.json(result);
       }
-
-      // 2. Not in MongoDB — fetch from Prokerala with fallback
-      const result = await fetchHoraWithFallback(lat, lng, datetime);
-
-      // 3. Save to MongoDB for all future requests
-      await collection.insertOne({ coords, lat, lng, dateStr, data: result, createdAt: new Date() });
-
-      return NextResponse.json(result);
     } catch (mongoErr: any) {
-      // If MongoDB itself fails, still try Prokerala directly
-      console.error("MongoDB error, falling back to direct API:", mongoErr.message);
-      const result = await fetchHoraWithFallback(lat, lng, datetime);
-      return NextResponse.json(result);
+      console.error("MongoDB or Compute error, falling back:", mongoErr.message);
+      
+      if (source === "local") {
+        const tzOffset = extractTzOffset(datetime);
+        const data = computeHoraChaughadiya(datetime, parseFloat(lat), parseFloat(lng), tzOffset);
+        return NextResponse.json(data);
+      } else {
+        const result = await fetchHoraWithFallback(lat, lng, datetime);
+        return NextResponse.json(result);
+      }
     }
   } catch (err: any) {
     return NextResponse.json({ error: err.message || "Unknown error" }, { status: 500 });
