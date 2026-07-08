@@ -141,46 +141,14 @@ export default function AdminPage() {
     sessionStorage.removeItem("astro_admin_auth");
   };
 
-  // Convert File to WebP client-side using Canvas API
-  const processImageToWebP = (file: File): Promise<{ dataUrl: string; compressedSize: number }> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext("2d");
-          if (!ctx) {
-            reject(new Error("Could not create canvas context."));
-            return;
-          }
-          ctx.drawImage(img, 0, 0);
-          // 0.85 quality matches near-identical visual fidelity with substantial compression
-          const webpDataUrl = canvas.toDataURL("image/webp", 0.85);
-
-          // Estimate file size of base64 data URL
-          const head = "data:image/webp;base64,";
-          const bytes = Math.round(((webpDataUrl.length - head.length) * 3) / 4);
-          resolve({ dataUrl: webpDataUrl, compressedSize: bytes });
-        };
-        img.onerror = (err) => reject(new Error("Error loading image elements."));
-        img.src = e.target?.result as string;
-      };
-      reader.onerror = (err) => reject(new Error("Error reading file."));
-      reader.readAsDataURL(file);
-    });
-  };
-
   // Handle Image Upload Selection
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Constraint: Max size 500KB
-    if (file.size > 500 * 1024) {
-      setOperationError("Upload failed: File size exceeds the maximum limit of 500 KB.");
+    // Constraint: Max size 5MB (Cloudinary will compress and convert to WebP)
+    if (file.size > 5 * 1024 * 1024) {
+      setOperationError("Upload failed: File size exceeds the maximum limit of 5 MB.");
       if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
@@ -188,23 +156,40 @@ export default function AdminPage() {
     setOperationError("");
     setIsCompressing(true);
     try {
-      const { dataUrl, compressedSize } = await processImageToWebP(file);
+      // Create object URL for local preview immediately
+      const objectUrl = URL.createObjectURL(file);
+      setImagePreview(objectUrl);
       setImageFile(file);
-      setImagePreview(dataUrl);
 
-      const origKb = (file.size / 1024).toFixed(1);
-      const compKb = (compressedSize / 1024).toFixed(1);
-      const percent = ((1 - compressedSize / file.size) * 100).toFixed(1);
+      // Upload to Cloudinary API route
+      const formData = new FormData();
+      formData.append("file", file);
 
-      setImageSizeStats({
-        originalSize: `${origKb} KB`,
-        compressedSize: `${compKb} KB`,
-        reduction: `${percent}%`,
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
       });
 
-      setEditingPost((prev) => ({ ...prev, image: dataUrl }));
+      const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.error || "Failed to upload image");
+      }
+
+      // Record size stats
+      const origKb = (file.size / 1024).toFixed(1);
+      setImageSizeStats({
+        originalSize: `${origKb} KB`,
+        compressedSize: "Optimized by Cloudinary",
+        reduction: "Auto-WebP",
+      });
+
+      // Use the Cloudinary secure URL for the post
+      setEditingPost((prev) => ({ ...prev, image: result.url }));
     } catch (err: any) {
-      setOperationError("Error converting image to WebP: " + err.message);
+      setOperationError("Error uploading image: " + err.message);
+      setImagePreview(null);
+      setImageFile(null);
     } finally {
       setIsCompressing(false);
     }
