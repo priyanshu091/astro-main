@@ -53,9 +53,9 @@ export function getSiderealMoonLong(date: Date): number {
  */
 export function getSunrise(date: Date, lat: number, lng: number): Date | null {
   const observer = new Astronomy.Observer(lat, lng, 0);
-  const startOfDay = new Date(date);
-  startOfDay.setUTCHours(0, 0, 0, 0);
-  const result = Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, +1, startOfDay, 1);
+  // date is already local midnight (e.g. 2026-07-09T00:00:00+05:30)
+  // Search forward for the next sunrise
+  const result = Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, +1, date, 1);
   return result?.date ?? null;
 }
 
@@ -64,9 +64,8 @@ export function getSunrise(date: Date, lat: number, lng: number): Date | null {
  */
 export function getSunset(date: Date, lat: number, lng: number): Date | null {
   const observer = new Astronomy.Observer(lat, lng, 0);
-  const startOfDay = new Date(date);
-  startOfDay.setUTCHours(0, 0, 0, 0);
-  const result = Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, -1, startOfDay, 1);
+  // Search forward from local midnight for the next sunset
+  const result = Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, -1, date, 1);
   return result?.date ?? null;
 }
 
@@ -75,10 +74,9 @@ export function getSunset(date: Date, lat: number, lng: number): Date | null {
  */
 export function getNextSunrise(date: Date, lat: number, lng: number): Date | null {
   const observer = new Astronomy.Observer(lat, lng, 0);
-  // Start searching from noon of the current day to find next day's sunrise
-  const noon = new Date(date);
-  noon.setUTCHours(12, 0, 0, 0);
-  const result = Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, +1, noon, 1);
+  // Start searching from 24 hours after local midnight
+  const nextDay = new Date(date.getTime() + 24 * 3600 * 1000);
+  const result = Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, +1, nextDay, 1);
   return result?.date ?? null;
 }
 
@@ -93,9 +91,7 @@ export function getNextSunrise(date: Date, lat: number, lng: number): Date | nul
  */
 export function getMoonrise(date: Date, lat: number, lng: number): Date | null {
   const observer = new Astronomy.Observer(lat, lng, 0);
-  const startOfDay = new Date(date);
-  startOfDay.setUTCHours(0, 0, 0, 0);
-  const result = Astronomy.SearchRiseSet(Astronomy.Body.Moon, observer, +1, startOfDay, 1);
+  const result = Astronomy.SearchRiseSet(Astronomy.Body.Moon, observer, +1, date, 1);
   return result?.date ?? null;
 }
 
@@ -105,8 +101,6 @@ export function getMoonrise(date: Date, lat: number, lng: number): Date | null {
  */
 export function getMoonset(date: Date, lat: number, lng: number): Date | null {
   const observer = new Astronomy.Observer(lat, lng, 0);
-  const startOfDay = new Date(date);
-  startOfDay.setUTCHours(0, 0, 0, 0);
-  const result = Astronomy.SearchRiseSet(Astronomy.Body.Moon, observer, -1, startOfDay, 1);
+  const result = Astronomy.SearchRiseSet(Astronomy.Body.Moon, observer, -1, date, 1);
   return result?.date ?? null;
 }
