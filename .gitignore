@@ -37,3 +37,8 @@ yarn-error.log*
 .DS_Store
 .claude
 .env*
+clear-cache.ts
+test-engine.ts
+server.log
+server.pid
+test-astronomy.js
