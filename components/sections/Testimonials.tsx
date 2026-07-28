@@ -22,6 +22,9 @@ export default function Testimonials() {
   const reduced = useReducedMotion() ?? false;
   const trackRef = useRef<HTMLDivElement>(null);
   const hovering = useRef(false);
+  // current index within the real reviews (0..n-1), but we render 3× clones
+  const [current, setCurrent] = useState(0);
+  const isAnimating = useRef(false);
 
   // Sync client-side
   useEffect(() => {
@@ -54,35 +57,87 @@ export default function Testimonials() {
     fetchLatest();
   }, []);
 
-  const step = useCallback(
-    (dir: 1 | -1) => {
+  const n = reviews.length;
+
+  // When reviews load, start at middle clone set
+  useEffect(() => {
+    if (n > 0) setCurrent(n); // start at index n (middle copy)
+  }, [n]);
+
+  // Scroll track to the correct card instantly (no animation)
+  const jumpTo = useCallback(
+    (idx: number) => {
       const el = trackRef.current;
       if (!el) return;
       const card = el.querySelector<HTMLElement>("[data-card]");
-      const amount = (card?.offsetWidth ?? el.clientWidth) + 24; // card + gap
-      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 4;
+      const cardW = (card?.offsetWidth ?? el.clientWidth) + 20; // card + gap
+      el.scrollTo({ left: idx * cardW, behavior: "instant" as ScrollBehavior });
+    },
+    []
+  );
 
-      if (dir === 1 && atEnd) {
-        el.scrollTo({ left: 0, behavior: reduced ? "auto" : "smooth" });
-      } else {
-        el.scrollBy({ left: dir * amount, behavior: reduced ? "auto" : "smooth" });
-      }
+  // Scroll track to the correct card with smooth animation
+  const scrollTo = useCallback(
+    (idx: number) => {
+      const el = trackRef.current;
+      if (!el) return;
+      const card = el.querySelector<HTMLElement>("[data-card]");
+      const cardW = (card?.offsetWidth ?? el.clientWidth) + 20;
+      el.scrollTo({ left: idx * cardW, behavior: reduced ? "auto" : "smooth" });
     },
     [reduced]
   );
 
-  // Auto-scroll every 6s, paused on hover and under reduced-motion.
+  // Sync scroll position whenever current changes
   useEffect(() => {
-    if (reduced || reviews.length <= 1) return;
+    if (n === 0) return;
+    scrollTo(current);
+  }, [current, scrollTo, n]);
+
+  const step = useCallback(
+    (dir: 1 | -1) => {
+      if (isAnimating.current) return;
+      isAnimating.current = true;
+
+      setCurrent((prev) => {
+        const next = prev + dir;
+        return next;
+      });
+
+      // After animation (~400ms), if we're in the cloned zone, silently reset
+      setTimeout(() => {
+        setCurrent((prev) => {
+          if (prev >= n * 2) {
+            // jumped into 3rd copy → reset to 2nd copy (same visual position)
+            jumpTo(prev - n);
+            return prev - n;
+          }
+          if (prev < n) {
+            // jumped into 1st copy → reset to 2nd copy (same visual position)
+            jumpTo(prev + n);
+            return prev + n;
+          }
+          return prev;
+        });
+        isAnimating.current = false;
+      }, 420);
+    },
+    [n, jumpTo]
+  );
+
+  // Auto-scroll every 5s, paused on hover and under reduced-motion.
+  useEffect(() => {
+    if (reduced || n <= 1) return;
     const id = window.setInterval(() => {
       if (!hovering.current) step(1);
-    }, 6000);
+    }, 5000);
     return () => window.clearInterval(id);
-  }, [reduced, step, reviews.length]);
+  }, [reduced, step, n]);
 
-  if (reviews.length === 0) {
-    return null; // Don't render empty section
-  }
+  if (n === 0) return null;
+
+  // Render 3 copies for seamless infinite loop
+  const displayReviews = [...reviews, ...reviews, ...reviews];
 
   return (
     <section id="testimonials" className="bg-bg-void">
@@ -91,7 +146,7 @@ export default function Testimonials() {
           <SectionHeader eyebrow="Testimonials" title="What clients say" />
 
           {/* Nav arrows */}
-          {reviews.length > 1 && (
+          {n > 1 && (
             <div className="flex shrink-0 gap-sp-3">
               <ArrowButton label="Previous testimonial" onClick={() => step(-1)}>
                 <IconChevronLeft size={18} />
@@ -108,10 +163,11 @@ export default function Testimonials() {
           onMouseEnter={() => (hovering.current = true)}
           onMouseLeave={() => (hovering.current = false)}
           className="no-scrollbar mt-sp-8 flex snap-x snap-mandatory gap-sp-5 overflow-x-auto pb-2 lg:mt-sp-10"
+          style={{ scrollSnapType: "x mandatory" }}
         >
-          {reviews.map((r) => (
+          {displayReviews.map((r, i) => (
             <div
-              key={r.id || r.name}
+              key={`${r.id || r.name}-${i}`}
               data-card
               className="flex min-w-full shrink-0 snap-center justify-center sm:block sm:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)]"
             >
