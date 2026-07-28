@@ -12,8 +12,28 @@ const LINKS = [
   { label: "About", href: "/about" },
   { label: "FAQ", href: "/faq" },
   { label: "Blog", href: "/blog" },
+  // "Contact" is handled specially below — it opens the site-wide ConnectModal
+  // (mounted once in app/layout.tsx, present on every page) instead of
+  // navigating. href stays as a fallback for no-JS / opening in a new tab.
   { label: "Contact", href: "/#contact" },
 ];
+
+/**
+ * Opens the global contact modal. This matches the pattern already used by the
+ * "Book A Consultation" CTA on /about and /blog — dispatching this event is the
+ * established, correct way to open contact from anywhere on the site.
+ *
+ * Previously the navbar's "Contact" link and "Connect" button used a plain
+ * href="/#contact", which only worked on the homepage: from every other page
+ * (services, panchang, faq, blog posts, etc.) it did a full-page navigation
+ * away to "/" instead of opening the modal in place.
+ */
+function openContactModal(e?: React.MouseEvent) {
+  e?.preventDefault();
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("open-connect-modal"));
+  }
+}
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -59,6 +79,7 @@ export default function Navbar() {
               <li key={l.href}>
                 <a
                   href={l.href}
+                  onClick={l.label === "Contact" ? openContactModal : undefined}
                   className="font-sans text-sm font-medium text-text-primary opacity-70 transition-opacity duration-200 hover:opacity-100"
                 >
                   {l.label}
@@ -69,7 +90,7 @@ export default function Navbar() {
 
           {/* CTA — desktop */}
           <div className="hidden md:block">
-            <Button as="a" href="/#contact" variant="primary" size="md">
+            <Button onClick={openContactModal} variant="primary" size="md">
               Connect
             </Button>
           </div>
@@ -149,19 +170,23 @@ export default function Navbar() {
               <a
                 key={l.href}
                 href={l.href}
-                onClick={() => setOpen(false)}
+                onClick={(e) => {
+                  if (l.label === "Contact") openContactModal(e);
+                  setOpen(false);
+                }}
                 className="font-sans text-base font-medium text-text-primary opacity-80 transition-opacity hover:opacity-100"
               >
                 {l.label}
               </a>
             ))}
             <Button
-              as="a"
-              href="/#contact"
               variant="primary"
               size="lg"
               className="mt-sp-3 w-full"
-              onClick={() => setOpen(false)}
+              onClick={(e) => {
+                openContactModal(e);
+                setOpen(false);
+              }}
             >
               Connect
             </Button>
