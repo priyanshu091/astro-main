@@ -57,7 +57,7 @@ export default function AboutPage() {
         <section className="max-w-content mx-auto px-sp-5 py-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             <div className="lg:col-span-4 flex flex-col items-center">
-              <div className="relative h-72 w-72 overflow-hidden rounded-card ring-4 ring-gold-400/35 shadow-chart-float mb-6">
+              <div className="relative h-72 w-72 overflow-hidden rounded-card ring-4 ring-gold-400/35 shadow-chart-float mb-4">
                 <Image
                   src="/astrologer.webp"
                   alt="Portrait of Acharya Soumitra Roy Chowdhury"
@@ -66,7 +66,16 @@ export default function AboutPage() {
                   className="object-cover"
                 />
               </div>
-              
+
+              {/* Certified Astrologer badge below photo */}
+              <div className="mb-6 flex items-center gap-2 rounded-full border border-gold-400/30 bg-bg-cosmos px-4 py-1.5 shadow-[0_0_12px_rgba(184,146,40,0.12)]">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gold-400 shrink-0" aria-hidden="true">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <span className="font-sans text-[12px] font-bold uppercase tracking-[0.15em] text-gold-500">
+                  Certified Astrologer
+                </span>
+              </div>
               <div className="w-full bg-bg-cosmos border border-gold-400/10 rounded-card p-6 space-y-4">
                 <h4 className="font-display text-md font-bold text-text-primary uppercase tracking-wider text-center border-b border-gold-400/10 pb-2">
                   Qualifications
