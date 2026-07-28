@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { IconMapPin, IconClock, IconStarFilled } from "@/components/ui/Icon";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { WHATSAPP_URL } from "@/lib/site";
 
 const EASE = [0.22, 0.61, 0.36, 1] as const;
 
@@ -99,7 +100,7 @@ export default function FinalCTA() {
               <div>
                 <span className="block font-sans text-[11px] font-bold text-text-muted uppercase tracking-wider mb-1">Call / WhatsApp</span>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-x-4 gap-y-1 font-display font-semibold text-text-primary text-base">
-                  <a href="https://wa.me/7800333373" target="_blank" rel="noopener noreferrer" className="hover:text-gold-600 transition-colors flex items-center gap-1">
+                  <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-gold-600 transition-colors flex items-center gap-1">
                     {/* WhatsApp Icon */}
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-success shrink-0">
                       <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" />

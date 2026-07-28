@@ -1,5 +1,6 @@
 import Logo from "@/components/shared/Logo";
 import { IconInstagram, IconFacebook, IconLinkedin, IconThreads } from "@/components/ui/Icon";
+import { WHATSAPP_URL } from "@/lib/site";
 
 const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
   {
@@ -59,7 +60,7 @@ export default function Footer() {
               <div className="flex flex-col">
                 <span className="font-bold text-text-muted text-[9px] uppercase tracking-wider mb-0.5">Call / WhatsApp</span>
                 <div className="flex items-center gap-2">
-                  <a href="https://wa.me/7800333373" target="_blank" rel="noopener noreferrer" className="hover:text-gold-200 transition-colors font-semibold flex items-center gap-0.5">
+                  <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-gold-200 transition-colors font-semibold flex items-center gap-0.5">
                     WhatsApp
                   </a>
                   <span className="text-gold-400/20">|</span>
