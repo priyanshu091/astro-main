@@ -151,6 +151,12 @@ export default function FinalCTA() {
                 </span>
               </div>
               <p className="font-sans text-xs text-text-secondary mt-3">Flexible online & in-person sessions</p>
+              {/* Paid-service expectation, shown alongside the existing booking
+                  meta. FinalCTA renders on every /services/* page as well, so a
+                  single placement here covers the whole site. */}
+              <p className="font-sans text-xs font-semibold text-gold-600 mt-1.5">
+                Paid consultation services only
+              </p>
             </div>
 
             {/* Social Presence Links */}

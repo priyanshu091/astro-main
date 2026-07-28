@@ -119,6 +119,11 @@ export default function BhriguNandiNadiPage() {
           <p>
             Take the next step towards clarity, success, and self-discovery with a personalized consultation from Vedic Destiny. Contact Vedic Destiny today and unlock the hidden secrets of your destiny through authentic Bhrigu Nandi Nadi Astrology.
           </p>
+          {/* This page has no CTA card, so the paid-service note sits in the
+              prose flow directly under the booking invitation. */}
+          <p className="mt-sp-5 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-gold-600 not-italic">
+            Paid consultation services only
+          </p>
         </div>
       </section>
 

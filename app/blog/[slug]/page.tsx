@@ -212,6 +212,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 >
                   Book a Consultation →
                 </Link>
+                {/* Blog posts do not render FinalCTA, so the note accompanies
+                    this author-box booking link. */}
+                <p className="mt-1.5 font-sans text-[10px] font-semibold uppercase tracking-[0.12em] text-gold-600">
+                  Paid consultation services only
+                </p>
               </div>
             </div>
           </div>

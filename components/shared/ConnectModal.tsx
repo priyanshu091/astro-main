@@ -193,6 +193,11 @@ export default function ConnectModal() {
                 <p className="text-center font-sans text-[11px] text-text-muted">
                   🔒 Your details are 100% secure and confidential.
                 </p>
+                {/* Paired with the security line above so the two read as one
+                    block of fine print rather than a bolt-on notice. */}
+                <p className="text-center font-sans text-[11px] font-semibold text-gold-600">
+                  Paid consultation services only
+                </p>
               </form>
             ) : (
               <motion.div

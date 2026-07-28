@@ -502,6 +502,12 @@ export default function PropertyServicePage() {
                       </svg>
                     </a>
                   </div>
+
+                  {/* Sets the paid-service expectation right where the visitor is
+                      being asked to book. */}
+                  <p className="mt-sp-4 font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-gold-600">
+                    Paid consultation services only
+                  </p>
                 </Card>
               </StaggerItem>
             </StaggerReveal>
