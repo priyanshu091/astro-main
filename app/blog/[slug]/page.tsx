@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import clientPromise from "@/lib/mongodb";
@@ -33,13 +34,18 @@ export async function generateStaticParams() {
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   let post: BlogPostData | null = null;
-  
+  // Distinguishes "the database said there is no such post" from "we could not
+  // reach the database". These must behave differently: the first is a genuine
+  // 404, the second is transient and must NOT return 404, or search engines will
+  // deindex real articles during an outage.
+  let lookupFailed = false;
+
   try {
     const client = await clientPromise;
     const db = client.db("astro");
     const postsCollection = db.collection<any>("posts");
     const doc = await postsCollection.findOne({ _id: params.slug });
-    
+
     if (doc) {
       post = {
         slug: doc._id || doc.slug,
@@ -53,16 +59,27 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     }
   } catch (err) {
     console.error("Failed to fetch blog post:", err);
+    lookupFailed = true;
+  }
+
+  // Genuine miss → real 404 status. Previously this rendered a "not found" page
+  // with an HTTP 200, so crawlers indexed unlimited non-existent article URLs.
+  if (!post && !lookupFailed) {
+    notFound();
   }
 
   if (!post) {
+    // Database unreachable: explain the situation without claiming the article
+    // does not exist, and without emitting a 404.
     return (
       <main className="min-h-screen flex flex-col justify-between bg-bg-void selection:bg-gold-100 selection:text-copper-800">
         <Navbar />
         <div className="pt-24 lg:pt-32 flex-1 pb-16 text-center px-sp-5">
-          <h1 className="font-display text-3xl font-bold text-text-primary">Article Not Found</h1>
+          <h1 className="font-display text-3xl font-bold text-text-primary">
+            Article Temporarily Unavailable
+          </h1>
           <p className="mt-4 text-text-secondary font-sans">
-            The article you are looking for does not exist.
+            We couldn&apos;t load this article just now. Please try again in a moment.
           </p>
           <Link
             href="/blog"

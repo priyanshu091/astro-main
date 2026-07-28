@@ -53,7 +53,17 @@ const config: Config = {
       fontFamily: {
         display: ["var(--font-fraunces)", "Georgia", "serif"],
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+        // System monospace stack — no webfont download. Resolves to SF Mono on
+        // macOS/iOS, Segoe UI Mono / Consolas on Windows, Liberation Mono on Linux.
+        mono: [
+          "ui-monospace",
+          "SFMono-Regular",
+          "SF Mono",
+          "Menlo",
+          "Consolas",
+          "Liberation Mono",
+          "monospace",
+        ],
       },
       borderRadius: {
         card: "16px",

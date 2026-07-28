@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import clientPromise from "@/lib/mongodb";
+import { isAuthenticatedRequest } from "@/lib/auth";
 
 const DB_NAME = "astro";
 
@@ -77,12 +78,37 @@ export async function GET() {
       testimonials: formattedTestimonials,
     });
   } catch (error: any) {
-    console.error("GET API Error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    // Log the real error server-side only. Returning `error.message` to the
+    // client previously leaked infrastructure detail (e.g. the database host and
+    // port in a connection error).
+    console.error("GET /api/blogs failed, serving local fallback:", error);
+
+    // Graceful degradation: the blog can still render from the bundled JSON
+    // snapshot when the database is unreachable, matching the fallback approach
+    // already used by /api/panchang.
+    const fallback = getFallbackData();
+    return NextResponse.json({
+      posts: fallback.posts ?? [],
+      categories: fallback.categories ?? [],
+      testimonials: fallback.testimonials ?? [],
+      degraded: true,
+    });
   }
 }
 
 export async function POST(request: Request) {
+  // SECURITY: every mutation below (create/update/delete posts, testimonials and
+  // settings) requires a valid admin session. Previously this endpoint was
+  // completely unauthenticated — anyone who knew the URL could rewrite the
+  // site's content. The admin UI's password prompt is only a UI affordance; this
+  // server-side check is the actual gate.
+  if (!isAuthenticatedRequest(request)) {
+    return NextResponse.json(
+      { error: "Your session has expired. Please log in again." },
+      { status: 401 }
+    );
+  }
+
   try {
     const body = await request.json();
     const { action } = body;
@@ -204,9 +230,10 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });
   } catch (error: any) {
+    // Detail stays in the server log; the client gets a generic message.
     console.error("API write error:", error);
     return NextResponse.json(
-      { error: error.message },
+      { error: "Could not save changes. Please try again." },
       { status: 500 }
     );
   }

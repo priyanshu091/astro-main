@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 import ConnectModal from "@/components/shared/ConnectModal";
 
@@ -16,11 +16,11 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-mono",
-});
+// NOTE: JetBrains Mono was removed as a webfont. It was used only for a handful
+// of small 13px label/caption lines, which did not justify downloading an entire
+// extra font family on every page load. `font-mono` now resolves to the system
+// monospace stack (see tailwind.config.ts) — visually near-identical at these
+// sizes, with zero network cost.
 
 export const metadata: Metadata = {
   title: "Vedic Destiny — Expert Vedic Astrology by Acharya Soumitra Roy Chowdhury",
@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${fraunces.variable} ${inter.variable}`}
     >
       <body className="font-sans antialiased">
         {children}

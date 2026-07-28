@@ -38,6 +38,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loginError, setLoginError] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Data State
   const [data, setData] = useState<BlogsData>({ categories: [], posts: [], testimonials: [] });
@@ -72,14 +73,23 @@ export default function AdminPage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Check existing session
+  // Check existing session with the server. The session lives in an httpOnly
+  // cookie that JavaScript cannot read, so we ask the server whether it is still
+  // valid rather than trusting anything stored in the browser.
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const sessionAuth = sessionStorage.getItem("astro_admin_auth");
-      if (sessionAuth === "true") {
-        setIsAuthenticated(true);
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/admin/session", { cache: "no-store" });
+        const json = await res.json();
+        if (!cancelled && json.authenticated) setIsAuthenticated(true);
+      } catch {
+        /* not logged in — leave the login form showing */
       }
-    }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Fetch blogs data
@@ -127,20 +137,50 @@ export default function AdminPage() {
   }, [isAuthenticated]);
 
   // Handle Login
-  const handleLogin = (e: React.FormEvent) => {
+  //
+  // SECURITY: the password is verified on the server. It is never compared in
+  // client code, so it is never present in the browser bundle. (This previously
+  // did `password === "<literal>"`, which shipped the real password to every
+  // visitor who opened the page source.)
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "Devraj@123") {
-      setIsAuthenticated(true);
-      setLoginError("");
-      sessionStorage.setItem("astro_admin_auth", "true");
-    } else {
-      setLoginError("Invalid password. Please try again.");
+    setLoginError("");
+    setIsLoggingIn(true);
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      if (res.ok) {
+        setIsAuthenticated(true);
+        setPassword("");
+      } else {
+        const json = await res.json().catch(() => ({}));
+        setLoginError(json.error || "Invalid password. Please try again.");
+      }
+    } catch {
+      setLoginError("Could not reach the server. Please try again.");
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
-  const handleLogout = () => {
+  // If any operation reports an expired session, drop back to the login screen
+  // so the admin is not left clicking buttons that will keep failing.
+  useEffect(() => {
+    if (operationError && operationError.includes("session has expired")) {
+      setIsAuthenticated(false);
+    }
+  }, [operationError]);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/admin/session", { method: "DELETE" });
+    } catch {
+      /* clearing local state below regardless */
+    }
     setIsAuthenticated(false);
-    sessionStorage.removeItem("astro_admin_auth");
   };
 
   // Handle Image Upload Selection
@@ -663,9 +703,10 @@ export default function AdminPage() {
 
               <button
                 type="submit"
-                className="w-full rounded-btn bg-gold-500 hover:bg-gold-600 text-text-on-gold font-sans font-semibold py-2.5 transition-colors shadow-sm cursor-pointer text-center text-sm"
+                disabled={isLoggingIn}
+                className="w-full rounded-btn bg-gold-500 hover:bg-gold-600 disabled:opacity-60 disabled:cursor-not-allowed text-text-on-gold font-sans font-semibold py-2.5 transition-colors shadow-sm cursor-pointer text-center text-sm"
               >
-                Access Dashboard
+                {isLoggingIn ? "Verifying…" : "Access Dashboard"}
               </button>
             </form>
           </div>

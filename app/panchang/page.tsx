@@ -106,9 +106,12 @@ export default function PanchangPage() {
   const searchLocation = async () => {
     if (!locQuery.trim()) return;
     try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locQuery)}&format=json&limit=5`);
+      // Routed through our own /api/geocode proxy so the request carries the
+      // identifying User-Agent that OpenStreetMap's usage policy requires
+      // (browsers refuse to set that header on fetch), and so results are cached.
+      const res = await fetch(`/api/geocode?q=${encodeURIComponent(locQuery)}`);
       const data = await res.json();
-      setLocResults(data);
+      setLocResults(Array.isArray(data) ? data : []);
     } catch {
       setLocResults([]);
     }
@@ -125,7 +128,7 @@ export default function PanchangPage() {
           setLng(newLng);
           setLocError("");
           try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${newLat}&lon=${newLng}`);
+            const res = await fetch(`/api/geocode?lat=${newLat}&lon=${newLng}`);
             const locData = await res.json();
             if (locData.address) {
               const city = locData.address.city || locData.address.town || locData.address.county || "Current Location";

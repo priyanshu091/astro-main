@@ -10,7 +10,10 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
       { label: "Numerology", href: "/services/prediction#numerology" },
       { label: "Lal Kitab Remedies", href: "/services/prediction#lal-kitab" },
       { label: "Bhrigu Nandi Nadi", href: "/services/bhrigu-nandi-nadi" },
-      { label: "Vedic Astrology", href: "/services/prediction#vedic-astrology" },
+      // NOTE: the section on /services/prediction has id="astrology" (rendered as
+      // "Astrology Services"). This previously pointed at #vedic-astrology, which
+      // does not exist on that page, so the link landed at the top instead.
+      { label: "Vedic Astrology", href: "/services/prediction#astrology" },
     ],
   },
   {
