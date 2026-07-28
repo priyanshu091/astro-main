@@ -42,3 +42,6 @@ test-engine.ts
 server.log
 server.pid
 test-astronomy.js
+
+# uncompressed source images (kept locally as originals, not deployed)
+.image-originals/

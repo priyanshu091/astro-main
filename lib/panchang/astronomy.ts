@@ -13,9 +13,14 @@ import { toSidereal } from "./ayanamsa";
  * @returns Longitude in degrees (0–360)
  */
 export function getSunLongitude(date: Date): number {
+  // Astronomy.SunPosition() already returns the apparent geocentric ecliptic
+  // longitude of date directly via `.elon` — no further transform needed.
+  // (Previously this code re-ran `Astronomy.Ecliptic()` on the already-ecliptic
+  // `.vec`, which re-applies precession/nutation to a vector not in the
+  // expected J2000-equatorial frame, corrupting the result by up to a few
+  // degrees depending on date.)
   const equ = Astronomy.SunPosition(date);
-  const ecl = Astronomy.Ecliptic(equ.vec);
-  return ((ecl.elon % 360) + 360) % 360;
+  return ((equ.elon % 360) + 360) % 360;
 }
 
 /**

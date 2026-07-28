@@ -18,7 +18,7 @@ export default function AstrologerProfiles() {
           <div className="lg:col-span-5 flex justify-center">
             <div className="relative h-72 w-72 overflow-hidden rounded-card ring-4 ring-gold-400/35 shadow-chart-float">
               <Image
-                src="/astrologer.jpg"
+                src="/astrologer.webp"
                 alt="Portrait of Acharya Soumitra Roy Chowdhury"
                 fill
                 sizes="288px"

@@ -4,7 +4,7 @@ export default function Logo({ className = "" }: { className?: string }) {
   return (
     <a href="/" className={`flex items-center ${className}`} aria-label="Vedic Destiny — home">
       <Image
-        src="/logo.png"
+        src="/logo.webp"
         alt="Vedic Destiny"
         width={130}
         height={80}

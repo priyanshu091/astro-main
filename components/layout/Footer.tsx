@@ -9,7 +9,7 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
       { label: "Vastu Shastra", href: "/services/prediction#vastu" },
       { label: "Numerology", href: "/services/prediction#numerology" },
       { label: "Lal Kitab Remedies", href: "/services/prediction#lal-kitab" },
-      { label: "Brighu Nandi Nadi", href: "/services/prediction#brighu-nandi-nadi" },
+      { label: "Bhrigu Nandi Nadi", href: "/services/bhrigu-nandi-nadi" },
       { label: "Vedic Astrology", href: "/services/prediction#vedic-astrology" },
     ],
   },

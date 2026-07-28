@@ -320,7 +320,7 @@ export default function PanchangPage() {
             {/* 2. Solar Times (Image Cards) */}
             <section className="grid gap-sp-5 md:grid-cols-2">
               <div className="group relative aspect-[2/1] overflow-hidden rounded-card border border-[rgba(184,146,40,0.15)] md:aspect-auto md:h-64">
-                <Image src="/panchang_sunrise.png" alt="Sunrise" fill className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-80" />
+                <Image src="/panchang_sunrise.webp" alt="Sunrise" fill className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-80" />
                 <div className="absolute inset-0 bg-gradient-to-t from-bg-void via-bg-void/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 flex w-full items-end justify-between p-6">
                   <div>
@@ -333,7 +333,7 @@ export default function PanchangPage() {
                 </div>
               </div>
               <div className="group relative aspect-[2/1] overflow-hidden rounded-card border border-[rgba(184,146,40,0.15)] md:aspect-auto md:h-64">
-                <Image src="/panchang_sunset.png" alt="Sunset" fill className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-80" />
+                <Image src="/panchang_sunset.webp" alt="Sunset" fill className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-80" />
                 <div className="absolute inset-0 bg-gradient-to-t from-bg-void via-bg-void/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 flex w-full items-end justify-between p-6">
                   <div>

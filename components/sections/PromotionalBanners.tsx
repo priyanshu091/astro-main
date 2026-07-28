@@ -3,13 +3,13 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
-import bannerKundli from "@/public/banner_kundli.png";
-import bannerVastu from "@/public/banner_vastu.png";
-import bannerProblem from "@/public/banner_problem.png";
-import bannerLalKitab from "@/public/banner_lal_kitab.png";
-import bannerBrighuNandi from "@/public/banner_brighu_nandi.png";
-import bannerNumerology from "@/public/banner_numerology.png";
-import bannerVedicAstrology from "@/public/banner_vedic_astrology.png";
+import bannerKundli from "@/public/banner_kundli.webp";
+import bannerVastu from "@/public/banner_vastu.webp";
+import bannerProblem from "@/public/banner_problem.webp";
+import bannerLalKitab from "@/public/banner_lal_kitab.webp";
+import bannerBrighuNandi from "@/public/banner_brighu_nandi.webp";
+import bannerNumerology from "@/public/banner_numerology.webp";
+import bannerVedicAstrology from "@/public/banner_vedic_astrology.webp";
 
 const BANNERS = [
   {
