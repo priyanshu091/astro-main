@@ -144,10 +144,12 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 { title: "Vedic Astrology", desc: "Deep analysis of birth charts (Kundali) to understand life patterns, timing, and opportunities." },
+                { title: "Bhrigu Nandi Nadi", desc: "A specialized predictive system that decodes life events, karma, and their precise timing through the flow and interaction of planetary combinations." },
                 { title: "Numerology", desc: "Name correction, business name alignment, lucky numbers, mobile numbers, and signature analysis." },
-                { title: "Lal Kitab Remedies", desc: "Simple and practical remedies focused on karmic correction and positive transformation." },
+                { title: "Lal Kitab Predictions & Remedies", desc: "Precise predictions paired with simple, practical remedies focused on karmic correction and positive transformation." },
                 { title: "Vastu Shastra", desc: "Consultations for homes, offices, and commercial spaces to improve harmony, prosperity, and energy balance." },
                 { title: "Gemstone & Rudraksha Guidance", desc: "Personalized recommendations aligned with planetary influences and individual charts." },
+                { title: "Wrist Watch Analysis", desc: "Guidance on choosing and wearing a wristwatch — dial colour, material, and wrist — in alignment with your planetary influences." },
                 { title: "Life Guidance & Planetary Cycles", desc: "Support during major life transitions, challenging planetary periods, and important decision-making phases." },
               ].map((e) => (
                 <div key={e.title} className="bg-bg-void p-6 rounded-card border border-gold-400/10 shadow-[0_4px_20px_-8px_rgba(140,106,58,0.15)] flex flex-col">
