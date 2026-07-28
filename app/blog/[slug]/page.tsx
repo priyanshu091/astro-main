@@ -130,9 +130,17 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             <span className="text-gold-400/30">•</span>
             <span className="text-gold-500 font-semibold">{post.readTime}</span>
           </div>
-          <p className="mt-3 font-sans text-xs text-text-secondary">
-            By Astrologer Acharya Soumitra Roy Chowdhury
-          </p>
+          <div className="mt-3 flex items-center justify-center gap-2 flex-wrap">
+            <p className="font-sans text-xs text-text-secondary">
+              By Astrologer Acharya Soumitra Roy Chowdhury
+            </p>
+            <div className="inline-flex items-center gap-1 rounded-full border border-gold-400/25 bg-[rgba(184,146,40,0.06)] px-2.5 py-0.5">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gold-400 shrink-0" aria-hidden="true">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span className="font-sans text-[10px] font-bold uppercase tracking-[0.12em] text-gold-500">Certified Astrologer</span>
+            </div>
+          </div>
         </header>
 
         {/* Featured Cover Image */}
@@ -187,7 +195,15 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 <h3 className="font-display text-base font-bold text-text-primary">
                   Astrologer Acharya Soumitra Roy Chowdhury
                 </h3>
-                <p className="font-sans text-xs text-text-secondary mt-1 leading-relaxed">
+                <div className="mt-1 flex items-center gap-1.5">
+                  <div className="inline-flex items-center gap-1 rounded-full border border-gold-400/25 bg-[rgba(184,146,40,0.06)] px-2.5 py-0.5">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gold-400 shrink-0" aria-hidden="true">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    <span className="font-sans text-[10px] font-bold uppercase tracking-[0.12em] text-gold-500">Certified Astrologer</span>
+                  </div>
+                </div>
+                <p className="font-sans text-xs text-text-secondary mt-1.5 leading-relaxed">
                   Professional Vedic astrologer with over 30 years of consulting experience. Specializing in birth chart analysis, marriage compatibility, career guidance, Vastu Shastra, and Lal Kitab remedies.
                 </p>
                 <Link

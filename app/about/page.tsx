@@ -18,6 +18,17 @@ export default function AboutPage() {
           <h1 className="font-display mt-sp-3 text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.1] tracking-[-0.02em] text-text-primary">
             Acharya Soumitra Roy Chowdhury
           </h1>
+          {/* Certified Astrologer badge */}
+          <div className="mt-3 flex justify-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-gold-400/30 bg-bg-cosmos px-4 py-1.5 shadow-[0_0_12px_rgba(184,146,40,0.1)]">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gold-400 shrink-0" aria-hidden="true">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span className="font-sans text-[12px] font-bold uppercase tracking-[0.15em] text-gold-500">
+                Certified Astrologer
+              </span>
+            </div>
+          </div>
           <p className="mt-sp-2 text-md font-medium tracking-tight text-gold-600 font-sans uppercase">
             Lucknow &bull; Guiding Lives With Ancient Wisdom &amp; Cosmic Insight
           </p>
