@@ -15,7 +15,7 @@ export default function AstrologerProfiles() {
 
         <div className="mt-sp-8 grid grid-cols-1 gap-sp-8 lg:mt-sp-10 lg:grid-cols-12 lg:gap-sp-10 items-center">
           {/* Photo: 5 of 12 cols */}
-          <div className="lg:col-span-5 flex justify-center">
+          <div className="lg:col-span-5 flex flex-col items-center gap-3">
             <div className="relative h-72 w-72 overflow-hidden rounded-card ring-4 ring-gold-400/35 shadow-chart-float">
               <Image
                 src="/astrologer.webp"
@@ -25,13 +25,31 @@ export default function AstrologerProfiles() {
                 className="object-cover"
               />
             </div>
+            {/* Certified Astrologer badge below photo */}
+            <div className="flex items-center gap-2 rounded-full border border-gold-400/30 bg-bg-cosmos px-4 py-1.5 shadow-[0_0_12px_rgba(184,146,40,0.12)]">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gold-400 shrink-0" aria-hidden="true">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span className="font-sans text-[12px] font-bold uppercase tracking-[0.15em] text-gold-500">
+                Certified Astrologer
+              </span>
+            </div>
           </div>
 
           {/* Biography details: 7 of 12 cols */}
           <div className="lg:col-span-7 space-y-sp-4">
             <h3 className="font-display text-2xl font-bold text-text-primary">
-              Vedic Astrology, Vastu Shastra & Lal Kitab Expert
+              Vedic Astrology, Vastu Shastra &amp; Lal Kitab Expert
             </h3>
+            {/* Certified badge inline with bio heading */}
+            <div className="flex items-center gap-2 w-fit rounded-full border border-gold-400/20 bg-[rgba(184,146,40,0.06)] px-3 py-1">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-gold-400 shrink-0" aria-hidden="true">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-gold-500/90">
+                Certified Astrologer · 30+ Years Experience
+              </span>
+            </div>
             
             <p className="font-sans text-base leading-relaxed text-text-secondary">
               Based in Lucknow, **Acharya Soumitra Roy Chowdhury** is a professional astrologer with over 30 years of consulting experience. His practice stands apart by providing logical, practical, and highly realistic remedies rather than fear-based, deterministic predictions.
