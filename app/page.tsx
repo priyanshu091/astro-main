@@ -3,7 +3,6 @@ import HeroSection from "@/components/hero/HeroSection";
 import TrustStrip from "@/components/sections/TrustStrip";
 import PromotionalBanners from "@/components/sections/PromotionalBanners";
 import ServicesGrid from "@/components/sections/ServicesGrid";
-import PanchangWidget from "@/components/sections/PanchangWidget";
 import Testimonials from "@/components/sections/Testimonials";
 import VedicWisdom from "@/components/sections/VedicWisdom";
 import FinalCTA from "@/components/sections/FinalCTA";
@@ -17,7 +16,6 @@ export default function Home() {
       <HeroSection />
       <TrustStrip />
       <ServicesGrid />
-      <PanchangWidget />
       <Testimonials />
       <VedicWisdom />
       <FinalCTA />
